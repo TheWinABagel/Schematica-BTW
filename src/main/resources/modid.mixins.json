@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.fabricmc.example.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "EntityRendererMixin",
+    "GameSettingsMixin",
+    "RenderGlobalAccessor"
+  ],
+  "client": [
+    "ExampleMixin",
+    "MinecraftMixin",
+    "NetClientHandlerMixin",
+    "TextureMapAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
