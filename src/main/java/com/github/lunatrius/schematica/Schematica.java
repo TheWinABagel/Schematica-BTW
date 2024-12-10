@@ -1,22 +1,15 @@
 package com.github.lunatrius.schematica;
 
 import btw.BTWAddon;
+import btw.BTWMod;
+import btw.block.BTWBlocks;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
-import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
-import com.github.lunatrius.schematica.util.Config;
+import net.fabricmc.example.mixin.BTWModAccessor;
 import net.fabricmc.example.mixin.RenderGlobalAccessor;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.src.Block;
-import net.minecraft.src.RenderGlobal;
-import net.minecraft.src.WorldRenderer;
-import net.minecraft.src.KeyBinding;
-import net.minecraft.src.Item;
-import net.minecraft.src.Profiler;
-import net.minecraft.src.AxisAlignedBB;
+import net.minecraft.src.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,6 +30,8 @@ public class Schematica extends BTWAddon {
 
 	private Field sortedWorldRenderers = null;
 	private File configurationFolder = null;
+
+	public static DebugItem debugItem;
 
 	@Override
 	public void preInitialize() {
@@ -64,6 +59,8 @@ public class Schematica extends BTWAddon {
 		blockListIgnoreID.add(Block.pistonMoving.blockID);
 		blockListIgnoreID.add(Block.portal.blockID);
 		blockListIgnoreID.add(Block.endPortal.blockID);
+		//BTW
+
 
 		List<Integer> blockListIgnoreMetadata = SchematicWorld.blockListIgnoreMetadata;
 		blockListIgnoreMetadata.add(Block.waterMoving.blockID);
@@ -128,6 +125,7 @@ public class Schematica extends BTWAddon {
 		blockListIgnoreMetadata.add(Block.potato.blockID);
 		blockListIgnoreMetadata.add(Block.woodenButton.blockID);
 		blockListIgnoreMetadata.add(Block.anvil.blockID);
+		//BTW
 
 		Map<Integer, Integer> blockListMapping = SchematicWorld.blockListMapping;
 		blockListMapping.put(Block.waterMoving.blockID, Item.bucketWater.itemID);
@@ -183,10 +181,14 @@ public class Schematica extends BTWAddon {
 			Settings.logger.logSevereException("Could not initialize the mod!", e);
 			throw new RuntimeException(e);
 		}
+		debugItem = new DebugItem(2121);
+
 	}
 
 	@Override
 	public void postInitialize() {
+//		saveNewConfigFile();
+		getBtwBlocks();
 		String[] files = new String[] {
 				"aliasVanilla", "flipVanilla", "rotationVanilla"
 		};
@@ -207,6 +209,20 @@ public class Schematica extends BTWAddon {
 				Settings.logger.logSevereException("Could not load properties file.", e);
 			}
 		}
+	}
+
+	private void getBtwBlocks() {
+		Map<String, String> props = ((BTWModAccessor) BTWMod.instance).getPropertyValues();
+
+		for (Entry<String, String> entry : props.entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue();
+			if (!key.startsWith("fc") || key.contains("Container") || key.contains("Item")) {
+				continue;
+			}
+			BlockInfo.addMappingAlias(key, value);
+		}
+		BlockInfo.ALIAS.isEmpty();
 	}
 
 	private void loadConfigurationFile(URL configurationFile, String configurationFilename) {
@@ -260,7 +276,7 @@ public class Schematica extends BTWAddon {
 			}
 		}
 	}
-	//todo keyboard event
+
 	public void keyboardEvent(KeyBinding keyBinding, boolean down) {
 		if (down) {
 			this.settings.keyboardEvent(keyBinding);
@@ -319,4 +335,6 @@ public class Schematica extends BTWAddon {
 			}
 //		}
 	}
+
+
 }

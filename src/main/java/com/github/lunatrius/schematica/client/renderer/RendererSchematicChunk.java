@@ -248,6 +248,7 @@ public class RendererSchematicChunk {
 
 						sides = 0;
 						if (block != null) {
+							block.currentBlockRenderer = renderBlocks;
 							if (block.shouldSideBeRendered(this.schematic, x, y - 1, z, 0)) {
 								sides |= RenderHelper.QUAD_DOWN;
 							}
@@ -317,9 +318,9 @@ public class RendererSchematicChunk {
 									RenderHelper.drawCuboidOutline(zero, size, sides, 0.0f, 0.75f, 1.0f, 0.25f);
 								}
 							}
-							//todo idk even know
 
-							if (block != null && RenderPass.checkRenderPasses(block, false)/*block.canRenderInPass(renderPass)*/) {
+							//todo idk even know
+							if (block != null && renderPass == block.getRenderBlockPass() /*&& RenderPass.checkRenderPasses(block, false)*//*block.canRenderInPass(renderPass)*/) {
 								renderBlocks.renderBlockByRenderType(block, x, y, z);
 							}
 						}

@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica;
 
+import btw.block.BTWBlocks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.src.Block;
@@ -23,7 +24,7 @@ import org.lwjgl.util.vector.Vector3f;
 import java.util.*;
 
 public class SchematicWorld extends World {
-	//todo added idk if this works right
+
 	private static final WorldProvider provider = new WorldProvider() {
 		@Override
 		public String getDimensionName() {
@@ -40,9 +41,9 @@ public class SchematicWorld extends World {
 		}
 	};
 
-	protected static final List<Integer> blockListIgnoreID = new ArrayList<Integer>();
-	protected static final List<Integer> blockListIgnoreMetadata = new ArrayList<Integer>();
-	protected static final Map<Integer, Integer> blockListMapping = new HashMap<Integer, Integer>();
+	protected static final List<Integer> blockListIgnoreID = new ArrayList<>();
+	protected static final List<Integer> blockListIgnoreMetadata = new ArrayList<>();
+	protected static final Map<Integer, Integer> blockListMapping = new HashMap<>();
 
 	private final Settings settings = Settings.instance();
 	private ItemStack icon;
@@ -50,6 +51,7 @@ public class SchematicWorld extends World {
 	private int[][][] metadata;
 	private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
 	private final List<ItemStack> blockList = new ArrayList<ItemStack>();
+	private final List<Entity> entityList = new ArrayList<>();
 	private short width;
 	private short length;
 	private short height;
@@ -419,8 +421,8 @@ public class SchematicWorld extends World {
 		for (int i = 0; i < this.tileEntities.size(); i++) {
 			tileEntity = this.tileEntities.get(i);
 
-			if (tileEntity instanceof TileEntityChest) {
-				checkForAdjacentChests((TileEntityChest) tileEntity);
+			if (tileEntity instanceof TileEntityChest chest) {
+				checkForAdjacentChests(chest);
 			}
 		}
 	}
@@ -432,19 +434,19 @@ public class SchematicWorld extends World {
 		tileEntityChest.adjacentChestXNeg = null;
 		tileEntityChest.adjacentChestZPosition = null;
 
-		if (getBlockId(tileEntityChest.xCoord - 1, tileEntityChest.yCoord, tileEntityChest.zCoord) == Block.chest.blockID) {
+		if (getBlockId(tileEntityChest.xCoord - 1, tileEntityChest.yCoord, tileEntityChest.zCoord) == BTWBlocks.chest.blockID) {
 			tileEntityChest.adjacentChestXNeg = (TileEntityChest) getBlockTileEntity(tileEntityChest.xCoord - 1, tileEntityChest.yCoord, tileEntityChest.zCoord);
 		}
 
-		if (getBlockId(tileEntityChest.xCoord + 1, tileEntityChest.yCoord, tileEntityChest.zCoord) == Block.chest.blockID) {
+		if (getBlockId(tileEntityChest.xCoord + 1, tileEntityChest.yCoord, tileEntityChest.zCoord) == BTWBlocks.chest.blockID) {
 			tileEntityChest.adjacentChestXPos = (TileEntityChest) getBlockTileEntity(tileEntityChest.xCoord + 1, tileEntityChest.yCoord, tileEntityChest.zCoord);
 		}
 
-		if (getBlockId(tileEntityChest.xCoord, tileEntityChest.yCoord, tileEntityChest.zCoord - 1) == Block.chest.blockID) {
+		if (getBlockId(tileEntityChest.xCoord, tileEntityChest.yCoord, tileEntityChest.zCoord - 1) == BTWBlocks.chest.blockID) {
 			tileEntityChest.adjacentChestZNeg = (TileEntityChest) getBlockTileEntity(tileEntityChest.xCoord, tileEntityChest.yCoord, tileEntityChest.zCoord - 1);
 		}
 
-		if (getBlockId(tileEntityChest.xCoord, tileEntityChest.yCoord, tileEntityChest.zCoord + 1) == Block.chest.blockID) {
+		if (getBlockId(tileEntityChest.xCoord, tileEntityChest.yCoord, tileEntityChest.zCoord + 1) == BTWBlocks.chest.blockID) {
 			tileEntityChest.adjacentChestZPosition = (TileEntityChest) getBlockTileEntity(tileEntityChest.xCoord, tileEntityChest.yCoord, tileEntityChest.zCoord + 1);
 		}
 	}
@@ -576,7 +578,7 @@ public class SchematicWorld extends World {
 	}
 
 	public static boolean isContainer(int itemId) {
-		return itemId == Block.furnaceBurning.blockID || itemId == Block.furnaceIdle.blockID || itemId == Block.dispenser.blockID || itemId == Block.chest.blockID || itemId == Block.enderChest.blockID;
+		return itemId == Block.furnaceBurning.blockID || itemId == Block.furnaceIdle.blockID || itemId == Block.dispenser.blockID || itemId == BTWBlocks.chest.blockID || itemId == Block.enderChest.blockID;
 	}
 
 	public static boolean isButton(int itemId) {
@@ -593,5 +595,17 @@ public class SchematicWorld extends World {
 
 	public static boolean isMetadataSensitive(int itemId) {
 		return itemId == Block.anvil.blockID || itemId == Block.trapdoor.blockID || isTorch(itemId) || isBlock(itemId) || isSlab(itemId) || isDoubleSlab(itemId) || isPistonBase(itemId) || isRedstoneRepeater(itemId) || isContainer(itemId) || isButton(itemId) || isPumpkin(itemId);
+	}
+
+	public static boolean addIgnoreMeta(int blockId) {
+		return blockListIgnoreMetadata.add(blockId);
+	}
+
+	public static boolean addIgnoreId(int blockId) {
+		return blockListIgnoreID.add(blockId);
+	}
+
+	public static void addBlockItemMap(int blockId, int itemId) {
+		blockListMapping.put(blockId, itemId);
 	}
 }

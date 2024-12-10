@@ -31,3 +31,5 @@ schematica.gui.printer=Printer
 schematica.key.load=Load schematic
 schematica.key.save=Save schematic
 schematica.key.control=Manipulate schematic
+
+schematica.item.debug=Schematic Debug Tool
