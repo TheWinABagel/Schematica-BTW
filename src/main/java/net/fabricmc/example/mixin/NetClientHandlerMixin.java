@@ -1,6 +1,6 @@
 package net.fabricmc.example.mixin;
 
-import com.github.lunatrius.schematica.ChatEventHandler;
+import com.github.lunatrius.schematicaold.ChatEventHandler;
 import net.minecraft.src.NetClientHandler;
 import net.minecraft.src.Packet3Chat;
 import org.spongepowered.asm.mixin.Mixin;

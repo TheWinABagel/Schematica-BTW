@@ -1,6 +1,6 @@
 package net.fabricmc.example.mixin;
 
-import com.github.lunatrius.schematica.Settings;
+import com.github.lunatrius.schematicaold.Settings;
 import net.minecraft.src.GameSettings;
 import net.minecraft.src.KeyBinding;
 import net.minecraft.src.Minecraft;

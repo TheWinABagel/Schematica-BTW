@@ -1,6 +1,6 @@
 package net.fabricmc.example.mixin;
 
-import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
+import com.github.lunatrius.schematicaold.client.renderer.RendererSchematicGlobal;
 import net.minecraft.src.EntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
