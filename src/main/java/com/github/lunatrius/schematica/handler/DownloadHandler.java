@@ -8,8 +8,6 @@ import com.github.lunatrius.schematica.network.message.MessageDownloadEnd;
 import com.github.lunatrius.schematica.network.transfer.SchematicTransfer;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.src.EntityPlayerMP;
 
 import java.util.LinkedHashMap;
@@ -24,12 +22,7 @@ public class DownloadHandler {
 
     private DownloadHandler() {}
 
-    @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START) {
-            return;
-        }
-
+    public void onServerStartTick() {
         processQueue();
     }
 

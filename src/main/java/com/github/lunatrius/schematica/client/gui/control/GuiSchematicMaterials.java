@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.client.gui.control;
 
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.gui.shim.GuiUnicodeGlyphButton;
 import com.github.lunatrius.schematica.client.util.BlockList;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
@@ -68,8 +69,9 @@ public class GuiSchematicMaterials extends GuiScreenBase {
                 this.btnSort.displayString = " " + I18n.getString(Names.Gui.Control.SORT_PREFIX + this.sortType.label);
                 this.btnSort.glyph = this.sortType.glyph;
 
-                ConfigurationHandler.propSortType.set(String.valueOf(this.sortType));
-                ConfigurationHandler.loadConfiguration();
+                //todo change config when button pressed
+//                ConfigurationHandler.propSortType.set(String.valueOf(this.sortType));
+//                ConfigurationHandler.loadConfiguration();
             } else if (guiButton.id == this.btnDump.id) {
                 dumpMaterialList(this.blockList);
             } else if (guiButton.id == this.btnDone.id) {
@@ -80,10 +82,10 @@ public class GuiSchematicMaterials extends GuiScreenBase {
         }
     }
 
-    @Override
-    public void renderToolTip(ItemStack stack, int x, int y) {
-        super.renderToolTip(stack, x, y);
-    }
+//    @Override
+//    public void renderToolTip(ItemStack stack, int x, int y) {
+//        super.renderToolTip(stack, x, y);
+//    }
 
     @Override
     public void drawScreen(int x, int y, float partialTicks) {
@@ -119,7 +121,7 @@ public class GuiSchematicMaterials extends GuiScreenBase {
             stringBuilder.append(System.lineSeparator());
         }
 
-        final File dumps = Schematica.proxy.getDirectory("dumps");
+        final File dumps = Schematica.getProxy().getDirectory("dumps");
         try {
             final FileOutputStream outputStream = new FileOutputStream(new File(dumps, Reference.MODID + "-materials.txt"));
             try {

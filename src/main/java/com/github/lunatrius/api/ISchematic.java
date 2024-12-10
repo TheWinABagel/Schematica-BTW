@@ -20,6 +20,16 @@ public interface ISchematic {
     @Nullable Block getBlock(int x, int y, int z);
 
     /**
+     * Gets a block at a given location within the schematic. Requesting a block outside of those bounds returns 0.
+     *
+     * @param x the X coord in world space.
+     * @param y the Y coord in world space.
+     * @param z the Z coord in world space.
+     * @return the block id at the requested location.
+     */
+    int getBlockId(int x, int y, int z);
+
+    /**
      * Sets the block at the given location, metadata will be set to 0. Attempting to set a block outside of the schematic
      * boundaries or with an invalid block will result in no change being made and this method will return false.
      *

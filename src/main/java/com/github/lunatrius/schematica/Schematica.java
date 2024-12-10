@@ -1,48 +1,67 @@
 package com.github.lunatrius.schematica;
 
+import btw.BTWAddon;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.proxy.CommonProxy;
+import com.github.lunatrius.schematica.proxy.ServerProxy;
 import com.github.lunatrius.schematica.reference.Reference;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkCheckHandler;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.ICommand;
 
 import java.util.Map;
 
-public class Schematica {
-    public static Schematica instance;
+public class Schematica extends BTWAddon {
+    public static Schematica instance = new Schematica();
 
-    @SidedProxy(serverSide = Reference.PROXY_SERVER, clientSide = Reference.PROXY_CLIENT)
-    public static CommonProxy proxy;
-
-    @NetworkCheckHandler
-    public boolean checkModList(Map<String, String> versions, Side side) {
-        return true;
+    public static CommonProxy getProxy() {
+        if (MinecraftServer.getIsServer()) {
+            return new ServerProxy();
+        }
+        else return new ClientProxy();
     }
 
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        proxy.preInit(event);
+    //todo proxy might not work
+//    @SidedProxy(serverSide = Reference.PROXY_SERVER, clientSide = Reference.PROXY_CLIENT)
+    private static CommonProxy proxy = getProxy();
+
+//    @EventHandler
+//    public void preInit(FMLPreInitializationEvent event) {
+//        getProxy().preInitialize();
+//    }
+
+    @Override
+    public void preInitialize() {
+        getProxy().preInitialize();
     }
 
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.init(event);
+    //    @EventHandler
+//    public void init(FMLInitializationEvent event) {
+//        proxy.init(event);
+//    }
+
+    @Override
+    public void initialize() {
+        getProxy().init();
     }
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit(event);
-    }
 
-    @EventHandler
-    public void serverStarting(FMLServerStartingEvent event) {
-        proxy.serverStarting(event);
-    }
+
+//    @EventHandler
+//    public void postInit(FMLPostInitializationEvent event) {
+//        proxy.postInit(event);
+//    }
+
+
+    //not needed anymore, only for forge multipart
+//    @Override
+//    public void postInitialize() {
+//        getProxy().postInitialize();
+//    }
+
+
+    //only to set up keybinds
+//    @EventHandler
+//    public void serverStarting(FMLServerStartingEvent event) {
+//        proxy.serverStarting(event);
+//    }
 }

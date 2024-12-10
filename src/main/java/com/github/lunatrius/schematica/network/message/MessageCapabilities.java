@@ -2,11 +2,10 @@ package com.github.lunatrius.schematica.network.message;
 
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
+import com.github.lunatrius.schematica.network.util.IMessage;
+import com.github.lunatrius.schematica.network.util.IMessageHandler;
+import com.github.lunatrius.schematica.network.util.MessageContext;
 import com.github.lunatrius.schematica.reference.Reference;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import io.netty.buffer.ByteBuf;
 
 public class MessageCapabilities implements IMessage, IMessageHandler<MessageCapabilities, IMessage> {
     public boolean isPrinterEnabled;
@@ -40,8 +39,8 @@ public class MessageCapabilities implements IMessage, IMessageHandler<MessageCap
     @Override
     public IMessage onMessage(MessageCapabilities message, MessageContext ctx) {
         SchematicPrinter.INSTANCE.setEnabled(message.isPrinterEnabled);
-        Schematica.proxy.isSaveEnabled = message.isSaveEnabled;
-        Schematica.proxy.isLoadEnabled = message.isLoadEnabled;
+        Schematica.getProxy().isSaveEnabled = message.isSaveEnabled;
+        Schematica.getProxy().isLoadEnabled = message.isLoadEnabled;
 
         Reference.logger.info("Server capabilities{printer={}, save={}, load={}}", message.isPrinterEnabled, message.isSaveEnabled, message.isLoadEnabled);
 

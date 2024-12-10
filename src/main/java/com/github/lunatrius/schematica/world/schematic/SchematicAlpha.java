@@ -14,8 +14,6 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
 
 import java.util.HashMap;
 import java.util.List;
@@ -174,7 +172,8 @@ public class SchematicAlpha extends SchematicFormat {
         }
 
         PreSchematicSaveEvent event = new PreSchematicSaveEvent(schematic, mappings);
-        MinecraftForge.EVENT_BUS.post(event);
+        //todo save event
+//        MinecraftForge.EVENT_BUS.post(event);
 
         NBTTagCompound nbtMapping = new NBTTagCompound();
         for (Map.Entry<String, Short> entry : mappings.entrySet()) {

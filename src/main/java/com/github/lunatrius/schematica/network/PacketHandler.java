@@ -6,21 +6,23 @@ import com.github.lunatrius.schematica.network.message.MessageDownloadBeginAck;
 import com.github.lunatrius.schematica.network.message.MessageDownloadChunk;
 import com.github.lunatrius.schematica.network.message.MessageDownloadChunkAck;
 import com.github.lunatrius.schematica.network.message.MessageDownloadEnd;
+import com.github.lunatrius.schematica.network.util.NetworkHelper;
 import com.github.lunatrius.schematica.reference.Reference;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
+//import cpw.mods.fml.common.network.NetworkRegistry;
+//import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+//import cpw.mods.fml.relauncher.Side;
 
 public class PacketHandler {
-    public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MODID.toLowerCase());
+    //todo networking in its entirety
+    public static final NetworkHelper INSTANCE = NetworkHelper.INSTANCE;
 
     public static void init() {
-        INSTANCE.registerMessage(MessageCapabilities.class, MessageCapabilities.class, 0, Side.CLIENT);
-
-        INSTANCE.registerMessage(MessageDownloadBegin.class, MessageDownloadBegin.class, 1, Side.CLIENT);
-        INSTANCE.registerMessage(MessageDownloadBeginAck.class, MessageDownloadBeginAck.class, 2, Side.SERVER);
-        INSTANCE.registerMessage(MessageDownloadChunk.class, MessageDownloadChunk.class, 3, Side.CLIENT);
-        INSTANCE.registerMessage(MessageDownloadChunkAck.class, MessageDownloadChunkAck.class, 4, Side.SERVER);
-        INSTANCE.registerMessage(MessageDownloadEnd.class, MessageDownloadEnd.class, 5, Side.CLIENT);
+//        INSTANCE.registerMessage(MessageCapabilities.class, MessageCapabilities.class, 0, Side.CLIENT);
+//
+//        INSTANCE.registerMessage(MessageDownloadBegin.class, MessageDownloadBegin.class, 1, Side.CLIENT);
+//        INSTANCE.registerMessage(MessageDownloadBeginAck.class, MessageDownloadBeginAck.class, 2, Side.SERVER);
+//        INSTANCE.registerMessage(MessageDownloadChunk.class, MessageDownloadChunk.class, 3, Side.CLIENT);
+//        INSTANCE.registerMessage(MessageDownloadChunkAck.class, MessageDownloadChunkAck.class, 4, Side.SERVER);
+//        INSTANCE.registerMessage(MessageDownloadEnd.class, MessageDownloadEnd.class, 5, Side.CLIENT);
     }
 }

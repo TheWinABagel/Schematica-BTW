@@ -11,12 +11,7 @@ import net.minecraft.src.CommandException;
 import net.minecraft.src.ICommandSender;
 import net.minecraft.src.WrongUsageException;
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ClickEvent;
-import net.minecraft.src.ChatComponentText;
-import net.minecraft.src.ChatComponentTranslation;
-import net.minecraft.src.ChatStyle;
 import net.minecraft.src.EnumChatFormatting;
-import net.minecraft.src.IChatComponent;
 
 import java.io.File;
 import java.util.Arrays;
@@ -65,7 +60,7 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
         }
 
         String filename = String.format("%s.schematic", name);
-        File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
+        File schematicDirectory = Schematica.getProxy().getPlayerSchematicDirectory(player, true);
         File file = new File(schematicDirectory, filename);
         if (!FileUtils.contains(schematicDirectory, file)) {
             Reference.logger.error("{} has tried to download the file {}", player.getCommandSenderName(), filename);
@@ -73,32 +68,33 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
         }
 
         if (file.exists()) {
-            if (delete) {
-                if (file.delete()) {
-                    sender.addChatMessage(new ChatComponentTranslation(Names.Command.Remove.Message.SCHEMATIC_REMOVED, name));
-                } else {
-                    throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
-                }
-            } else {
-                String hash = Hashing.md5().hashString(name, Charsets.UTF_8).toString();
-                String confirmCommand = String.format("/%s %s %s", Names.Command.Remove.NAME, name, hash);
-                final IChatComponent chatComponent = new ChatComponentTranslation(Names.Command.Remove.Message.ARE_YOU_SURE_START, name)
-                        .appendSibling(new ChatComponentText(" ["))
-                        .appendSibling(
-                                //Confirmation link
-                                new ChatComponentTranslation(Names.Command.Remove.Message.YES)
-                                        .setChatStyle(
-                                                new ChatStyle()
-                                                        .setColor(EnumChatFormatting.RED)
-                                                        .setChatClickEvent(
-                                                                new ClickEvent(ClickEvent.Action.RUN_COMMAND, confirmCommand)
-                                                        )
-                                        )
-                        )
-                        .appendSibling(new ChatComponentText("]"));
-
-                sender.addChatMessage(chatComponent);
-            }
+            ((EntityPlayer) sender).addChatMessage("not yet implemented!");
+//            if (delete) {
+//                if (file.delete()) {
+//                    sender.addChatMessage(new ChatComponentTranslation(Names.Command.Remove.Message.SCHEMATIC_REMOVED, name));
+//                } else {
+//                    throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
+//                }
+//            } else {
+//                String hash = Hashing.md5().hashString(name, Charsets.UTF_8).toString();
+//                String confirmCommand = String.format("/%s %s %s", Names.Command.Remove.NAME, name, hash);
+//                final IChatComponent chatComponent = new ChatComponentTranslation(Names.Command.Remove.Message.ARE_YOU_SURE_START, name)
+//                        .appendSibling(new ChatComponentText(" ["))
+//                        .appendSibling(
+//                                //Confirmation link
+//                                new ChatComponentTranslation(Names.Command.Remove.Message.YES)
+//                                        .setChatStyle(
+//                                                new ChatStyle()
+//                                                        .setColor(EnumChatFormatting.RED)
+//                                                        .setChatClickEvent(
+//                                                                new ClickEvent(ClickEvent.Action.RUN_COMMAND, confirmCommand)
+//                                                        )
+//                                        )
+//                        )
+//                        .appendSibling(new ChatComponentText("]"));
+//
+//                sender.addChatMessage(chatComponent);
+//            }
         } else {
             throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
         }

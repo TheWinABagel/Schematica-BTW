@@ -5,15 +5,20 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BTWModAccessor",
-    "EntityRendererMixin",
     "GameSettingsMixin",
-    "RenderGlobalAccessor"
+    "NetServerHandlerMixin",
+    "RenderGlobalAccessor",
+    "oneseven.EntityRendererMixin",
+    "oneseven.MinecraftServerMixin",
+    "oneseven.ServerConfigurationManagerMixin"
   ],
   "client": [
     "ExampleMixin",
     "MinecraftMixin",
-    "NetClientHandlerMixin",
-    "TextureMapAccessor"
+    "TextureMapAccessor",
+    "oneseven.MinecraftMixin",
+    "oneseven.NetClientHandlerMixin",
+    "oneseven.WorldClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -3,7 +3,6 @@ package com.github.lunatrius.schematica.world.schematic;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.CompressedStreamTools;
 import net.minecraft.src.NBTTagCompound;
@@ -37,13 +36,14 @@ public final class SchematicUtil {
                 }
             }
         }
-
-        icon = new ItemStack(GameData.getBlockRegistry().getObject(name), 1, damage);
+        //todo icon saving not working
+        icon = new ItemStack(1, 1, 0);
+//        icon = new ItemStack(GameData.getBlockRegistry().getObject(name), 1, damage);
         if (icon.getItem() != null) {
             return icon;
         }
 
-        icon = new ItemStack(GameData.getItemRegistry().getObject(name), 1, damage);
+//        icon = new ItemStack(GameData.getItemRegistry().getObject(name), 1, damage);
         if (icon.getItem() != null) {
             return icon;
         }

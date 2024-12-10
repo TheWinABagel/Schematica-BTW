@@ -31,10 +31,11 @@ public class ShaderProgram {
     }
 
     private void init(String domain, String vertShaderFilename, String fragShaderFilename) {
-        if (!OpenGlHelper.shadersSupported) {
-            this.program = 0;
-            return;
-        }
+        //todo shaders supported 2
+//        if (!OpenGlHelper.shadersSupported) {
+//            this.program = 0;
+//            return;
+//        }
 
         this.program = GL20.glCreateProgram();
 

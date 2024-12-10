@@ -4,11 +4,7 @@ import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import net.minecraft.src.CommandException;
-import net.minecraft.src.ICommandSender;
-import net.minecraft.src.WrongUsageException;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ChatComponentTranslation;
+import net.minecraft.src.*;
 
 import java.io.File;
 
@@ -35,7 +31,7 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
 
         final EntityPlayer player = (EntityPlayer) sender;
 
-        if (Schematica.proxy.isPlayerQuotaExceeded(player)) {
+        if (Schematica.getProxy().isPlayerQuotaExceeded(player)) {
             throw new CommandException(Names.Command.Save.Message.QUOTA_EXCEEDED);
         }
 
@@ -55,7 +51,7 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
         }
 
         Reference.logger.debug("Saving schematic from {} to {} to {}", from, to, filename);
-        final File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
+        final File schematicDirectory = Schematica.getProxy().getPlayerSchematicDirectory(player, true);
         if (schematicDirectory == null) {
             //Chances are that if this is null, we could not retrieve their UUID.
             Reference.logger.warn("Unable to determine the schematic directory for player {}", player);
@@ -70,8 +66,9 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
         }
 
         try {
-            Schematica.proxy.saveSchematic(player, schematicDirectory, filename, player.getEntityWorld(), from, to);
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.Save.Message.SAVE_SUCCESSFUL, name));
+            Schematica.getProxy().saveSchematic(player, schematicDirectory, filename, player.getEntityWorld(), from, to);
+            ((EntityPlayer) sender).addChatMessage(StringTranslate.getInstance().translateKeyFormat(Names.Command.Save.Message.SAVE_SUCCESSFUL, name));
+//            sender.addChatMessage(new ChatComponentTranslation(Names.Command.Save.Message.SAVE_SUCCESSFUL, name));
         } catch (Exception e) {
             throw new CommandException(Names.Command.Save.Message.SAVE_FAILED, name);
         }

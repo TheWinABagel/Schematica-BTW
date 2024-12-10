@@ -7,28 +7,22 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.ChunkProviderSchematic;
 import com.github.lunatrius.schematica.world.storage.SaveHandlerSchematic;
 import com.github.lunatrius.schematica.world.storage.Schematic;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.src.Block;
-import net.minecraft.src.Entity;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.TileEntityChest;
-import net.minecraft.src.TileEntitySkull;
-import net.minecraft.src.EnumSkyBlock;
-import net.minecraft.src.World;
-import net.minecraft.src.WorldSettings;
-import net.minecraft.src.WorldType;
-import net.minecraft.src.BiomeGenBase;
-import net.minecraft.src.IChunkProvider;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.src.*;
 
 import java.util.List;
 
 public class SchematicWorld extends World {
-    private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, WorldSettings.GameType.CREATIVE, false, false, WorldType.FLAT);
+    private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, EnumGameType.CREATIVE, false, false, WorldType.FLAT);
 
-    public static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.grass);
+    public static final ItemStack DEFAULT_ICON = new ItemStack(Block.grass);
+    private static final WorldProvider DUMMY_PROVIDER = new WorldProvider() {
+        @Override
+        public String getDimensionName() {
+            return "dummy_schematic";
+        }
+    };
 
     private ISchematic schematic;
 
@@ -38,7 +32,7 @@ public class SchematicWorld extends World {
     public int renderingLayer;
 
     public SchematicWorld(ISchematic schematic) {
-        super(new SaveHandlerSchematic(), "Schematica", WORLD_SETTINGS, null, null);
+        super(new SaveHandlerSchematic(), "Schematica", WORLD_SETTINGS, DUMMY_PROVIDER, null, null);
         this.schematic = schematic;
 
         for (TileEntity tileEntity : schematic.getTileEntities()) {
@@ -51,36 +45,65 @@ public class SchematicWorld extends World {
     }
 
     @Override
+    public int getBlockId(int x, int y, int z) {
+        if (this.isRenderingLayer && this.renderingLayer != y) {
+            return 0;
+        }
+        return this.schematic.getBlockId(x, y, z);
+    }
+
+//    @Override
     public Block getBlock(int x, int y, int z) {
         if (this.isRenderingLayer && this.renderingLayer != y) {
-            return Blocks.air;
+            return null;
         }
 
         return this.schematic.getBlock(x, y, z);
     }
 
-    @Override
-    public boolean setBlock(int x, int y, int z, Block block, int metadata, int flags) {
-        return this.schematic.setBlock(x, y, z, block, metadata);
-    }
+//    @Override
+//    public boolean setBlock(int x, int y, int z, Block block, int metadata, int flags) {
+//        return this.schematic.setBlock(x, y, z, block, metadata);
+//    }
 
     @Override
-    public TileEntity getTileEntity(int x, int y, int z) {
+    public boolean setBlock(int x, int y, int z, int blockId, int metadata, int flags) {
+        return this.schematic.setBlock(x, y, z, Block.blocksList[blockId], metadata);
+    }
+
+//    @Override
+//    public TileEntity getTileEntity(int x, int y, int z) {
+//        return this.schematic.getTileEntity(x, y, z);
+//    }
+
+    @Override
+    public TileEntity getBlockTileEntity(int x, int y, int z) {
         return this.schematic.getTileEntity(x, y, z);
     }
 
+//    @Override
+//    public void setTileEntity(int x, int y, int z, TileEntity tileEntity) {
+//        this.schematic.setTileEntity(x, y, z, tileEntity);
+//        initializeTileEntity(tileEntity);
+//    }
+
     @Override
-    public void setTileEntity(int x, int y, int z, TileEntity tileEntity) {
+    public void setBlockTileEntity(int x, int y, int z, TileEntity tileEntity) {
         this.schematic.setTileEntity(x, y, z, tileEntity);
         initializeTileEntity(tileEntity);
     }
 
+//    @Override
+//    public void removeTileEntity(int x, int y, int z) {
+//        this.schematic.removeTileEntity(x, y, z);
+//    }
+
     @Override
-    public void removeTileEntity(int x, int y, int z) {
+    public void removeBlockTileEntity(int x, int y, int z) {
         this.schematic.removeTileEntity(x, y, z);
     }
 
-    @SideOnly(Side.CLIENT)
+    @Environment(EnvType.CLIENT)
     @Override
     public int getSkyBlockTypeBrightness(EnumSkyBlock skyBlock, int x, int y, int z) {
         return 15;
@@ -98,17 +121,20 @@ public class SchematicWorld extends World {
 
     @Override
     public boolean isBlockNormalCubeDefault(int x, int y, int z, boolean _default) {
-        return getBlock(x, y, z).isNormalCube();
+//        return getBlock(x, y, z).isNormalCube();
+        return getBlock(x, y, z).isNormalCube(this, x, y, z);
     }
 
-    @Override
-    protected int func_152379_p() {
-        return 0;
-    }
+    //render distance chunks, not important?
+//    @Override
+//    protected int func_152379_p() {
+//        return 0;
+//    }
 
     @Override
     public boolean isAirBlock(int x, int y, int z) {
-        return getBlock(x, y, z).isAir(this, x, y, z);
+//        return getBlock(x, y, z).isAir(this, x, y, z);
+        return getBlock(x, y, z) == null;
     }
 
     @Override
@@ -129,7 +155,7 @@ public class SchematicWorld extends World {
         return this.schematic.getHeight();
     }
 
-    @SideOnly(Side.CLIENT)
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean extendedLevelsInChunkCache() {
         return false;
@@ -155,15 +181,15 @@ public class SchematicWorld extends World {
         return this.schematic.setBlockMetadata(x, y, z, metadata);
     }
 
-    @Override
-    public boolean isSideSolid(int x, int y, int z, ForgeDirection side) {
-        return isSideSolid(x, y, z, side, false);
-    }
-
-    @Override
-    public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default) {
-        return getBlock(x, y, z).isSideSolid(this, x, y, z, side);
-    }
+//    @Override
+//    public boolean isSideSolid(int x, int y, int z, ForgeDirection side) {
+//        return isSideSolid(x, y, z, side, false);
+//    }
+//
+//    @Override
+//    public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default) {
+//        return getBlock(x, y, z).isSideSolid(this, x, y, z, side);
+//    }
 
     public void initializeTileEntity(TileEntity tileEntity) {
         tileEntity.setWorldObj(this);
@@ -218,7 +244,12 @@ public class SchematicWorld extends World {
             for (int z = 0; z < length; z++) {
                 for (int x = 0; x < width; x++) {
                     try {
-                        getBlock(x, y, length - 1 - z).rotateBlock(this, x, y, length - 1 - z, ForgeDirection.UP);
+                        Block block = getBlock(x, y, length - 1 - z);
+                        //todo rotation logic changed
+                        if (block != null) {
+                            block.rotateMetadataAroundYAxis(getBlockMetadata(x, y, z), false);
+                        }
+//                        getBlock(x, y, length - 1 - z).rotateBlock(this, x, y, length - 1 - z, ForgeDirection.UP);
                     } catch (Exception e) {
                         Reference.logger.debug("Failed to rotate block!", e);
                     }
@@ -236,9 +267,9 @@ public class SchematicWorld extends World {
             tileEntity.xCoord = length - 1 - coord;
             tileEntity.blockMetadata = schematicRotated.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
 
-            if (tileEntity instanceof TileEntitySkull && tileEntity.blockMetadata == 0x1) {
-                TileEntitySkull skullTileEntity = (TileEntitySkull) tileEntity;
-                skullTileEntity.func_145903_a((skullTileEntity.func_145906_b() + 12) & 15);
+            if (tileEntity instanceof TileEntitySkull skullTileEntity && tileEntity.blockMetadata == 0x1) {
+                //renamed from func_145906_b and func_145903_a
+                skullTileEntity.setSkullRotation((skullTileEntity.getSkullRotationServerSafe() + 12) & 15);
             }
 
             schematicRotated.setTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity);

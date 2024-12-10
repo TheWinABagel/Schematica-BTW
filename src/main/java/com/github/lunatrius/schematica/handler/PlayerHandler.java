@@ -3,8 +3,7 @@ package com.github.lunatrius.schematica.handler;
 import com.github.lunatrius.schematica.network.PacketHandler;
 import com.github.lunatrius.schematica.network.message.MessageCapabilities;
 import com.github.lunatrius.schematica.reference.Reference;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
 
 public class PlayerHandler {
@@ -12,21 +11,19 @@ public class PlayerHandler {
 
     private PlayerHandler() {}
 
-    @SubscribeEvent
-    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.player instanceof EntityPlayerMP) {
+    public void onPlayerLoggedIn(EntityPlayer player) {
+        if (player instanceof EntityPlayerMP playerMP) {
             try {
-                PacketHandler.INSTANCE.sendTo(new MessageCapabilities(ConfigurationHandler.printerEnabled, ConfigurationHandler.saveEnabled, ConfigurationHandler.loadEnabled), (EntityPlayerMP) event.player);
+                PacketHandler.INSTANCE.sendTo(new MessageCapabilities(ConfigurationHandler.printerEnabled, ConfigurationHandler.saveEnabled, ConfigurationHandler.loadEnabled), playerMP);
             } catch (Exception ex) {
                 Reference.logger.error("Failed to send capabilities!", ex);
             }
         }
     }
 
-    @SubscribeEvent
-    public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
-        if (event.player instanceof EntityPlayerMP) {
-            DownloadHandler.INSTANCE.transferMap.remove(event.player);
+    public void onPlayerLoggedOut(EntityPlayer player) {
+        if (player instanceof EntityPlayerMP) {
+            DownloadHandler.INSTANCE.transferMap.remove(player);
         }
     }
 }

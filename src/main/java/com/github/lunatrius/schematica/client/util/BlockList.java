@@ -4,9 +4,8 @@ import com.github.lunatrius.core.entity.EntityHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.src.Block;
-import net.minecraft.src.multiplayer.WorldClient;
+import net.minecraft.src.WorldClient;
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.Blocks;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MovingObjectPosition;
 
@@ -32,20 +31,24 @@ public class BlockList {
 
                     final Block block = world.getBlock(x, y, z);
 
-                    if (block == Blocks.air || world.isAirBlock(x, y, z)) {
+                    if (block == null || world.isAirBlock(x, y, z)) {
                         continue;
                     }
 
                     final int wx = world.position.x + x;
                     final int wy = world.position.y + y;
                     final int wz = world.position.z + z;
-                    final Block mcBlock = mcWorld.getBlock(wx, wy, wz);
+                    final Block mcBlock = Block.blocksList[mcWorld.getBlockId(wx, wy, wz)];
+                    if (mcBlock == null) {
+                        continue;
+                    }
                     final boolean isPlaced = block == mcBlock && world.getBlockMetadata(x, y, z) == mcWorld.getBlockMetadata(wx, wy, wz);
 
                     ItemStack stack = null;
 
                     try {
-                        stack = block.getPickBlock(movingObjectPosition, world, x, y, z, player);
+//                        stack = block.getPickBlock(movingObjectPosition, world, x, y, z, player);
+                        stack = new ItemStack(block.idPicked(world, x, y, z), 1, 0);
                     } catch (final Exception e) {
                         Reference.logger.debug("Could not get the pick block for: {}", block, e);
                     }

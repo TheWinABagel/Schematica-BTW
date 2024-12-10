@@ -4,11 +4,10 @@ import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.SchematicContainer;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraft.src.MemoryConnection;
 import net.minecraft.src.Minecraft;
 import net.minecraft.src.EntityClientPlayerMP;
-import net.minecraft.src.ChatComponentTranslation;
+import net.minecraft.src.StringTranslate;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -20,16 +19,11 @@ public class QueueTickHandler {
 
     private QueueTickHandler() {}
 
-    @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.START) {
-            return;
-        }
-
+    public void onClientEndTick() {
         // TODO: find a better way... maybe?
         try {
             final EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-            if (player != null && player.sendQueue != null && !player.sendQueue.getNetworkManager().isLocalChannel()) {
+            if (player != null && player.sendQueue != null && !(player.sendQueue.getNetManager() instanceof MemoryConnection) /*&& !player.sendQueue.getNetworkManager().isLocalChannel()*/) {
                 processQueue();
             }
         } catch (Exception e) {
@@ -37,12 +31,7 @@ public class QueueTickHandler {
         }
     }
 
-    @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START) {
-            return;
-        }
-
+    public void onServerStartTick() {
         processQueue();
     }
 
@@ -58,8 +47,10 @@ public class QueueTickHandler {
 
         if (container.hasNext()) {
             if (container.isFirst()) {
-                final ChatComponentTranslation chatComponent = new ChatComponentTranslation(Names.Command.Save.Message.SAVE_STARTED, container.chunkCount, container.file.getName());
-                container.player.addChatMessage(chatComponent);
+//                final ChatComponentTranslation chatComponent = new ChatComponentTranslation(Names.Command.Save.Message.SAVE_STARTED, container.chunkCount, container.file.getName());
+//                container.player.addChatMessage(chatComponent);
+                String component = StringTranslate.getInstance().translateKeyFormat(Names.Command.Save.Message.SAVE_STARTED, container.chunkCount, container.file.getName());
+                container.player.addChatMessage(component);
             }
 
             container.next();
@@ -70,7 +61,8 @@ public class QueueTickHandler {
         } else {
             final boolean success = SchematicFormat.writeToFile(container.file, container.schematic);
             final String message = success ? Names.Command.Save.Message.SAVE_SUCCESSFUL : Names.Command.Save.Message.SAVE_FAILED;
-            container.player.addChatMessage(new ChatComponentTranslation(message, container.file.getName()));
+//            container.player.addChatMessage(new ChatComponentTranslation(message, container.file.getName()));
+            container.player.addChatMessage(StringTranslate.getInstance().translateKeyFormat(message, container.file.getName()));
         }
     }
 

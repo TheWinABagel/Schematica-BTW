@@ -4,8 +4,6 @@ import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 public class ChatEventHandler {
     public static final ChatEventHandler INSTANCE = new ChatEventHandler();
@@ -14,11 +12,9 @@ public class ChatEventHandler {
 
     private ChatEventHandler() {}
 
-    @SubscribeEvent
-    public void onClientChatReceivedEvent(ClientChatReceivedEvent event) {
+    public void onClientChatReceivedEvent(String message) {
         if (this.chatLines < 20) {
             this.chatLines++;
-            String message = event.message.getFormattedText();
             Reference.logger.debug("Message #{}: {}", this.chatLines, message);
             if (message.contains(Names.SBC.DISABLE_PRINTER)) {
                 Reference.logger.info("Printer is disabled on this server.");
@@ -26,11 +22,11 @@ public class ChatEventHandler {
             }
             if (message.contains(Names.SBC.DISABLE_SAVE)) {
                 Reference.logger.info("Saving is disabled on this server.");
-                Schematica.proxy.isSaveEnabled = false;
+                Schematica.getProxy().isSaveEnabled = false;
             }
             if (message.contains(Names.SBC.DISABLE_LOAD)) {
                 Reference.logger.info("Loading is disabled on this server.");
-                Schematica.proxy.isLoadEnabled = false;
+                Schematica.getProxy().isLoadEnabled = false;
             }
         }
     }

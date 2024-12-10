@@ -56,7 +56,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
 //
 //        LinkedList<IChatComponent> componentsToSend = new LinkedList<IChatComponent>();
 //
-//        File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
+//        File schematicDirectory = Schematica.getProxy().getPlayerSchematicDirectory(player, true);
 //        if (schematicDirectory == null) {
 //            Reference.logger.warn("Unable to determine the schematic directory for player {}", player);
 //            throw new CommandException(Names.Command.Save.Message.PLAYER_SCHEMATIC_DIR_UNAVAILABLE);

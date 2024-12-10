@@ -4,13 +4,11 @@ import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.src.Minecraft;
 import net.minecraft.src.EntityPlayerSP;
 import net.minecraft.src.RenderBlocks;
-import net.minecraft.src.culling.Frustrum;
+import net.minecraft.src.Frustrum;
 import net.minecraft.src.Profiler;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -30,11 +28,12 @@ public class RendererSchematicGlobal {
 
     private RendererSchematicGlobal() {}
 
-    @SubscribeEvent
-    public void onRender(RenderWorldLastEvent event) {
+
+    //RenderWorldLastEvent
+    public void onRender(float partialTicks) {
         EntityPlayerSP player = this.minecraft.thePlayer;
         if (player != null) {
-            ClientProxy.setPlayerData(player, event.partialTicks);
+            ClientProxy.setPlayerData(player, partialTicks);
 
             this.profiler.startSection("schematica");
             SchematicWorld schematic = ClientProxy.schematic;

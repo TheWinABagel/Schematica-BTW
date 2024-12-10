@@ -15,19 +15,12 @@ import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.handler.client.WorldHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
-import cpw.mods.fml.client.config.GuiConfigEntries;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.fabricmc.example.ForgeDirection;
 import net.minecraft.src.Minecraft;
 import net.minecraft.src.KeyBinding;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.MovingObjectPosition;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.File;
 import java.io.IOException;
@@ -148,38 +141,40 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
-        super.preInit(event);
+    public void preInitialize() {
+        super.preInitialize();
 
-        final Property[] sliders = {
-                ConfigurationHandler.propAlpha,
-                ConfigurationHandler.propBlockDelta,
-                ConfigurationHandler.propPlaceDelay,
-                ConfigurationHandler.propTimeout
-        };
-        for (Property prop : sliders) {
-            prop.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
-        }
+//        final Property[] sliders = {
+//                ConfigurationHandler.propAlpha,
+//                ConfigurationHandler.propBlockDelta,
+//                ConfigurationHandler.propPlaceDelay,
+//                ConfigurationHandler.propTimeout
+//        };
+//        for (Property prop : sliders) {
+//            prop.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+//        }
 
         for (KeyBinding keyBinding : InputHandler.KEY_BINDINGS) {
-            ClientRegistry.registerKeyBinding(keyBinding);
+//            ClientRegistry.registerKeyBinding(keyBinding);
         }
     }
 
-    @Override
-    public void init(FMLInitializationEvent event) {
-        super.init(event);
+//    @Override
+//    public void init(FMLInitializationEvent event) {
+//        super.init(event);
 
-        FMLCommonHandler.instance().bus().register(InputHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(TickHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
+//        FMLCommonHandler.instance().bus().register(InputHandler.INSTANCE);        //implemented, todo register keybinds
+//        FMLCommonHandler.instance().bus().register(TickHandler.INSTANCE);         //todo implement tick handler fully
+//        FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);   //todo render tick handler
+//        FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);//todo config
 
-        MinecraftForge.EVENT_BUS.register(RendererSchematicGlobal.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(ChatEventHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(new OverlayHandler());
-        MinecraftForge.EVENT_BUS.register(new WorldHandler());
-    }
+//        MinecraftForge.EVENT_BUS.register(RendererSchematicGlobal.INSTANCE);      //implemented
+//        MinecraftForge.EVENT_BUS.register(ChatEventHandler.INSTANCE);             //implemented
+//        MinecraftForge.EVENT_BUS.register(new OverlayHandler());                  //todo f3 overlay
+//        MinecraftForge.EVENT_BUS.register(new WorldHandler());                    //implemented
+//    }
+
+
 
     @Override
     public File getDataDirectory() {

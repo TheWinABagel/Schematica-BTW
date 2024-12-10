@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Schematic implements ISchematic {
     private static final ItemStack DEFAULT_ICON = new ItemStack(Block.grass);
-    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
+//    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     private ItemStack icon;
     private final short[][][] blocks;
@@ -40,7 +40,16 @@ public class Schematic implements ISchematic {
             return null;
         }
 
-        return BLOCK_REGISTRY.getObjectById(this.blocks[x][y][z]);
+//        return BLOCK_REGISTRY.getObjectById(this.blocks[x][y][z]);
+        return Block.blocksList[this.blocks[x][y][z]];
+    }
+
+    @Override
+    public int getBlockId(int x, int y, int z) {
+        if (!isValid(x, y, z)) {
+            return 0;
+        }
+        return this.blocks[x][y][z];
     }
 
     @Override
@@ -54,10 +63,11 @@ public class Schematic implements ISchematic {
             return false;
         }
 
-        final int id = BLOCK_REGISTRY.getId(block);
-        if (id == -1) {
-            return false;
-        }
+//        final int id = BLOCK_REGISTRY.getId(block);
+//        if (id == -1) {
+//            return false;
+//        }
+        final int id = block == null ? 0 : block.blockID;
 
         this.blocks[x][y][z] = (short) id;
         setBlockMetadata(x, y, z, metadata);

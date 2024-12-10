@@ -78,7 +78,7 @@ public class SchematicUpdater implements IWorldAccess {
     public void destroyBlockPartially(final int id, final int x, final int y, final int z, final int partialDamage) {
     }
 
-    @Override
-    public void onStaticEntitiesChanged() {
-    }
+//    @Override
+//    public void onStaticEntitiesChanged() {
+//    }
 }

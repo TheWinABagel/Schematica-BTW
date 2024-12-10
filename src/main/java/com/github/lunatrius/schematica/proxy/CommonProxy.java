@@ -1,8 +1,9 @@
 package com.github.lunatrius.schematica.proxy;
 
+import btw.BTWAddon;
 import com.github.lunatrius.core.util.vector.Vector3i;
-import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.api.ISchematic;
+import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.command.CommandSchematicaList;
 import com.github.lunatrius.schematica.command.CommandSchematicaRemove;
 import com.github.lunatrius.schematica.command.CommandSchematicaSave;
@@ -17,15 +18,9 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.SchematicContainer;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import com.github.lunatrius.schematica.world.storage.Schematic;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import net.minecraft.src.Block;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.Blocks;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.World;
@@ -38,29 +33,34 @@ public abstract class CommonProxy {
     public boolean isSaveEnabled = true;
     public boolean isLoadEnabled = true;
 
-    public void preInit(FMLPreInitializationEvent event) {
-        Reference.logger = event.getModLog();
-        ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
-        VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
+    public void preInitialize() {
+//        Reference.logger = event.getModLog();
+//        ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+
+//        VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
     }
 
-    public void init(FMLInitializationEvent event) {
+    public void init() {
         PacketHandler.init();
 
-        FMLCommonHandler.instance().bus().register(QueueTickHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(DownloadHandler.INSTANCE);
+//        FMLCommonHandler.instance().bus().register(QueueTickHandler.INSTANCE);    //implemented
+//        FMLCommonHandler.instance().bus().register(DownloadHandler.INSTANCE);     //implemented
+
+        Schematica.instance.registerAddonCommand(new CommandSchematicaSave());
+        Schematica.instance.registerAddonCommand(new CommandSchematicaList());
+        Schematica.instance.registerAddonCommand(new CommandSchematicaRemove());
     }
 
-    public void postInit(FMLPostInitializationEvent event) {
-        ForgeMultipart.init();
-    }
+//    public void postInit(FMLPostInitializationEvent event) {
+//        ForgeMultipart.init();
+//    }
 
-    public void serverStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandSchematicaSave());
-        event.registerServerCommand(new CommandSchematicaList());
-        event.registerServerCommand(new CommandSchematicaRemove());
-    }
+//    public void serverStarting(FMLServerStartingEvent event) {
+//        event.registerServerCommand(new CommandSchematicaSave());
+//        event.registerServerCommand(new CommandSchematicaList());
+//        event.registerServerCommand(new CommandSchematicaRemove());
+//    }
 
     public void createFolders() {
         if (!ConfigurationHandler.schematicDirectory.exists()) {
@@ -116,19 +116,19 @@ public abstract class CommonProxy {
                     final int localZ = z - minZ;
 
                     try {
-                        final Block block = world.getBlock(x, y, z);
+                        final Block block = Block.blocksList[world.getBlockId(x, y, z)];
                         final int metadata = world.getBlockMetadata(x, y, z);
                         final boolean success = schematic.setBlock(localX, localY, localZ, block, metadata);
 
-                        if (success && block.hasTileEntity(metadata)) {
-                            final TileEntity tileEntity = world.getTileEntity(x, y, z);
+                        if (success && block.hasTileEntity(/*metadata*/)) {
+                            final TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
                             if (tileEntity != null) {
                                 try {
                                     final TileEntity reloadedTileEntity = NBTHelper.reloadTileEntity(tileEntity, minX, minY, minZ);
                                     schematic.setTileEntity(localX, localY, localZ, reloadedTileEntity);
                                 } catch (NBTConversionException nce) {
                                     Reference.logger.error("Error while trying to save tile entity '{}'!", tileEntity, nce);
-                                    schematic.setBlock(localX, localY, localZ, Blocks.bedrock);
+                                    schematic.setBlock(localX, localY, localZ, Block.bedrock);
                                 }
                             }
                         }

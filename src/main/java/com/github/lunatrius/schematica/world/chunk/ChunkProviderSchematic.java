@@ -60,8 +60,13 @@ public class ChunkProviderSchematic implements IChunkProvider {
         return null;
     }
 
+//    @Override
+//    public ChunkPosition func_147416_a(World world, String name, int x, int y, int z) {
+//        return null;
+//    }
+
     @Override
-    public ChunkPosition func_147416_a(World world, String name, int x, int y, int z) {
+    public ChunkPosition findClosestStructure(World world, String string, int i, int j, int k) {
         return null;
     }
 

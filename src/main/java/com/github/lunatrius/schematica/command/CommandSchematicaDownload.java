@@ -35,7 +35,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
             throw new CommandException(Names.Command.Download.Message.PLAYERS_ONLY);
         }
 
-        final File directory = Schematica.proxy.getPlayerSchematicDirectory((EntityPlayer) sender, true);
+        final File directory = Schematica.getProxy().getPlayerSchematicDirectory((EntityPlayer) sender, true);
         final File[] files = directory.listFiles(FILE_FILTER_SCHEMATIC);
 
         if (files != null) {
@@ -63,7 +63,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
 
         final String filename = args[0] + ".schematic";
         final EntityPlayerMP player = (EntityPlayerMP) sender;
-        final File directory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
+        final File directory = Schematica.getProxy().getPlayerSchematicDirectory(player, true);
         if (!FileUtils.contains(directory, filename)) {
             Reference.logger.error("{} has tried to download the file {}", player.getEntityName(), filename);
             throw new CommandException(Names.Command.Download.Message.DOWNLOAD_FAILED);

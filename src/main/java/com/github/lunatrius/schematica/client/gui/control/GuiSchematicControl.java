@@ -162,7 +162,7 @@ public class GuiSchematicControl extends GuiScreenBase {
                 this.schematic.position.z = this.numericZ.getValue();
                 RendererSchematicGlobal.INSTANCE.refresh();
             } else if (guiButton.id == this.btnUnload.id) {
-                Schematica.proxy.unloadSchematic();
+                Schematica.getProxy().unloadSchematic();
                 this.mc.displayGuiScreen(this.parentScreen);
             } else if (guiButton.id == this.btnLayerMode.id) {
                 this.schematic.isRenderingLayer = !this.schematic.isRenderingLayer;

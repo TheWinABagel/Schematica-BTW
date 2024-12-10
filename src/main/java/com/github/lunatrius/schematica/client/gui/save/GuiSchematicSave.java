@@ -144,12 +144,12 @@ public class GuiSchematicSave extends GuiScreenBase {
                 ClientProxy.pointB.z = this.numericBZ.getValue();
                 ClientProxy.updatePoints();
             } else if (guiButton.id == this.btnEnable.id) {
-                ClientProxy.isRenderingGuide = !ClientProxy.isRenderingGuide && Schematica.proxy.isSaveEnabled;
+                ClientProxy.isRenderingGuide = !ClientProxy.isRenderingGuide && Schematica.getProxy().isSaveEnabled;
                 this.btnEnable.displayString = ClientProxy.isRenderingGuide ? this.strOn : this.strOff;
                 this.btnSave.enabled = ClientProxy.isRenderingGuide;
             } else if (guiButton.id == this.btnSave.id) {
                 String path = this.tfFilename.getText() + ".schematic";
-                if (Schematica.proxy.saveSchematic(this.mc.thePlayer, ConfigurationHandler.schematicDirectory, path, this.mc.theWorld, ClientProxy.pointMin, ClientProxy.pointMax)) {
+                if (Schematica.getProxy().saveSchematic(this.mc.thePlayer, ConfigurationHandler.schematicDirectory, path, this.mc.theWorld, ClientProxy.pointMin, ClientProxy.pointMax)) {
                     this.filename = "";
                     this.tfFilename.setText(this.filename);
                 }

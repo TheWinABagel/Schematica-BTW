@@ -8,27 +8,17 @@ import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import net.minecraft.src.Block;
-import net.minecraft.src.Minecraft;
-import net.minecraft.src.EntityClientPlayerMP;
-import net.minecraft.src.KeyBinding;
-import net.minecraft.src.Blocks;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.MovingObjectPosition;
-import net.minecraftforge.common.ForgeHooks;
+import net.minecraft.src.*;
 import org.lwjgl.input.Keyboard;
 
 public class InputHandler {
     public static final InputHandler INSTANCE = new InputHandler();
 
-    private static final KeyBinding KEY_BINDING_LOAD = new KeyBinding(Names.Keys.LOAD, Keyboard.KEY_DIVIDE, Names.Keys.CATEGORY);
-    private static final KeyBinding KEY_BINDING_SAVE = new KeyBinding(Names.Keys.SAVE, Keyboard.KEY_MULTIPLY, Names.Keys.CATEGORY);
-    private static final KeyBinding KEY_BINDING_CONTROL = new KeyBinding(Names.Keys.CONTROL, Keyboard.KEY_SUBTRACT, Names.Keys.CATEGORY);
-    private static final KeyBinding KEY_BINDING_LAYER_INC = new KeyBinding(Names.Keys.LAYER_INC, Keyboard.KEY_NONE, Names.Keys.CATEGORY);
-    private static final KeyBinding KEY_BINDING_LAYER_DEC = new KeyBinding(Names.Keys.LAYER_DEC, Keyboard.KEY_NONE, Names.Keys.CATEGORY);
+    private static final KeyBinding KEY_BINDING_LOAD = new KeyBinding(Names.Keys.LOAD, Keyboard.KEY_DIVIDE/*, Names.Keys.CATEGORY*/);
+    private static final KeyBinding KEY_BINDING_SAVE = new KeyBinding(Names.Keys.SAVE, Keyboard.KEY_MULTIPLY/*, Names.Keys.CATEGORY*/);
+    private static final KeyBinding KEY_BINDING_CONTROL = new KeyBinding(Names.Keys.CONTROL, Keyboard.KEY_SUBTRACT/*, Names.Keys.CATEGORY*/);
+    private static final KeyBinding KEY_BINDING_LAYER_INC = new KeyBinding(Names.Keys.LAYER_INC, Keyboard.KEY_NONE/*, Names.Keys.CATEGORY*/);
+    private static final KeyBinding KEY_BINDING_LAYER_DEC = new KeyBinding(Names.Keys.LAYER_DEC, Keyboard.KEY_NONE/*, Names.Keys.CATEGORY*/);
 
     public static final KeyBinding[] KEY_BINDINGS = new KeyBinding[] {
             KEY_BINDING_LOAD, KEY_BINDING_SAVE, KEY_BINDING_CONTROL, KEY_BINDING_LAYER_INC, KEY_BINDING_LAYER_DEC
@@ -37,9 +27,8 @@ public class InputHandler {
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
     private InputHandler() {}
-
-    @SubscribeEvent
-    public void onKeyInput(InputEvent event) {
+    
+    public void onKeyInput() {
         if (this.minecraft.currentScreen == null) {
             if (KEY_BINDING_LOAD.isPressed()) {
                 this.minecraft.displayGuiScreen(new GuiSchematicLoad(this.minecraft.currentScreen));
@@ -85,7 +74,7 @@ public class InputHandler {
                 }
 
                 if (revert) {
-                    KeyBinding.onTick(keyPickBlock.getKeyCode());
+                    KeyBinding.onTick(keyPickBlock.keyCode);
                 }
             } catch (Exception e) {
                 Reference.logger.error("Could not pick block!", e);
@@ -100,12 +89,13 @@ public class InputHandler {
         if (objectMouseOver != null) {
             final EntityClientPlayerMP player = this.minecraft.thePlayer;
 
-            if (objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.MISS) {
-                revert = true;
-            }
+            //todo pick block handling has no miss
+//            if (objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.MISS) {
+//                revert = true;
+//            }
 
             final MovingObjectPosition mcObjectMouseOver = this.minecraft.objectMouseOver;
-            if (mcObjectMouseOver != null && mcObjectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            if (mcObjectMouseOver != null && mcObjectMouseOver.typeOfHit == EnumMovingObjectType.TILE) {
                 final int x = mcObjectMouseOver.blockX - schematic.position.x;
                 final int y = mcObjectMouseOver.blockY - schematic.position.y;
                 final int z = mcObjectMouseOver.blockZ - schematic.position.z;
@@ -114,14 +104,14 @@ public class InputHandler {
                 }
             }
 
-            if (!ForgeHooks.onPickBlock(objectMouseOver, player, schematic)) {
-                return revert;
-            }
+//            if (!ForgeHooks.onPickBlock(objectMouseOver, player, schematic)) {
+//                return revert;
+//            }
 
             if (player.capabilities.isCreativeMode) {
                 final Block block = schematic.getBlock(objectMouseOver.blockX, objectMouseOver.blockY, objectMouseOver.blockZ);
                 final int metadata = schematic.getBlockMetadata(objectMouseOver.blockX, objectMouseOver.blockY, objectMouseOver.blockZ);
-                if (block == Blocks.double_stone_slab || block == Blocks.double_wooden_slab || block == Blocks.snow_layer) {
+                if (block == Block.stoneDoubleSlab || block == Block.woodDoubleSlab || block == Block.snow) {
                     player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(block, 1, metadata & 0xF));
                 }
 

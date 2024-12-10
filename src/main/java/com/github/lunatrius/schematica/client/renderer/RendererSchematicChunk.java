@@ -9,7 +9,6 @@ import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.src.*;
-import net.minecraft.src.TileEntityRendererDispatcher;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
@@ -180,15 +179,15 @@ public class RendererSchematicChunk {
 
         this.profiler.startSection("blocks");
         this.minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-
-        if (OpenGlHelper.shadersSupported && ConfigurationHandler.enableAlpha) {
+        //todo shaders supported?
+        if (/*OpenGlHelper.shadersSupported && */ConfigurationHandler.enableAlpha) {
             GL20.glUseProgram(SHADER_ALPHA.getProgram());
             GL20.glUniform1f(GL20.glGetUniformLocation(SHADER_ALPHA.getProgram(), "alpha_multiplier"), ConfigurationHandler.alpha);
         }
 
         GL11.glCallList(this.glList + renderPass);
 
-        if (OpenGlHelper.shadersSupported && ConfigurationHandler.enableAlpha) {
+        if (/*OpenGlHelper.shadersSupported && */ConfigurationHandler.enableAlpha) {
             GL20.glUseProgram(0);
         }
 
@@ -234,7 +233,7 @@ public class RendererSchematicChunk {
                         wy = this.schematic.position.y + y;
                         wz = this.schematic.position.z + z;
 
-                        mcBlock = mcWorld.getBlock(wx, wy, wz);
+                        mcBlock = Block.blocksList[mcWorld.getBlockId(wx, wy, wz)];
 
                         sides = 0;
                         if (block != null) {

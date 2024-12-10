@@ -3,12 +3,12 @@ package com.github.lunatrius.schematica.handler;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameData;
+//import cpw.mods.fml.client.event.ConfigChangedEvent;
+//import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+//import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.src.Block;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
+//import net.minecraftforge.common.config.Configuration;
+//import net.minecraftforge.common.config.Property;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,13 +16,13 @@ import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
-
+//todo config
 public class ConfigurationHandler {
     public static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
 
     public static final String VERSION = "1";
 
-    public static Configuration configuration;
+//    public static Configuration configuration;
 
     public static final boolean SHOW_DEBUG_INFO_DEFAULT = true;
     public static final boolean ENABLE_ALPHA_DEFAULT = false;
@@ -42,7 +42,7 @@ public class ConfigurationHandler {
             false, false, false, false, false, true, true, true, true
     };
     public static final String SCHEMATIC_DIRECTORY_STR = "schematics";
-    public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
+    public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.getProxy().getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
     public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = { };
     public static final String SORT_TYPE_DEFAULT = "";
     public static final boolean PRINTER_ENABLED_DEFAULT = true;
@@ -74,7 +74,7 @@ public class ConfigurationHandler {
     public static boolean loadEnabled = LOAD_ENABLED_DEFAULT;
     public static int playerQuotaKilobytes = PLAYER_QUOTA_KILOBYTES_DEFAULT;
 
-    public static Property propShowDebugInfo = null;
+    /*public static Property propShowDebugInfo = null;
     public static Property propEnableAlpha = null;
     public static Property propAlpha = null;
     public static Property propHighlight = null;
@@ -181,7 +181,7 @@ public class ConfigurationHandler {
         try {
             schematicDirectory = schematicDirectory.getCanonicalFile();
             final String schematicPath = schematicDirectory.getAbsolutePath();
-            final String dataPath = Schematica.proxy.getDataDirectory().getAbsolutePath();
+            final String dataPath = Schematica.getProxy().getDataDirectory().getAbsolutePath();
             if (schematicPath.contains(dataPath)) {
                 propSchematicDirectory.set(schematicPath.substring(dataPath.length()).replace("\\", "/").replaceAll("^/+", ""));
             } else {
@@ -223,7 +223,7 @@ public class ConfigurationHandler {
         propPlayerQuotaKilobytes.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLAYER_QUOTA_KILOBYTES);
         playerQuotaKilobytes = propPlayerQuotaKilobytes.getInt(PLAYER_QUOTA_KILOBYTES_DEFAULT);
 
-        Schematica.proxy.createFolders();
+        Schematica.getProxy().createFolders();
 
         if (configuration.hasChanged()) {
             configuration.save();
@@ -241,5 +241,9 @@ public class ConfigurationHandler {
 
     public static boolean isExtraAirBlock(final Block block) {
         return extraAirBlockList.contains(block);
+    }*/
+    //REMOVE WHNE CONFIG IS FUNCTIONAL
+    public static boolean isExtraAirBlock(final Block block) {
+        return false;
     }
 }

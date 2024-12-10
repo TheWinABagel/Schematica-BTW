@@ -2,8 +2,6 @@ package com.github.lunatrius.schematica.handler.client;
 
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.src.Minecraft;
 import net.minecraft.src.EntityLivingBase;
 import net.minecraft.src.MovingObjectPosition;
@@ -16,8 +14,8 @@ public class RenderTickHandler {
 
     private RenderTickHandler() {}
 
-    @SubscribeEvent
-    public void onRenderTick(TickEvent.RenderTickEvent event) {
+    //todo should this run on both start and end of render tick?
+    public void onRenderTick() {
         final SchematicWorld schematic = ClientProxy.schematic;
 
         ClientProxy.movingObjectPosition = schematic != null ? rayTrace(schematic, 1.0f) : null;
@@ -47,6 +45,7 @@ public class RenderTickHandler {
         renderViewEntity.posY = posY;
         renderViewEntity.posZ = posZ;
 
-        return schematic.func_147447_a(vecPosition, vecExtendedLook, false, false, true);
+        return schematic.rayTraceBlocks_do_do(vecPosition, vecExtendedLook, false, false);
+//        return schematic.func_147447_a(vecPosition, vecExtendedLook, false, false, true);
     }
 }

@@ -71,7 +71,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
                     Sys.openURL("file://" + ConfigurationHandler.schematicDirectory.getAbsolutePath());
                 }
             } else if (guiButton.id == this.btnDone.id) {
-                if (Schematica.proxy.isLoadEnabled) {
+                if (Schematica.getProxy().isLoadEnabled) {
                     loadSchematic();
                 }
                 this.mc.displayGuiScreen(this.parentScreen);
@@ -152,7 +152,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
         try {
             if (selectedIndex >= 0 && selectedIndex < this.schematicFiles.size()) {
                 GuiSchematicEntry schematicEntry = this.schematicFiles.get(selectedIndex);
-                if (Schematica.proxy.loadSchematic(null, this.currentDirectory, schematicEntry.getName())) {
+                if (Schematica.getProxy().loadSchematic(null, this.currentDirectory, schematicEntry.getName())) {
                     SchematicWorld schematic = ClientProxy.schematic;
                     if (schematic != null) {
                         ClientProxy.moveSchematicToPlayer(schematic);

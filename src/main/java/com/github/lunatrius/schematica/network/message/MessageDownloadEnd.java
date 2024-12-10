@@ -2,15 +2,12 @@ package com.github.lunatrius.schematica.network.message;
 
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.handler.DownloadHandler;
+import com.github.lunatrius.schematica.network.util.IMessage;
+import com.github.lunatrius.schematica.network.util.IMessageHandler;
+import com.github.lunatrius.schematica.network.util.MessageContext;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.src.Minecraft;
-import net.minecraft.src.ChatComponentTranslation;
 
 import java.io.File;
 
@@ -36,7 +33,7 @@ public class MessageDownloadEnd implements IMessage, IMessageHandler<MessageDown
 
     @Override
     public IMessage onMessage(MessageDownloadEnd message, MessageContext ctx) {
-        File directory = Schematica.proxy.getPlayerSchematicDirectory(null, true);
+        File directory = Schematica.getProxy().getPlayerSchematicDirectory(null, true);
         boolean success = SchematicFormat.writeToFile(directory, message.name, DownloadHandler.INSTANCE.schematic);
 
         if (success) {

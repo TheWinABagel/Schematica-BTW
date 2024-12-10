@@ -11,14 +11,13 @@ import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.fabricmc.example.ForgeDirection;
 import net.minecraft.src.*;
-import net.minecraft.src.C0BPacketEntityAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SchematicPrinter {
     public static final SchematicPrinter INSTANCE = new SchematicPrinter();
-    public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
+//    public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
@@ -151,7 +150,7 @@ public class SchematicPrinter {
 
         final ItemStack itemStack = BlockToItemStack.getItemStack(player, block, this.schematic, x, y, z);
         if (itemStack == null || itemStack.getItem() == null) {
-            Reference.logger.debug("{} is missing a mapping!", BLOCK_REGISTRY.getNameForObject(block));
+            Reference.logger.debug("{} is missing a mapping!", block != null ? block.getLocalizedName() : "air block?" /*BLOCK_REGISTRY.getNameForObject(block)*/);
             return false;
         }
 
@@ -340,7 +339,7 @@ public class SchematicPrinter {
 
     private void syncSneaking(EntityClientPlayerMP player, boolean isSneaking) {
         player.setSneaking(isSneaking);
-        player.sendQueue.addToSendQueue(new C0BPacketEntityAction(player, isSneaking ? 1 : 2));
+        player.sendQueue.addToSendQueue(/*new C0BPacketEntityAction*/new Packet19EntityAction(player, isSneaking ? 1 : 2));
     }
 
     private boolean swapToItem(InventoryPlayer inventory, ItemStack itemStack) {

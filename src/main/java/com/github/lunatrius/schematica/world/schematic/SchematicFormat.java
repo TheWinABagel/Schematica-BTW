@@ -4,6 +4,7 @@ import com.github.lunatrius.api.ISchematic;
 import com.github.lunatrius.api.event.PostSchematicCaptureEvent;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
+import net.fabricmc.example.CompoundTagExtension;
 import net.minecraft.src.NBTTagCompound;
 
 import java.io.DataOutputStream;
@@ -46,7 +47,7 @@ public abstract class SchematicFormat {
     public static boolean writeToFile(File file, ISchematic schematic) {
         try {
             final PostSchematicCaptureEvent event = new PostSchematicCaptureEvent(schematic);
-            MinecraftForge.EVENT_BUS.post(event);
+//            MinecraftForge.EVENT_BUS.post(event);
 
             NBTTagCompound tagCompound = new NBTTagCompound();
 
@@ -55,7 +56,8 @@ public abstract class SchematicFormat {
             DataOutputStream dataOutputStream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
             try {
-                NBTTagCompound.func_150298_a(Names.NBT.ROOT, tagCompound, dataOutputStream);
+                CompoundTagExtension.func_150298_a(Names.NBT.ROOT, tagCompound, dataOutputStream);
+//                NBTTagCompound.func_150298_a(Names.NBT.ROOT, tagCompound, dataOutputStream);
             } finally {
                 dataOutputStream.close();
             }
