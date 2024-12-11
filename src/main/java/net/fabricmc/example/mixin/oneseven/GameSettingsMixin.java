@@ -1,6 +1,6 @@
-package net.fabricmc.example.mixin;
+package net.fabricmc.example.mixin.oneseven;
 
-import com.github.lunatrius.schematicaold.Settings;
+import com.github.lunatrius.schematica.handler.client.InputHandler;
 import net.minecraft.src.GameSettings;
 import net.minecraft.src.KeyBinding;
 import net.minecraft.src.Minecraft;
@@ -16,11 +16,15 @@ import java.util.Arrays;
 @Mixin(GameSettings.class)
 public class GameSettingsMixin {
     @Shadow public KeyBinding[] keyBindings;
-
+    //todo custom config screen for keybinds
     @Inject(method = "<init>(Lnet/minecraft/src/Minecraft;Ljava/io/File;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/GameSettings;loadOptions()V"))
     private void schematica$addOptions(Minecraft par1Minecraft, File par2File, CallbackInfo ci) {
-        final int oldLength = this.keyBindings.length;
-        this.keyBindings = Arrays.copyOf(this.keyBindings, this.keyBindings.length + Settings.instance().keyBindings.length);
-        System.arraycopy(Settings.instance().keyBindings, 0, this.keyBindings, oldLength, Settings.instance().keyBindings.length);
+        for (KeyBinding keyBinding : InputHandler.KEY_BINDINGS) {
+            keyBindings = Arrays.copyOf(keyBindings, keyBindings.length + 1);
+            keyBindings[keyBindings.length - 1] = keyBinding;
+        }
+//        final int oldLength = this.keyBindings.length;
+//        this.keyBindings = Arrays.copyOf(this.keyBindings, this.keyBindings.length + Settings.instance().keyBindings.length);
+//        System.arraycopy(Settings.instance().keyBindings, 0, this.keyBindings, oldLength, Settings.instance().keyBindings.length);
     }
 }

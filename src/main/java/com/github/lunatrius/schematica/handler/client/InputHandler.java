@@ -28,21 +28,22 @@ public class InputHandler {
 
     private InputHandler() {}
     
-    public void onKeyInput() {
+    public void onKeyInput(int idx) {
+        System.out.println("index is  " + idx);
         if (this.minecraft.currentScreen == null) {
-            if (KEY_BINDING_LOAD.isPressed()) {
+            if (idx == 0/*KEY_BINDING_LOAD.isPressed()*/) {
                 this.minecraft.displayGuiScreen(new GuiSchematicLoad(this.minecraft.currentScreen));
             }
 
-            if (KEY_BINDING_SAVE.isPressed()) {
+            if (idx == 1/*KEY_BINDING_SAVE.isPressed()*/) {
                 this.minecraft.displayGuiScreen(new GuiSchematicSave(this.minecraft.currentScreen));
             }
 
-            if (KEY_BINDING_CONTROL.isPressed()) {
+            if (idx == 2/*KEY_BINDING_CONTROL.isPressed()*/) {
                 this.minecraft.displayGuiScreen(new GuiSchematicControl(this.minecraft.currentScreen));
             }
 
-            if (KEY_BINDING_LAYER_INC.isPressed()) {
+            if (idx == 3/*KEY_BINDING_LAYER_INC.isPressed()*/) {
                 final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null && schematic.isRenderingLayer) {
                     schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
@@ -50,7 +51,7 @@ public class InputHandler {
                 }
             }
 
-            if (KEY_BINDING_LAYER_DEC.isPressed()) {
+            if (idx == 4/*KEY_BINDING_LAYER_DEC.isPressed()*/) {
                 final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null && schematic.isRenderingLayer) {
                     schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);

@@ -15,9 +15,6 @@
   "icon": "assets/schematica/logo.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "net.fabricmc.example.ExampleMod"
-    ],
     "btw:addon": [
       "com.github.lunatrius.schematica.Schematica"
     ]

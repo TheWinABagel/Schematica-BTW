@@ -28,7 +28,7 @@ public class WorldHandler {
 //    }
 
     public static void onUnload(WorldClient world) {
-        if (world.isRemote) {
+        if (world != null && world.isRemote) {
             removeWorldAccess(world, SchematicUpdater.INSTANCE);
         }
     }

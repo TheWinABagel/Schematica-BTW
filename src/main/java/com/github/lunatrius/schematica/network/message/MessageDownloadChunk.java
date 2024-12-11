@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.network.message;
 import com.github.lunatrius.api.ISchematic;
 import com.github.lunatrius.schematica.handler.DownloadHandler;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
+import com.github.lunatrius.schematica.network.util.ByteBuf;
 import com.github.lunatrius.schematica.network.util.IMessage;
 import com.github.lunatrius.schematica.network.util.IMessageHandler;
 import com.github.lunatrius.schematica.network.util.MessageContext;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDownloadChunk, IMessage> {
-    public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     public int baseX;
     public int baseY;
@@ -44,7 +44,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
             for (int y = 0; y < Constants.SchematicChunk.HEIGHT; y++) {
                 for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
                     final Block block = schematic.getBlock(baseX + x, baseY + y, baseZ + z);
-                    final int id = BLOCK_REGISTRY.getId(block);
+                    final int id = block != null ? block.blockID : 0;
                     this.blocks[x][y][z] = (short) id;
                     this.metadata[x][y][z] = (byte) schematic.getBlockMetadata(baseX + x, baseY + y, baseZ + z);
                     final TileEntity tileEntity = schematic.getTileEntity(baseX + x, baseY + y, baseZ + z);
@@ -62,7 +62,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
                 for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
                     short id = this.blocks[x][y][z];
                     byte meta = this.metadata[x][y][z];
-                    Block block = BLOCK_REGISTRY.getObjectById(id);
+                    Block block = Block.blocksList[id];
 
                     schematic.setBlock(this.baseX + x, this.baseY + y, this.baseZ + z, block, meta);
                 }
@@ -94,10 +94,10 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
             }
         }
 
-        final NBTTagCompound compound = ByteBufUtils.readTag(buf);
+        final NBTTagCompound compound = buf.readTag();
         this.tileEntities = NBTHelper.readTileEntitiesFromCompound(compound, this.tileEntities);
 
-        final NBTTagCompound compound2 = ByteBufUtils.readTag(buf);
+        final NBTTagCompound compound2 = buf.readTag();
         this.entities = NBTHelper.readEntitiesFromCompound(compound2, this.entities);
     }
 
@@ -117,10 +117,10 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
         }
 
         final NBTTagCompound compound = NBTHelper.writeTileEntitiesToCompound(this.tileEntities);
-        ByteBufUtils.writeTag(buf, compound);
+        buf.writeTag(compound);
 
         final NBTTagCompound compound1 = NBTHelper.writeEntitiesToCompound(this.entities);
-        ByteBufUtils.writeTag(buf, compound1);
+        buf.writeTag(compound1);
     }
 
     @Override

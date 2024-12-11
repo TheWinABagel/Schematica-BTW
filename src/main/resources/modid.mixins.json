@@ -5,12 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BTWModAccessor",
-    "GameSettingsMixin",
+    "oneseven.GameSettingsMixin",
     "NetServerHandlerMixin",
     "RenderGlobalAccessor",
     "oneseven.EntityRendererMixin",
-    "oneseven.MinecraftServerMixin",
-    "oneseven.ServerConfigurationManagerMixin"
+    "oneseven.MinecraftServerMixin"
   ],
   "client": [
     "ExampleMixin",

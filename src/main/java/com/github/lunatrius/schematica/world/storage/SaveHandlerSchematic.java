@@ -1,12 +1,6 @@
 package com.github.lunatrius.schematica.world.storage;
 
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.MinecraftException;
-import net.minecraft.src.WorldProvider;
-import net.minecraft.src.IChunkLoader;
-import net.minecraft.src.IPlayerFileData;
-import net.minecraft.src.ISaveHandler;
-import net.minecraft.src.WorldInfo;
+import net.minecraft.src.*;
 
 import java.io.File;
 
@@ -39,8 +33,13 @@ public class SaveHandlerSchematic implements ISaveHandler {
     public void flush() {}
 
     @Override
-    public File getWorldDirectory() {
-        return null;
+    public void loadModSpecificData(WorldServer var1) {
+
+    }
+
+    @Override
+    public void saveModSpecificData(WorldServer var1) {
+
     }
 
     @Override

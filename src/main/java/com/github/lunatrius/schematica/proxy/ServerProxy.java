@@ -17,7 +17,7 @@ public class ServerProxy extends CommonProxy {
     public void init() {
         super.init();
 
-        FMLCommonHandler.instance().bus().register(PlayerHandler.INSTANCE);
+//        FMLCommonHandler.instance().bus().register(PlayerHandler.INSTANCE);       //handled
 
         Schematica.instance.registerAddonCommandServerOnly(new CommandSchematicaDownload());
     }

@@ -243,11 +243,12 @@ public class SchematicWorld extends World {
         for (int y = 0; y < height; y++) {
             for (int z = 0; z < length; z++) {
                 for (int x = 0; x < width; x++) {
+                    int meta = getBlockMetadata(x, y, length - 1 - z);
                     try {
                         Block block = getBlock(x, y, length - 1 - z);
                         //todo rotation logic changed
                         if (block != null) {
-                            block.rotateMetadataAroundYAxis(getBlockMetadata(x, y, z), false);
+                            meta = block.rotateMetadataAroundYAxis(getBlockMetadata(x, y, z), false);
                         }
 //                        getBlock(x, y, length - 1 - z).rotateBlock(this, x, y, length - 1 - z, ForgeDirection.UP);
                     } catch (Exception e) {
@@ -255,7 +256,8 @@ public class SchematicWorld extends World {
                     }
 
                     final Block block = getBlock(x, y, length - 1 - z);
-                    final int metadata = getBlockMetadata(x, y, length - 1 - z);
+//                    final int metadata = getBlockMetadata(x, y, length - 1 - z);
+                    final int metadata = meta;
                     schematicRotated.setBlock(z, y, x, block, metadata);
                 }
             }

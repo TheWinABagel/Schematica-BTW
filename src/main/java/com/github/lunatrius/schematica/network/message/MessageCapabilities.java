@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.network.message;
 
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
+import com.github.lunatrius.schematica.network.util.ByteBuf;
 import com.github.lunatrius.schematica.network.util.IMessage;
 import com.github.lunatrius.schematica.network.util.IMessageHandler;
 import com.github.lunatrius.schematica.network.util.MessageContext;

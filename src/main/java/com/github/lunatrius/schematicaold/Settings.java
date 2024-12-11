@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematicaold;
 
+import com.github.lunatrius.schematica.handler.client.InputHandler;
 import com.github.lunatrius.schematicaold.client.gui.GuiSchematicControl;
 import com.github.lunatrius.schematicaold.client.gui.GuiSchematicLoad;
 import com.github.lunatrius.schematicaold.client.gui.GuiSchematicSave;
@@ -102,8 +103,8 @@ public class Settings {
 
 	public void keyboardEvent(KeyBinding keybinding) {
 		if (this.minecraft.currentScreen == null) {
-			for (int i = 0; i < this.keyBindings.length; i++) {
-				if (keybinding == this.keyBindings[i]) {
+			for (int i = 0; i < InputHandler.KEY_BINDINGS.length; i++) {
+				if (keybinding == InputHandler.KEY_BINDINGS[i]) {
 					keyboardEvent(i);
 					break;
 				}

@@ -1,5 +1,6 @@
 package net.fabricmc.example.mixin;
 
+import com.github.lunatrius.schematica.handler.client.InputHandler;
 import com.github.lunatrius.schematicaold.Schematica;
 import com.github.lunatrius.schematicaold.Settings;
 import net.minecraft.src.KeyBinding;
@@ -15,28 +16,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MinecraftMixin {
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/Profiler;endSection()V"))
     private void onRunTickPost(CallbackInfo ci) {
-        Schematica.instance.onTick(false);
+//        Schematica.instance.onTick(false);
         //todo will break with other addons that add keybinds, save start index of keybinds somewhere
-        for (int i = Minecraft.getMinecraft().gameSettings.keyBindings.length - Settings.instance().keyBindings.length; i < Minecraft.getMinecraft().gameSettings.keyBindings.length; i++) {
+        for (int i = Minecraft.getMinecraft().gameSettings.keyBindings.length - InputHandler.KEY_BINDINGS.length; i < Minecraft.getMinecraft().gameSettings.keyBindings.length; i++) {
             KeyBinding keyBinding = Minecraft.getMinecraft().gameSettings.keyBindings[i];
             int keyCode = keyBinding.keyCode;
             boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
-            if (/*state != keyDown[i] || (state && repeatings[i]) || */true)
-            {
-                if (state)
-                {
-                    Schematica.instance.keyboardEvent(keyBinding, true);
-//                    keyDown(type, keyBinding, tickEnd, state!=keyDown[i]);
-                }
-                else
-                {
-                    Schematica.instance.keyboardEvent(keyBinding, false);
-//                    keyUp(type, keyBinding, tickEnd);
-                }
-//                if (tickEnd)
-//                {
-//                    keyDown[i] = state;
-//                }
+            if (state) {
+                InputHandler.INSTANCE.onKeyInput(i - Minecraft.getMinecraft().gameSettings.keyBindings.length + InputHandler.KEY_BINDINGS.length);
             }
         }
     }

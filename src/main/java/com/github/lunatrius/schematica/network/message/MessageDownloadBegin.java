@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.network.message;
 
 import com.github.lunatrius.api.ISchematic;
 import com.github.lunatrius.schematica.handler.DownloadHandler;
+import com.github.lunatrius.schematica.network.util.ByteBuf;
 import com.github.lunatrius.schematica.network.util.IMessage;
 import com.github.lunatrius.schematica.network.util.IMessageHandler;
 import com.github.lunatrius.schematica.network.util.MessageContext;
@@ -26,7 +27,7 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.icon = ByteBufUtils.readItemStack(buf);
+        this.icon = buf.readItemStack();
         this.width = buf.readShort();
         this.height = buf.readShort();
         this.length = buf.readShort();
@@ -34,7 +35,7 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
 
     @Override
     public void toBytes(ByteBuf buf) {
-        ByteBufUtils.writeItemStack(buf, this.icon);
+        buf.writeItemStack(this.icon);
         buf.writeShort(this.width);
         buf.writeShort(this.height);
         buf.writeShort(this.length);

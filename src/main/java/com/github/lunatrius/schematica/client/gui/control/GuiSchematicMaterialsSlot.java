@@ -66,6 +66,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
         this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amountrequired, x + 215 - this.minecraft.fontRenderer.getStringWidth(amountrequired), y + 16, 0xFFFFFF);
 
         if (mouseX > x && mouseY > y && mouseX <= x + 18 && mouseY <= y + 18) {
+
             this.guiSchematicMaterials.renderToolTip(itemStack, mouseX, mouseY);
             GL11.glDisable(GL11.GL_LIGHTING);
         }

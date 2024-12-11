@@ -16,14 +16,11 @@ import com.github.lunatrius.schematica.handler.client.WorldHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import net.fabricmc.example.ForgeDirection;
-import net.minecraft.src.Minecraft;
-import net.minecraft.src.KeyBinding;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.MovingObjectPosition;
+import net.minecraft.src.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ClientProxy extends CommonProxy {
     public static boolean isRenderingGuide = false;
@@ -153,10 +150,12 @@ public class ClientProxy extends CommonProxy {
 //        for (Property prop : sliders) {
 //            prop.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
 //        }
-
-        for (KeyBinding keyBinding : InputHandler.KEY_BINDINGS) {
-//            ClientRegistry.registerKeyBinding(keyBinding);
-        }
+        //added in mixin
+//        GameSettings settings = Minecraft.getMinecraft().gameSettings;
+//        for (KeyBinding keyBinding : InputHandler.KEY_BINDINGS) {
+//            settings.keyBindings = Arrays.copyOf(settings.keyBindings, settings.keyBindings.length + 1);
+//            settings.keyBindings[settings.keyBindings.length - 1] = keyBinding;
+//        }
     }
 
 //    @Override

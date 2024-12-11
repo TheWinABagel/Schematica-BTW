@@ -1,3 +1,4 @@
+# gui - general
 schematica.gui.openFolder=เปิดโฟลเดอร์ Schematic
 schematica.gui.done=เสร็จสิ้น
 schematica.gui.title=เลือกไฟล์ Schematic ที่ต้องการ
@@ -18,8 +19,6 @@ schematica.gui.operations=การดำเนินงาน
 schematica.gui.point.red=จุดแดง
 schematica.gui.point.blue=จุดน้ำเงิน
 schematica.gui.saveselection=บันทึกจุดที่เลือกไปยัง Schematic
-schematica.gui.enable=เปิด
-schematica.gui.disable=ปิด
 schematica.gui.x=X:
 schematica.gui.y=Y:
 schematica.gui.z=Z:
@@ -28,6 +27,29 @@ schematica.gui.materialname=ส่วนประกอบ
 schematica.gui.materialamount=จำนวน
 schematica.gui.printer=การปริ๊น
 
+# gui - config - categories
+
+# gui - config - debug
+
+# gui - config - render
+
+# gui - config - printer
+
+# gui - config - printer - swap slots
+
+# gui - config - general
+
+# gui - config - server
+
+# keys
 schematica.key.load=เปิดไฟล์ Schematic
 schematica.key.save=บันทึกไฟล์ Schematic
 schematica.key.control=จัดการ Schematic
+
+# commands - save
+
+# commands - list
+
+# commands - remove
+
+# commands - download

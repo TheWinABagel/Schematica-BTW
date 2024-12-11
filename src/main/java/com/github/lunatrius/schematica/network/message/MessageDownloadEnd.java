@@ -2,12 +2,14 @@ package com.github.lunatrius.schematica.network.message;
 
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.handler.DownloadHandler;
+import com.github.lunatrius.schematica.network.util.ByteBuf;
 import com.github.lunatrius.schematica.network.util.IMessage;
 import com.github.lunatrius.schematica.network.util.IMessageHandler;
 import com.github.lunatrius.schematica.network.util.MessageContext;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import net.minecraft.src.Minecraft;
+import net.minecraft.src.StringTranslate;
 
 import java.io.File;
 
@@ -23,12 +25,12 @@ public class MessageDownloadEnd implements IMessage, IMessageHandler<MessageDown
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.name = ByteBufUtils.readUTF8String(buf);
+        this.name = buf.readString();;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        ByteBufUtils.writeUTF8String(buf, this.name);
+        buf.writeString(this.name);
     }
 
     @Override
@@ -37,7 +39,7 @@ public class MessageDownloadEnd implements IMessage, IMessageHandler<MessageDown
         boolean success = SchematicFormat.writeToFile(directory, message.name, DownloadHandler.INSTANCE.schematic);
 
         if (success) {
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation(Names.Command.Download.Message.DOWNLOAD_SUCCEEDED, message.name));
+            Minecraft.getMinecraft().thePlayer.addChatMessage(StringTranslate.getInstance().translateKeyFormat(Names.Command.Download.Message.DOWNLOAD_SUCCEEDED, message.name));
         }
 
         DownloadHandler.INSTANCE.schematic = null;

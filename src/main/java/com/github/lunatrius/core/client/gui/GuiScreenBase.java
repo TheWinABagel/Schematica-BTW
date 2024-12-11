@@ -3,6 +3,7 @@ package com.github.lunatrius.core.client.gui;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.GuiTextField;
+import net.minecraft.src.RenderItem;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class GuiScreenBase extends GuiScreen {
 
     protected List<GuiButton> buttonList = super.buttonList; // I feel dirty
     protected List<GuiTextField> textFields = new ArrayList<GuiTextField>();
-
+    protected static RenderItem itemRenderer = new RenderItem();
     public GuiScreenBase() {
         this(null);
     }
