@@ -21,7 +21,7 @@ public class MinecraftMixin {
             int keyCode = keyBinding.keyCode;
             boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
             if (state) {
-                InputHandler.INSTANCE.onKeyInput(keyBinding);
+                InputHandler.INSTANCE.onKeyInput();
             }
         }
     }

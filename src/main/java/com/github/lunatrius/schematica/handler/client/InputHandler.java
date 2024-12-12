@@ -30,22 +30,21 @@ public class InputHandler {
 
     private InputHandler() {}
     
-    public void onKeyInput(KeyBinding binding/*int idx*/) {
-        System.out.println("binding is  " + binding.keyDescription);
+    public void onKeyInput() {
         if (this.minecraft.currentScreen == null) {
-            if (binding == KEY_BINDING_LOAD/*idx == 0*//*KEY_BINDING_LOAD.isPressed()*/) {
+            if (KEY_BINDING_LOAD.isPressed()) {
                 this.minecraft.displayGuiScreen(new GuiSchematicLoad(this.minecraft.currentScreen));
             }
 
-            if (binding == KEY_BINDING_SAVE /*idx == 1*//*KEY_BINDING_SAVE.isPressed()*/) {
+            if (KEY_BINDING_SAVE.isPressed()) {
                 this.minecraft.displayGuiScreen(new GuiSchematicSave(this.minecraft.currentScreen));
             }
 
-            if (binding == KEY_BINDING_CONTROL /*idx == 2*//*KEY_BINDING_CONTROL.isPressed()*/) {
+            if (KEY_BINDING_CONTROL.isPressed()) {
                 this.minecraft.displayGuiScreen(new GuiSchematicControl(this.minecraft.currentScreen));
             }
 
-            if (binding == KEY_BINDING_LAYER_INC /*idx == 3*//*KEY_BINDING_LAYER_INC.isPressed()*/) {
+            if (KEY_BINDING_LAYER_INC.isPressed()) {
                 final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null && schematic.isRenderingLayer) {
                     schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
@@ -53,7 +52,7 @@ public class InputHandler {
                 }
             }
 
-            if (binding == KEY_BINDING_LAYER_DEC /*idx == 4*//*KEY_BINDING_LAYER_DEC.isPressed()*/) {
+            if (KEY_BINDING_LAYER_DEC.isPressed()) {
                 final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null && schematic.isRenderingLayer) {
                     schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
