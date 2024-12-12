@@ -1,17 +1,23 @@
 package com.github.lunatrius.schematica;
 
 import btw.BTWAddon;
+import com.github.lunatrius.schematica.network.PacketHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.proxy.CommonProxy;
 import com.github.lunatrius.schematica.proxy.ServerProxy;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.src.ICommand;
-
-import java.util.Map;
 
 public class Schematica extends BTWAddon {
     public static Schematica instance = new Schematica();
+
+    @Override
+    public void postSetup() {
+    }
+
+    public Schematica() {
+        this.modID = Reference.MODID;
+    }
 
     public static CommonProxy getProxy() {
         if (MinecraftServer.getIsServer()) {
@@ -20,7 +26,7 @@ public class Schematica extends BTWAddon {
         else return new ClientProxy();
     }
 
-    //todo proxy might not work
+    //todo proxy might not work on dedicated servers properly
 //    @SidedProxy(serverSide = Reference.PROXY_SERVER, clientSide = Reference.PROXY_CLIENT)
     private static CommonProxy proxy = getProxy();
 
@@ -43,8 +49,6 @@ public class Schematica extends BTWAddon {
     public void initialize() {
         getProxy().init();
     }
-
-
 
 //    @EventHandler
 //    public void postInit(FMLPostInitializationEvent event) {

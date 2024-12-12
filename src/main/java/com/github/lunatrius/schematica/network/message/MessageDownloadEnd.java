@@ -14,6 +14,7 @@ import net.minecraft.src.StringTranslate;
 import java.io.File;
 
 public class MessageDownloadEnd implements IMessage, IMessageHandler<MessageDownloadEnd, IMessage> {
+    public static final int ID = 5;
     public String name;
 
     public MessageDownloadEnd() {
@@ -24,13 +25,19 @@ public class MessageDownloadEnd implements IMessage, IMessageHandler<MessageDown
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
-        this.name = buf.readString();;
+    public IMessage fromBytes(ByteBuf buf) {
+        this.name = buf.readString();
+        return this;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeString(this.name);
+    }
+
+    @Override
+    public int id() {
+        return ID;
     }
 
     @Override

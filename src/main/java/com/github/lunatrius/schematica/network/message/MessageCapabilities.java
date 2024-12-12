@@ -9,6 +9,7 @@ import com.github.lunatrius.schematica.network.util.MessageContext;
 import com.github.lunatrius.schematica.reference.Reference;
 
 public class MessageCapabilities implements IMessage, IMessageHandler<MessageCapabilities, IMessage> {
+    public static final int ID = 0;
     public boolean isPrinterEnabled;
     public boolean isSaveEnabled;
     public boolean isLoadEnabled;
@@ -24,10 +25,11 @@ public class MessageCapabilities implements IMessage, IMessageHandler<MessageCap
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
+    public IMessage fromBytes(ByteBuf buf) {
         this.isPrinterEnabled = buf.readBoolean();
         this.isSaveEnabled = buf.readBoolean();
         this.isLoadEnabled = buf.readBoolean();
+        return this;
     }
 
     @Override
@@ -35,6 +37,11 @@ public class MessageCapabilities implements IMessage, IMessageHandler<MessageCap
         buf.writeBoolean(this.isPrinterEnabled);
         buf.writeBoolean(this.isSaveEnabled);
         buf.writeBoolean(this.isLoadEnabled);
+    }
+
+    @Override
+    public int id() {
+        return ID;
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.github.lunatrius.schematica.world.storage.Schematic;
 import net.minecraft.src.ItemStack;
 
 public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDownloadBegin, IMessage> {
+    public static final int ID = 1;
     public ItemStack icon;
     public int width;
     public int height;
@@ -26,11 +27,12 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
+    public IMessage fromBytes(ByteBuf buf) {
         this.icon = buf.readItemStack();
         this.width = buf.readShort();
         this.height = buf.readShort();
         this.length = buf.readShort();
+        return this;
     }
 
     @Override
@@ -39,6 +41,11 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
         buf.writeShort(this.width);
         buf.writeShort(this.height);
         buf.writeShort(this.length);
+    }
+
+    @Override
+    public int id() {
+        return ID;
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.github.lunatrius.schematica.network.util.MessageContext;
 import net.minecraft.src.EntityPlayerMP;
 
 public class MessageDownloadChunkAck implements IMessage, IMessageHandler<MessageDownloadChunkAck, IMessage> {
+    public static final int ID = 4;
     private int baseX;
     private int baseY;
     private int baseZ;
@@ -23,10 +24,11 @@ public class MessageDownloadChunkAck implements IMessage, IMessageHandler<Messag
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
+    public IMessage fromBytes(ByteBuf buf) {
         this.baseX = buf.readShort();
         this.baseY = buf.readShort();
         this.baseZ = buf.readShort();
+        return this;
     }
 
     @Override
@@ -34,6 +36,11 @@ public class MessageDownloadChunkAck implements IMessage, IMessageHandler<Messag
         buf.writeShort(this.baseX);
         buf.writeShort(this.baseY);
         buf.writeShort(this.baseZ);
+    }
+
+    @Override
+    public int id() {
+        return ID;
     }
 
     @Override

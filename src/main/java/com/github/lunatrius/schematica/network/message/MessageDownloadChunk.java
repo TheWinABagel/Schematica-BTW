@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDownloadChunk, IMessage> {
-
+    public static final int ID = 3;
     public int baseX;
     public int baseY;
     public int baseZ;
@@ -75,7 +75,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
+    public IMessage fromBytes(ByteBuf buf) {
         this.baseX = buf.readShort();
         this.baseY = buf.readShort();
         this.baseZ = buf.readShort();
@@ -99,6 +99,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
 
         final NBTTagCompound compound2 = buf.readTag();
         this.entities = NBTHelper.readEntitiesFromCompound(compound2, this.entities);
+        return this;
     }
 
     @Override
@@ -121,6 +122,11 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
 
         final NBTTagCompound compound1 = NBTHelper.writeEntitiesToCompound(this.entities);
         buf.writeTag(compound1);
+    }
+
+    @Override
+    public int id() {
+        return ID;
     }
 
     @Override

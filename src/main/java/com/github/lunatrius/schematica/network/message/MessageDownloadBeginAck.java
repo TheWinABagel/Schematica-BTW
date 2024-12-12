@@ -9,14 +9,21 @@ import com.github.lunatrius.schematica.network.util.MessageContext;
 import net.minecraft.src.EntityPlayerMP;
 
 public class MessageDownloadBeginAck implements IMessage, IMessageHandler<MessageDownloadBeginAck, IMessage> {
+    public static final int ID = 2;
     @Override
-    public void fromBytes(ByteBuf buf) {
-        // NOOP
+    public IMessage fromBytes(ByteBuf buf) {
+        //NOOP
+        return this;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         // NOOP
+    }
+
+    @Override
+    public int id() {
+        return ID;
     }
 
     @Override

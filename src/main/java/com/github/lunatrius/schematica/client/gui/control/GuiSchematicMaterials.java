@@ -186,7 +186,7 @@ public void renderToolTip(ItemStack par1ItemStack, int par2, int par3) {
 
         final File dumps = Schematica.getProxy().getDirectory("dumps");
         try {
-            final FileOutputStream outputStream = new FileOutputStream(new File(dumps, Reference.MODID + "-materials.txt"));
+            final FileOutputStream outputStream = new FileOutputStream(new File(dumps, Reference.NAME + "-materials.txt"));
             try {
                 IOUtils.write(stringBuilder.toString(), outputStream);
             } finally {
