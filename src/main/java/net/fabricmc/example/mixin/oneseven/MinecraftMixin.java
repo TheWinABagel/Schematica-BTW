@@ -29,14 +29,7 @@ public class MinecraftMixin {
     private void schematica$onRunTickPost(CallbackInfo ci) {
         QueueTickHandler.INSTANCE.onClientEndTick();
         TickHandler.INSTANCE.onClientTick();
-
     }
-
-//    @Inject(method = "runTick", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "net/minecraft/src/GameSettings.chatVisibility : I",/* ordinal = 1,*/ shift = At.Shift.BY, by = -2))
-//    private void handlekeyboardinputhopefullyidkeven(CallbackInfo ci) {
-//        InputHandler.INSTANCE.onKeyInput();
-//        System.err.println("key is being input idk what tho");
-//    }
 
     @Inject(method = "runGameLoop", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/Profiler;endStartSection(Ljava/lang/String;)V", ordinal = 2))
     private void preRenderTick(CallbackInfo ci) {
@@ -48,9 +41,11 @@ public class MinecraftMixin {
         RenderTickHandler.INSTANCE.onRenderTick();
     }
 
-    @Inject(method = "clickMiddleMouseButton", at = @At("HEAD"))
+    @Inject(method = "clickMiddleMouseButton", at = @At("HEAD"), cancellable = true)
     private void schematica$onMiddleClick(CallbackInfo ci) {
-        InputHandler.INSTANCE.handlePickBlock();
+        if (!InputHandler.INSTANCE.handlePickBlock()) {
+            ci.cancel();
+        }
     }
 
     @Inject(method = "loadWorld(Lnet/minecraft/src/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))

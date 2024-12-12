@@ -19,12 +19,10 @@ public class GameSettingsMixin {
     //todo custom config screen for keybinds
     @Inject(method = "<init>(Lnet/minecraft/src/Minecraft;Ljava/io/File;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/GameSettings;loadOptions()V"))
     private void schematica$addOptions(Minecraft par1Minecraft, File par2File, CallbackInfo ci) {
+        InputHandler.keyBindStartIndex = keyBindings.length;
         for (KeyBinding keyBinding : InputHandler.KEY_BINDINGS) {
             keyBindings = Arrays.copyOf(keyBindings, keyBindings.length + 1);
             keyBindings[keyBindings.length - 1] = keyBinding;
         }
-//        final int oldLength = this.keyBindings.length;
-//        this.keyBindings = Arrays.copyOf(this.keyBindings, this.keyBindings.length + Settings.instance().keyBindings.length);
-//        System.arraycopy(Settings.instance().keyBindings, 0, this.keyBindings, oldLength, Settings.instance().keyBindings.length);
     }
 }

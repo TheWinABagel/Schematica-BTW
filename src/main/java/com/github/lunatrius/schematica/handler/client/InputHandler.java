@@ -21,6 +21,7 @@ public class InputHandler {
     private static final KeyBinding KEY_BINDING_LAYER_INC = new KeyBinding(Names.Keys.LAYER_INC, Keyboard.KEY_NONE/*, Names.Keys.CATEGORY*/);
     private static final KeyBinding KEY_BINDING_LAYER_DEC = new KeyBinding(Names.Keys.LAYER_DEC, Keyboard.KEY_NONE/*, Names.Keys.CATEGORY*/);
 
+    public static int keyBindStartIndex;
     public static final KeyBinding[] KEY_BINDINGS = new KeyBinding[] {
             KEY_BINDING_LOAD, KEY_BINDING_SAVE, KEY_BINDING_CONTROL, KEY_BINDING_LAYER_INC, KEY_BINDING_LAYER_DEC
     };
@@ -29,22 +30,22 @@ public class InputHandler {
 
     private InputHandler() {}
     
-    public void onKeyInput(int idx) {
-        System.out.println("index is  " + idx);
+    public void onKeyInput(KeyBinding binding/*int idx*/) {
+        System.out.println("binding is  " + binding.keyDescription);
         if (this.minecraft.currentScreen == null) {
-            if (idx == 0/*KEY_BINDING_LOAD.isPressed()*/) {
+            if (binding == KEY_BINDING_LOAD/*idx == 0*//*KEY_BINDING_LOAD.isPressed()*/) {
                 this.minecraft.displayGuiScreen(new GuiSchematicLoad(this.minecraft.currentScreen));
             }
 
-            if (idx == 1/*KEY_BINDING_SAVE.isPressed()*/) {
+            if (binding == KEY_BINDING_SAVE /*idx == 1*//*KEY_BINDING_SAVE.isPressed()*/) {
                 this.minecraft.displayGuiScreen(new GuiSchematicSave(this.minecraft.currentScreen));
             }
 
-            if (idx == 2/*KEY_BINDING_CONTROL.isPressed()*/) {
+            if (binding == KEY_BINDING_CONTROL /*idx == 2*//*KEY_BINDING_CONTROL.isPressed()*/) {
                 this.minecraft.displayGuiScreen(new GuiSchematicControl(this.minecraft.currentScreen));
             }
 
-            if (idx == 3/*KEY_BINDING_LAYER_INC.isPressed()*/) {
+            if (binding == KEY_BINDING_LAYER_INC /*idx == 3*//*KEY_BINDING_LAYER_INC.isPressed()*/) {
                 final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null && schematic.isRenderingLayer) {
                     schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
@@ -52,44 +53,35 @@ public class InputHandler {
                 }
             }
 
-            if (idx == 4/*KEY_BINDING_LAYER_DEC.isPressed()*/) {
+            if (binding == KEY_BINDING_LAYER_DEC /*idx == 4*//*KEY_BINDING_LAYER_DEC.isPressed()*/) {
                 final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null && schematic.isRenderingLayer) {
                     schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
                     RendererSchematicGlobal.INSTANCE.refresh();
                 }
             }
-
-//            handlePickBlock();
         }
     }
 
-    public void handlePickBlock() {
-//        final KeyBinding keyPickBlock = this.minecraft.gameSettings.keyBindPickBlock;
-//        if (keyPickBlock.isPressed()) {
+    public boolean handlePickBlock() {
             try {
                 final SchematicWorld schematic = ClientProxy.schematic;
-                boolean revert = true;
-                System.out.println("pre attempt to pick block");
+                boolean pass = true;
                 if (schematic != null && schematic.isRendering) {
-
-                    revert = pickBlock(schematic, ClientProxy.movingObjectPosition);
+                    pass = pickBlock(schematic, ClientProxy.movingObjectPosition);
                 }
 
-//                if (revert) {
-//                    KeyBinding.onTick(keyPickBlock.keyCode);
-//                }
+                return pass;
             } catch (Exception e) {
                 Reference.logger.error("Could not pick block!", e);
+                return true;
             }
-
     }
 
+    /**
+     * @return if the vanilla pick block should happen
+     * */
     private boolean pickBlock(final SchematicWorld schematic, final MovingObjectPosition objectMouseOver) {
-        boolean revert = false;
-
-        // Minecraft.func_147112_ai
-        System.out.println("pickblock head " + objectMouseOver);
         if (objectMouseOver != null) {
             final EntityClientPlayerMP player = this.minecraft.thePlayer;
 
@@ -104,28 +96,25 @@ public class InputHandler {
                 }
             }
 
-//            if (!ForgeHooks.onPickBlock(objectMouseOver, player, schematic)) {
-//                return revert;
-//            }
+            boolean creative = player.capabilities.isCreativeMode;
+            int x = objectMouseOver.blockX, y = objectMouseOver.blockY, z = objectMouseOver.blockZ;
+            final Block block = schematic.getBlock(x, y, z);
 
-            if (player.capabilities.isCreativeMode) {
-                System.out.println("player is creative");
-                int x = objectMouseOver.blockX, y = objectMouseOver.blockY, z = objectMouseOver.blockZ;
-                final Block block = schematic.getBlock(x, y, z);
-                final int metadata = schematic.getBlockMetadata(x, y, z);
-                if (block == Block.stoneDoubleSlab || block == Block.woodDoubleSlab || block == Block.snow) {
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(block, 1, metadata & 0xF));
-                }
-                else {
+            int idPicked = block.idPicked(schematic, x, y, z);
+            if (idPicked == 0) {
+                return true;
+            }
+            int meta = block.getDamageValue(schematic, x, y, z);
+            Item item = Item.itemsList[idPicked];
+            player.inventory.setCurrentItem(idPicked, meta, item != null && item.getHasSubtypes(), creative);
 
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(block.idPicked(schematic, x, y, z), 1, block.getDamageValue(schematic, x, y, z)));
-                }
-
+            if (creative) {
                 final int slot = player.inventoryContainer.inventorySlots.size() - 9 + player.inventory.currentItem;
                 this.minecraft.playerController.sendSlotPacket(player.inventory.getStackInSlot(player.inventory.currentItem), slot);
             }
+            return false;
         }
 
-        return revert;
+        return true;
     }
 }

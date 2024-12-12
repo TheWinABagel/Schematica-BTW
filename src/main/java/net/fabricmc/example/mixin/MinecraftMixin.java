@@ -16,12 +16,12 @@ public class MinecraftMixin {
     private void onRunTickPost(CallbackInfo ci) {
 //        Schematica.instance.onTick(false);
         //todo will break with other addons that add keybinds, save start index of keybinds somewhere
-        for (int i = Minecraft.getMinecraft().gameSettings.keyBindings.length - InputHandler.KEY_BINDINGS.length; i < Minecraft.getMinecraft().gameSettings.keyBindings.length; i++) {
+        for (int i = InputHandler.keyBindStartIndex; i < Minecraft.getMinecraft().gameSettings.keyBindings.length; i++) {
             KeyBinding keyBinding = Minecraft.getMinecraft().gameSettings.keyBindings[i];
             int keyCode = keyBinding.keyCode;
             boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
             if (state) {
-                InputHandler.INSTANCE.onKeyInput(i - Minecraft.getMinecraft().gameSettings.keyBindings.length + InputHandler.KEY_BINDINGS.length);
+                InputHandler.INSTANCE.onKeyInput(keyBinding);
             }
         }
     }
