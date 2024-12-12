@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.handler.client;
 
 import com.github.lunatrius.schematica.client.world.SchematicUpdater;
 import com.github.lunatrius.schematica.reference.Reference;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.IWorldAccess;
 import net.minecraft.src.World;
 import net.minecraft.src.WorldClient;
@@ -14,20 +15,13 @@ public class WorldHandler {
 //        }
 //    }
 
-    public static void onLoad(WorldClient world) {
-        if (world.isRemote) {
+    public static void onLoad(World world) {
+        if (world != null && world.isRemote) {
             addWorldAccess(world, SchematicUpdater.INSTANCE);
         }
     }
-    //todo check if all of the load/unload events need to be implemented
-//    @SubscribeEvent
-//    public void onUnload(final WorldEvent.Unload event) {
-//        if (event.world.isRemote) {
-//            removeWorldAccess(event.world, SchematicUpdater.INSTANCE);
-//        }
-//    }
 
-    public static void onUnload(WorldClient world) {
+    public static void onUnload(World world) {
         if (world != null && world.isRemote) {
             removeWorldAccess(world, SchematicUpdater.INSTANCE);
         }

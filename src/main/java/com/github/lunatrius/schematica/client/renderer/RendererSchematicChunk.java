@@ -237,6 +237,7 @@ public class RendererSchematicChunk {
 
                         sides = 0;
                         if (block != null) {
+                            block.currentBlockRenderer = renderBlocks;
                             if (block.shouldSideBeRendered(this.schematic, x, y - 1, z, 0)) {
                                 sides |= RenderHelper.QUAD_DOWN;
                             }

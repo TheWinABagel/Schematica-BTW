@@ -4,16 +4,15 @@
   "package": "net.fabricmc.example.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "oneseven.GameSettingsMixin",
     "NetServerHandlerMixin",
     "oneseven.EntityRendererMixin",
+    "oneseven.GameSettingsMixin",
     "oneseven.MinecraftServerMixin"
   ],
   "client": [
     "MinecraftMixin",
     "oneseven.MinecraftMixin",
-    "oneseven.NetClientHandlerMixin",
-    "oneseven.WorldClientMixin"
+    "oneseven.NetClientHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.handler.client;
 import com.github.lunatrius.schematica.client.gui.control.GuiSchematicControl;
 import com.github.lunatrius.schematica.client.gui.load.GuiSchematicLoad;
 import com.github.lunatrius.schematica.client.gui.save.GuiSchematicSave;
+import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
@@ -59,42 +60,40 @@ public class InputHandler {
                 }
             }
 
-            handlePickBlock();
+//            handlePickBlock();
         }
     }
 
-    private void handlePickBlock() {
-        final KeyBinding keyPickBlock = this.minecraft.gameSettings.keyBindPickBlock;
-        if (keyPickBlock.isPressed()) {
+    public void handlePickBlock() {
+//        final KeyBinding keyPickBlock = this.minecraft.gameSettings.keyBindPickBlock;
+//        if (keyPickBlock.isPressed()) {
             try {
                 final SchematicWorld schematic = ClientProxy.schematic;
                 boolean revert = true;
-
+                System.out.println("pre attempt to pick block");
                 if (schematic != null && schematic.isRendering) {
+
                     revert = pickBlock(schematic, ClientProxy.movingObjectPosition);
                 }
 
-                if (revert) {
-                    KeyBinding.onTick(keyPickBlock.keyCode);
-                }
+//                if (revert) {
+//                    KeyBinding.onTick(keyPickBlock.keyCode);
+//                }
             } catch (Exception e) {
                 Reference.logger.error("Could not pick block!", e);
             }
-        }
+
     }
 
     private boolean pickBlock(final SchematicWorld schematic, final MovingObjectPosition objectMouseOver) {
         boolean revert = false;
 
         // Minecraft.func_147112_ai
+        System.out.println("pickblock head " + objectMouseOver);
         if (objectMouseOver != null) {
             final EntityClientPlayerMP player = this.minecraft.thePlayer;
 
-            //todo pick block handling has no miss
-//            if (objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.MISS) {
-//                revert = true;
-//            }
-
+            //revert if it should be picking a vanilla block
             final MovingObjectPosition mcObjectMouseOver = this.minecraft.objectMouseOver;
             if (mcObjectMouseOver != null && mcObjectMouseOver.typeOfHit == EnumMovingObjectType.TILE) {
                 final int x = mcObjectMouseOver.blockX - schematic.position.x;
@@ -110,10 +109,16 @@ public class InputHandler {
 //            }
 
             if (player.capabilities.isCreativeMode) {
-                final Block block = schematic.getBlock(objectMouseOver.blockX, objectMouseOver.blockY, objectMouseOver.blockZ);
-                final int metadata = schematic.getBlockMetadata(objectMouseOver.blockX, objectMouseOver.blockY, objectMouseOver.blockZ);
+                System.out.println("player is creative");
+                int x = objectMouseOver.blockX, y = objectMouseOver.blockY, z = objectMouseOver.blockZ;
+                final Block block = schematic.getBlock(x, y, z);
+                final int metadata = schematic.getBlockMetadata(x, y, z);
                 if (block == Block.stoneDoubleSlab || block == Block.woodDoubleSlab || block == Block.snow) {
                     player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(block, 1, metadata & 0xF));
+                }
+                else {
+
+                    player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(block.idPicked(schematic, x, y, z), 1, block.getDamageValue(schematic, x, y, z)));
                 }
 
                 final int slot = player.inventoryContainer.inventorySlots.size() - 9 + player.inventory.currentItem;

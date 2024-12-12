@@ -5,8 +5,7 @@ import com.github.lunatrius.schematica.handler.client.InputHandler;
 import com.github.lunatrius.schematica.handler.client.RenderTickHandler;
 import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.handler.client.WorldHandler;
-import net.minecraft.src.Minecraft;
-import net.minecraft.src.WorldClient;
+import net.minecraft.src.*;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,5 +41,20 @@ public class MinecraftMixin {
     @Inject(method = "runGameLoop", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/Profiler;endStartSection(Ljava/lang/String;)V", ordinal = 2))
     private void preRenderTick(CallbackInfo ci) {
         RenderTickHandler.INSTANCE.onRenderTick();
+    }
+
+    @Inject(method = "runGameLoop", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/Profiler;endSection()V", ordinal = 2, shift = At.Shift.AFTER))
+    private void postRenderTick(CallbackInfo ci) {
+        RenderTickHandler.INSTANCE.onRenderTick();
+    }
+
+    @Inject(method = "clickMiddleMouseButton", at = @At("HEAD"))
+    private void schematica$onMiddleClick(CallbackInfo ci) {
+        InputHandler.INSTANCE.handlePickBlock();
+    }
+
+    @Inject(method = "loadWorld(Lnet/minecraft/src/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
+    private void schematica$loadEvent(WorldClient par1WorldClient, String par2Str, CallbackInfo ci) {
+        WorldHandler.onLoad(par1WorldClient);
     }
 }
