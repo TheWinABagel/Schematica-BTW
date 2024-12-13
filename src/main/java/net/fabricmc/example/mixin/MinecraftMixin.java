@@ -14,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MinecraftMixin {
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/Profiler;endSection()V"))
     private void onRunTickPost(CallbackInfo ci) {
-//        Schematica.instance.onTick(false);
-        //todo will break with other addons that add keybinds, save start index of keybinds somewhere
         for (int i = InputHandler.keyBindStartIndex; i < Minecraft.getMinecraft().gameSettings.keyBindings.length; i++) {
             KeyBinding keyBinding = Minecraft.getMinecraft().gameSettings.keyBindings[i];
             int keyCode = keyBinding.keyCode;

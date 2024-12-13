@@ -30,7 +30,7 @@ public class PacketHandler implements CustomPacketHandler {
         DataInputStream dis = new DataInputStream(bis);
         int id = dis.readInt();
         ByteBuf buf = ByteBuf.in(dis);
-
+        System.out.println("received packet with id " + id);
         IMessage message = switch (id) {
             case MessageCapabilities.ID -> new MessageCapabilities().fromBytes(buf);
             case MessageDownloadBegin.ID -> new MessageDownloadBegin().fromBytes(buf);
@@ -42,15 +42,17 @@ public class PacketHandler implements CustomPacketHandler {
         };
         //is this safe?
         if (message instanceof IMessageHandler handler) {
-            NetHandler netHandler;
+            System.out.println("Message is a message handler: ");
+            MessageContext netHandler;
             if (player instanceof EntityPlayerMP emp) {
-                netHandler = emp.playerNetServerHandler;
+                netHandler = MessageContext.fromPlayer(emp);
             }
             else {
-               netHandler = ((EntityClientPlayerMP) player).sendQueue;
+               netHandler = MessageContext.fromPlayerSP(player);
             }
-            IMessage reply = handler.onMessage(message, new MessageContext(netHandler));
+            IMessage reply = handler.onMessage(message, netHandler);
             if (reply != null) {
+                System.out.println("reply packet has id of: " + reply.id());
                 if (player instanceof EntityPlayerMP mp) {
                     System.out.println("sending packet to mp player with id " + reply.id());
                     mp.playerNetServerHandler.sendPacketToPlayer(reply.toPacket());
@@ -66,7 +68,6 @@ public class PacketHandler implements CustomPacketHandler {
     public static final PacketHandler INSTANCE = new PacketHandler();
 
     public static void init() {
-        System.out.println("CURRENT PACKET HANDLER ID = " + Schematica.instance.getModID());
         Schematica.instance.registerPacketHandler(Reference.PACKET_ID, INSTANCE);
 //        INSTANCE.registerMessage(MessageCapabilities.class, MessageCapabilities.class, 0, Side.CLIENT);
 //

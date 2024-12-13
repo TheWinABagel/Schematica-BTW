@@ -1,8 +1,8 @@
 package com.github.lunatrius.schematica.network.util;
 
-import net.minecraft.src.NetClientHandler;
-import net.minecraft.src.NetHandler;
-import net.minecraft.src.NetServerHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.src.*;
 
 public record MessageContext(NetHandler netHandler) {
 
@@ -11,8 +11,12 @@ public record MessageContext(NetHandler netHandler) {
         return (NetServerHandler) netHandler;
     }
 
-    public NetClientHandler getClientHandler()
-    {
-        return (NetClientHandler) netHandler;
+    public static MessageContext fromPlayer(EntityPlayerMP emp) {
+        return new MessageContext(emp.playerNetServerHandler);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static MessageContext fromPlayerSP(EntityPlayer player) {
+        return new MessageContext(((EntityClientPlayerMP) player).sendQueue);
     }
 }

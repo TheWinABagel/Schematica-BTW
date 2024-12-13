@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 
-//todo currently no op
 public interface ByteBuf {
 
     public byte readByte();
