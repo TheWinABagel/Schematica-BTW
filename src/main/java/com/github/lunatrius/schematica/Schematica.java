@@ -6,6 +6,8 @@ import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.proxy.CommonProxy;
 import com.github.lunatrius.schematica.proxy.ServerProxy;
 import com.github.lunatrius.schematica.reference.Reference;
+import com.github.lunatrius.schematica.util.DebugItem;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 
 public class Schematica extends BTWAddon {
@@ -27,8 +29,6 @@ public class Schematica extends BTWAddon {
     }
 
     //todo proxy might not work on dedicated servers properly
-//    @SidedProxy(serverSide = Reference.PROXY_SERVER, clientSide = Reference.PROXY_CLIENT)
-    private static CommonProxy proxy = getProxy();
 
 //    @EventHandler
 //    public void preInit(FMLPreInitializationEvent event) {
@@ -48,6 +48,10 @@ public class Schematica extends BTWAddon {
     @Override
     public void initialize() {
         getProxy().init();
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            //todo config for debug item
+            new DebugItem(22000);
+        }
     }
 
 //    @EventHandler
