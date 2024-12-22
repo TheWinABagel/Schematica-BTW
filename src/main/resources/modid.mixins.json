@@ -7,7 +7,8 @@
     "NetServerHandlerMixin",
     "oneseven.EntityRendererMixin",
     "oneseven.GameSettingsMixin",
-    "oneseven.MinecraftServerMixin"
+    "oneseven.MinecraftServerMixin",
+    "rotate.BlockChestMixin"
   ],
   "client": [
     "MinecraftMixin",

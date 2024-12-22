@@ -1,14 +1,16 @@
 package com.github.lunatrius.schematica.client.world;
 
+import com.github.lunatrius.api.ISchematic;
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.core.util.vector.Vector3i;
-import com.github.lunatrius.api.ISchematic;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.ChunkProviderSchematic;
 import com.github.lunatrius.schematica.world.storage.SaveHandlerSchematic;
 import com.github.lunatrius.schematica.world.storage.Schematic;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.example.ForgeDirection;
+import net.fabricmc.example.RotationHelper;
 import net.minecraft.src.*;
 
 import java.util.List;
@@ -248,16 +250,18 @@ public class SchematicWorld extends World {
                         Block block = getBlock(x, y, length - 1 - z);
                         //todo rotation logic changed
                         if (block != null) {
-                            meta = block.rotateMetadataAroundYAxis(getBlockMetadata(x, y, z), false);
+
+//                            meta = block.rotateMetadataAroundYAxis(getBlockMetadata(x, y, z), false);
                         }
+                        RotationHelper.rotateVanillaBlock(block, this, x, y, length - 1 - z, ForgeDirection.UP);
 //                        getBlock(x, y, length - 1 - z).rotateBlock(this, x, y, length - 1 - z, ForgeDirection.UP);
                     } catch (Exception e) {
                         Reference.logger.debug("Failed to rotate block!", e);
                     }
 
                     final Block block = getBlock(x, y, length - 1 - z);
-//                    final int metadata = getBlockMetadata(x, y, length - 1 - z);
-                    final int metadata = meta;
+                    final int metadata = getBlockMetadata(x, y, length - 1 - z);
+//                    final int metadata = meta;
                     schematicRotated.setBlock(z, y, x, block, metadata);
                 }
             }
