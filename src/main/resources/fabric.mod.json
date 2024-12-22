@@ -2,25 +2,23 @@
   "schemaVersion": 1,
   "id": "schematica",
   "version": "${version}",
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Schematica",
+  "description": "Schematics Galore!",
   "authors": [
-    "Me!"
+    "Lunatrius",
+    "TheWinABagel (Port)"
   ],
   "contact": {
     "homepage": "https://legacyfabric.net/",
     "sources": "https://github.com/Legacy-Fabric/fabric-example-mod"
   },
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/schematica/logo.png",
   "environment": "*",
   "entrypoints": {
     "btw:addon": [
       "com.github.lunatrius.schematica.Schematica"
     ]
-  },
-  "custom": {
-    "btw:addon_prefix": "EX"
   },
   "mixins": [
     "modid.mixins.json"
