@@ -4,7 +4,6 @@ import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.gui.shim.GuiUnicodeGlyphButton;
 import com.github.lunatrius.schematica.client.util.BlockList;
-import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
@@ -36,15 +35,15 @@ public class GuiSchematicMaterials extends GuiScreenBase {
 
     public GuiSchematicMaterials(GuiScreen guiScreen) {
         super(guiScreen);
-        final Minecraft minecraft = Minecraft.getMinecraft();
-        final SchematicWorld schematic = ClientProxy.schematic;
-        this.blockList = new BlockList().getList(minecraft.thePlayer, schematic, minecraft.theWorld);
+        Minecraft mc = Minecraft.getMinecraft();
+        this.blockList = new BlockList().getList(mc.thePlayer, ClientProxy.schematic, mc.theWorld);
         this.sortType.sort(this.blockList);
     }
 
     @Override
     public void initGui() {
         int id = 0;
+        this.width += 100;
 
         this.btnSort = new GuiUnicodeGlyphButton(++id, this.width / 2 - 154, this.height - 30, 100, 20, " " + I18n.getString(Names.Gui.Control.SORT_PREFIX + this.sortType.label), this.sortType.glyph, 2.0f);
         this.buttonList.add(this.btnSort);
@@ -80,7 +79,7 @@ public class GuiSchematicMaterials extends GuiScreenBase {
         }
     }
 
-//    @Override
+    //    @Override
     //straight up copied from GuiContainer
 public void renderToolTip(ItemStack par1ItemStack, int par2, int par3) {
     EmiScreenManager.lastStackTooltipRendered = par1ItemStack;
@@ -92,26 +91,26 @@ public void renderToolTip(ItemStack par1ItemStack, int par2, int par3) {
         }
         var4.set(var5, EnumChatFormatting.GRAY + var4.get(var5));
     }
-    this.func_102021_a(var4, par2, par3);
+    this.renderTooltipList(var4, par2, par3);
 }
 
-    protected void func_102021_a(List<String> par1List, int par2, int par3) {
-        if (!par1List.isEmpty()) {
+    protected void renderTooltipList(List<String> tooltip, int mouseX, int mouseY) {
+        if (!tooltip.isEmpty()) {
             GL11.glDisable(32826);
             RenderHelper.disableStandardItemLighting();
             GL11.glDisable(2896);
             GL11.glDisable(2929);
             int var4 = 0;
-            for (String var6 : par1List) {
+            for (String var6 : tooltip) {
                 int var7 = this.fontRenderer.getStringWidth(var6);
                 if (var7 <= var4) continue;
                 var4 = var7;
             }
-            int var14 = par2 + 12;
-            int var15 = par3 - 12;
+            int var14 = mouseX + 12;
+            int var15 = mouseY - 12;
             int var8 = 8;
-            if (par1List.size() > 1) {
-                var8 += 2 + (par1List.size() - 1) * 10;
+            if (tooltip.size() > 1) {
+                var8 += 2 + (tooltip.size() - 1) * 10;
             }
             if (var14 + var4 > this.width) {
                 var14 -= 28 + var4;
@@ -133,8 +132,8 @@ public void renderToolTip(ItemStack par1ItemStack, int par2, int par3) {
             this.drawGradientRect(var14 + var4 + 2, var15 - 3 + 1, var14 + var4 + 3, var15 + var8 + 3 - 1, var10, var11);
             this.drawGradientRect(var14 - 3, var15 - 3, var14 + var4 + 3, var15 - 3 + 1, var10, var10);
             this.drawGradientRect(var14 - 3, var15 + var8 + 2, var14 + var4 + 3, var15 + var8 + 3, var11, var11);
-            for (int var12 = 0; var12 < par1List.size(); ++var12) {
-                String var13 = (String)par1List.get(var12);
+            for (int var12 = 0; var12 < tooltip.size(); ++var12) {
+                String var13 = (String)tooltip.get(var12);
                 this.fontRenderer.drawStringWithShadow(var13, var14, var15, -1);
                 if (var12 == 0) {
                     var15 += 2;
@@ -151,12 +150,12 @@ public void renderToolTip(ItemStack par1ItemStack, int par2, int par3) {
     }
 
     @Override
-    public void drawScreen(int x, int y, float partialTicks) {
-        this.guiSchematicMaterialsSlot.drawScreen(x, y, partialTicks);
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.guiSchematicMaterialsSlot.drawScreen(mouseX, mouseY, partialTicks);
 
         drawString(this.fontRenderer, this.strMaterialName, this.width / 2 - 108, 4, 0x00FFFFFF);
         drawString(this.fontRenderer, this.strMaterialAmount, this.width / 2 + 108 - this.fontRenderer.getStringWidth(this.strMaterialAmount), 4, 0x00FFFFFF);
-        super.drawScreen(x, y, partialTicks);
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     private void dumpMaterialList(final List<BlockList.WrappedItemStack> blockList) {

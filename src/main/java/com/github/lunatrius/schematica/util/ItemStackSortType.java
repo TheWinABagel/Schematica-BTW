@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public enum ItemStackSortType {
-    NAME_ASC("name", "\u2191", new Comparator<BlockList.WrappedItemStack>() {
+    NAME_ASC("name", "↑", new Comparator<BlockList.WrappedItemStack>() {
         @Override
         public int compare(final BlockList.WrappedItemStack wrappedItemStackA, final BlockList.WrappedItemStack wrappedItemStackB) {
             final String nameA = wrappedItemStackA.getItemStackDisplayName();
@@ -17,7 +17,7 @@ public enum ItemStackSortType {
             return nameA.compareTo(nameB);
         }
     }),
-    NAME_DESC("name", "\u2193", new Comparator<BlockList.WrappedItemStack>() {
+    NAME_DESC("name", "↓", new Comparator<BlockList.WrappedItemStack>() {
         @Override
         public int compare(final BlockList.WrappedItemStack wrappedItemStackA, final BlockList.WrappedItemStack wrappedItemStackB) {
             final String nameA = wrappedItemStackA.getItemStackDisplayName();
@@ -26,13 +26,13 @@ public enum ItemStackSortType {
             return nameB.compareTo(nameA);
         }
     }),
-    SIZE_ASC("amount", "\u2191", new Comparator<BlockList.WrappedItemStack>() {
+    SIZE_ASC("amount", "↑", new Comparator<BlockList.WrappedItemStack>() {
         @Override
         public int compare(final BlockList.WrappedItemStack wrappedItemStackA, final BlockList.WrappedItemStack wrappedItemStackB) {
             return wrappedItemStackA.total - wrappedItemStackB.total;
         }
     }),
-    SIZE_DESC("amount", "\u2193", new Comparator<BlockList.WrappedItemStack>() {
+    SIZE_DESC("amount", "↓", new Comparator<BlockList.WrappedItemStack>() {
         @Override
         public int compare(final BlockList.WrappedItemStack wrappedItemStackA, final BlockList.WrappedItemStack wrappedItemStackB) {
             return wrappedItemStackB.total - wrappedItemStackA.total;
@@ -69,6 +69,6 @@ public enum ItemStackSortType {
         } catch (final Exception ignored) {
         }
 
-        return NAME_ASC;
+        return SIZE_DESC;
     }
 }

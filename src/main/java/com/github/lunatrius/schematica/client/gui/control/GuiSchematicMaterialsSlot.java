@@ -3,13 +3,10 @@ package com.github.lunatrius.schematica.client.gui.control;
 import com.github.lunatrius.schematica.client.gui.GuiHelper;
 import com.github.lunatrius.schematica.client.util.BlockList;
 import com.github.lunatrius.schematica.reference.Names;
-
-import net.minecraft.src.Minecraft;
-import net.minecraft.src.GuiSlot;
-import net.minecraft.src.Tessellator;
-import net.minecraft.src.I18n;
-import net.minecraft.src.ItemStack;
+import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 class GuiSchematicMaterialsSlot extends GuiSlot {
     private final Minecraft minecraft = Minecraft.getMinecraft();
@@ -19,10 +16,10 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
     private final String strMaterialRequired = I18n.getString(Names.Gui.Control.MATERIAL_REQUIRED);
     private final String strMaterialAvailable = I18n.getString(Names.Gui.Control.MATERIAL_AVAILABLE);
 
-    protected int selectedIndex = -1;
+    protected int selectedIndex;
 
     public GuiSchematicMaterialsSlot(GuiSchematicMaterials par1) {
-        super(Minecraft.getMinecraft(), par1.width, par1.height, 16, par1.height - 34, 24);
+        super(Minecraft.getMinecraft(), par1.width, par1.height, 16, par1.height - 34, 25);
         this.guiSchematicMaterials = par1;
         this.selectedIndex = -1;
     }
@@ -57,15 +54,28 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 
         final String itemName = wrappedItemStack.getItemStackDisplayName();
         final String amount = wrappedItemStack.getFormattedAmount();
-        final String amountrequired = wrappedItemStack.getFormattedAmountRequired(strMaterialRequired, strMaterialAvailable);
+        final String amountRequired = wrappedItemStack.getFormattedAmountRequired(strMaterialRequired, strMaterialAvailable);
 
         GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRenderer, x, y, itemStack);
 
         this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, itemName, x + 24, y + 6, 0xFFFFFF);
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amount, x + 215 - this.minecraft.fontRenderer.getStringWidth(amount), y + 6, 0xFFFFFF);
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amountrequired, x + 215 - this.minecraft.fontRenderer.getStringWidth(amountrequired), y + 16, 0xFFFFFF);
+        int amountXWidth = this.minecraft.fontRenderer.getStringWidth(amount);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amount, x + 215 - amountXWidth, y + 6, 0xFFFFFF);
+        int amountRequiredXWidth = this.minecraft.fontRenderer.getStringWidth(amountRequired);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amountRequired, x + 215 - amountRequiredXWidth, y + 16, 0xFFFFFF);
 
-        if (mouseX > x && mouseY > y && mouseX <= x + 18 && mouseY <= y + 18) {
+        if (mouseX > x + 215 - amountXWidth && mouseX <= x + 215 && mouseY > y + 2 && mouseY <= y + 2 + 9) {
+            this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountTooltip()), mouseX, mouseY);
+            GL11.glDisable(GL11.GL_LIGHTING);
+        }
+
+        if (mouseX > x + 215 - amountRequiredXWidth && mouseX <= x + 215 && mouseY > y + 2 + 9 && mouseY <= y + 2 + 18) {
+            this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountRequiredTooltip(strMaterialRequired, strMaterialAvailable)), mouseX, mouseY);
+            GL11.glDisable(GL11.GL_LIGHTING);
+        }
+
+
+        if (mouseX >= x + 215 - x && mouseY >= y && mouseX <= x + 18 && mouseY <= y + 18) {
 
             this.guiSchematicMaterials.renderToolTip(itemStack, mouseX, mouseY);
             GL11.glDisable(GL11.GL_LIGHTING);

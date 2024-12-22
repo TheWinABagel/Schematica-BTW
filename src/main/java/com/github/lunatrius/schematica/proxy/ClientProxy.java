@@ -1,26 +1,23 @@
 package com.github.lunatrius.schematica.proxy;
 
+import com.github.lunatrius.api.ISchematic;
 import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.core.util.vector.Vector3i;
-import com.github.lunatrius.api.ISchematic;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
-import com.github.lunatrius.schematica.handler.client.InputHandler;
-import com.github.lunatrius.schematica.handler.client.OverlayHandler;
-import com.github.lunatrius.schematica.handler.client.RenderTickHandler;
-import com.github.lunatrius.schematica.handler.client.TickHandler;
-import com.github.lunatrius.schematica.handler.client.WorldHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import net.fabricmc.example.ForgeDirection;
-import net.minecraft.src.*;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.MathHelper;
+import net.minecraft.src.Minecraft;
+import net.minecraft.src.MovingObjectPosition;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class ClientProxy extends CommonProxy {
     public static boolean isRenderingGuide = false;
@@ -40,8 +37,6 @@ public class ClientProxy extends CommonProxy {
     public static MovingObjectPosition movingObjectPosition = null;
 
     private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
-
-    private SchematicWorld schematicWorld = null;
 
     public static void setPlayerData(EntityPlayer player, float partialTicks) {
         playerPosition.x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;

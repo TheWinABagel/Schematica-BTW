@@ -2,8 +2,8 @@ package com.github.lunatrius.schematica.handler.client;
 
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
-import net.minecraft.src.Minecraft;
 import net.minecraft.src.EntityLivingBase;
+import net.minecraft.src.Minecraft;
 import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.Vec3;
 
@@ -14,7 +14,6 @@ public class RenderTickHandler {
 
     private RenderTickHandler() {}
 
-    //todo should this run on both start and end of render tick?
     public void onRenderTick() {
         final SchematicWorld schematic = ClientProxy.schematic;
 

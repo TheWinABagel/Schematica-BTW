@@ -4,10 +4,9 @@ import com.github.lunatrius.core.entity.EntityHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.src.Block;
-import net.minecraft.src.WorldClient;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.MovingObjectPosition;
+import net.minecraft.src.WorldClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ public class BlockList {
             return blockList;
         }
 
-        final MovingObjectPosition movingObjectPosition = new MovingObjectPosition(player);
+//        final MovingObjectPosition movingObjectPosition = new MovingObjectPosition(player);
 
         for (int y = 0; y < world.getHeight(); y++) {
             for (int x = 0; x < world.getWidth(); x++) {
@@ -39,16 +38,22 @@ public class BlockList {
                     final int wy = world.position.y + y;
                     final int wz = world.position.z + z;
                     final Block mcBlock = Block.blocksList[mcWorld.getBlockId(wx, wy, wz)];
-                    if (mcBlock == null) {
-                        continue;
-                    }
+//                    if (mcBlock == null) {
+//                        continue;
+//                    }
                     final boolean isPlaced = block == mcBlock && world.getBlockMetadata(x, y, z) == mcWorld.getBlockMetadata(wx, wy, wz);
 
                     ItemStack stack = null;
 
                     try {
 //                        stack = block.getPickBlock(movingObjectPosition, world, x, y, z, player);
-                        stack = new ItemStack(block.idPicked(world, x, y, z), 1, 0);
+                        int idPicked = block.idPicked(world, x, y ,z);
+                        if (idPicked == 0) {
+                            Reference.logger.debug("Block {}'s picked id is 0, skipping", block);
+                            continue;
+                        }
+                        int meta = block.getDamageValue(world, x, y, z);
+                        stack = new ItemStack(idPicked, 1, meta);
                     } catch (final Exception e) {
                         Reference.logger.debug("Could not get the pick block for: {}", block, e);
                     }
@@ -111,15 +116,15 @@ public class BlockList {
 
         public String getFormattedAmount() {
             final char color = this.placed < this.total ? 'c' : 'a';
-            return String.format("\u00a7%c%s\u00a7r/%s", color, getFormattedStackAmount(itemStack, this.placed), getFormattedStackAmount(itemStack, this.total));
+            return String.format("§%c%s§r/%s", color, getFormattedStackAmount(itemStack, this.placed), getFormattedStackAmount(itemStack, this.total));
         }
 
         public String getFormattedAmountRequired(final String reqstr, final String avastr) {
             final int need = this.total - this.inventory - this.placed;
             if (this.inventory != -1 && need > 0) {
-                return String.format("\u00a7c%s:%s", reqstr, getFormattedStackAmount(itemStack, need));
+                return String.format("§c%s: %s", reqstr, getFormattedStackAmount(itemStack, need));
             } else {
-                return String.format("\u00a7a%s", avastr);
+                return String.format("§a%s", avastr);
             }
         }
 
@@ -130,7 +135,32 @@ public class BlockList {
             } else {
                 final int amountstack = amount / stackSize;
                 final int amountremainder = amount % stackSize;
-                return String.format("%d(%d:%d)", amount, amountstack, amountremainder);
+                return String.format("%d(%ds:%dr)", amount, amountstack, amountremainder);
+            }
+        }
+
+        public String getFormattedAmountTooltip() {
+            final char color = this.placed < this.total ? 'c' : 'a';
+            return String.format("§%c%s§r/%s", color, getFormattedStackAmountTooltip(itemStack, this.placed), getFormattedStackAmountTooltip(itemStack, this.total));
+        }
+
+        public String getFormattedAmountRequiredTooltip(final String reqstr, final String avastr) {
+            final int need = this.total - this.inventory - this.placed;
+            if (this.inventory != -1 && need > 0) {
+                return String.format("§c%s: %s", reqstr, getFormattedStackAmountTooltip(itemStack, need));
+            } else {
+                return String.format("§a%s", avastr);
+            }
+        }
+
+        private static String getFormattedStackAmountTooltip(final ItemStack itemStack, final int amount) {
+            final int stackSize = itemStack.getMaxStackSize();
+            if (amount < stackSize) {
+                return String.format("%d", amount);
+            } else {
+                final int amountstack = amount / stackSize;
+                final int amountremainder = amount % stackSize;
+                return String.format("Stacks needed: %d, remainder: %d)", amountstack, amountremainder);
             }
         }
     }
