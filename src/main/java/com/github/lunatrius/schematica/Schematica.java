@@ -1,11 +1,11 @@
 package com.github.lunatrius.schematica;
 
 import btw.BTWAddon;
+import com.github.lunatrius.schematica.debug.DebugItem;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.proxy.CommonProxy;
 import com.github.lunatrius.schematica.proxy.ServerProxy;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.util.DebugItem;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 

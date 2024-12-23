@@ -42,6 +42,11 @@ public class GuiSchematicMaterials extends GuiScreenBase {
     }
 
     @Override
+    public void drawBackground(int par1) {
+        super.drawBackground(par1);
+    }
+
+    @Override
     public void initGui() {
         int id = 0;
         this.width += 100;

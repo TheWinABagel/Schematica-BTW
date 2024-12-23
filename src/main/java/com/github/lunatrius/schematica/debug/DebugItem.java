@@ -1,5 +1,6 @@
-package com.github.lunatrius.schematica.util;
+package com.github.lunatrius.schematica.debug;
 
+import com.github.lunatrius.schematica.client.gui.control.GuiSchematicMaterials;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import net.fabricmc.example.ForgeDirection;
 import net.minecraft.src.*;
@@ -15,7 +16,9 @@ public class DebugItem extends Item {
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         if (world.isRemote) {
             if (ClientProxy.schematic == null) {
-                player.addChatMessage("No Schematic!");
+                new DebugSchematicLoader();
+                Minecraft.getMinecraft().displayGuiScreen(new GuiSchematicMaterials(null));
+                player.addChatMessage("No Schematic! Loading first schematic...");
                 return stack;
             }
             MovingObjectPosition pos = ClientProxy.movingObjectPosition;

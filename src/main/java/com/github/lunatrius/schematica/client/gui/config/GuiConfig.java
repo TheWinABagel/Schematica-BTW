@@ -1,7 +1,9 @@
 package com.github.lunatrius.schematica.client.gui.config;
 
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
+import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiScreen;
+import net.minecraft.src.Minecraft;
 
 public class GuiConfig extends GuiScreenBase {
 
@@ -18,5 +20,12 @@ public class GuiConfig extends GuiScreenBase {
     @Override
     public boolean doesGuiPauseGame() {
         return parentScreen.doesGuiPauseGame();
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) {
+        if (button.id == 17) {
+            Minecraft.getMinecraft().thePlayer.sendChatMessage("hi");
+        }
     }
 }
