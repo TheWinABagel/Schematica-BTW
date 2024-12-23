@@ -9,7 +9,7 @@ public class DebugItem extends Item {
     private static final String LINE = "----------------------------\n";
     public DebugItem(int par1) {
         super(par1);
-        setUnlocalizedName("schematica.debug");
+        setUnlocalizedName("debug");
     }
 
     @Override

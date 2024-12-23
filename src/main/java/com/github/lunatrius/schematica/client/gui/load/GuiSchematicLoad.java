@@ -3,11 +3,14 @@ package com.github.lunatrius.schematica.client.gui.load;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.FileFilterSchematic;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
+import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
+import com.github.lunatrius.schematica.util.ImmutableTriple;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import net.minecraft.src.*;
 import org.lwjgl.Sys;
@@ -17,6 +20,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.lunatrius.schematica.client.util.WorldServerName.worldServerName;
 
 public class GuiSchematicLoad extends GuiScreenBase {
     private static final FileFilterSchematic FILE_FILTER_FOLDER = new FileFilterSchematic(true);
@@ -155,7 +160,19 @@ public class GuiSchematicLoad extends GuiScreenBase {
                 if (Schematica.getProxy().loadSchematic(null, this.currentDirectory, schematicEntry.getName())) {
                     SchematicWorld schematic = ClientProxy.schematic;
                     if (schematic != null) {
-                        ClientProxy.moveSchematicToPlayer(schematic);
+                        ImmutableTriple<Boolean, Integer, ImmutableTriple<Integer, Integer, Integer>> schematicCoordinate = ClientProxy
+                                .getCoordinates(worldServerName(this.mc), schematic.name);
+                        System.out.println("TRIPLE" + schematicCoordinate);
+                        if (schematicCoordinate.left()) {
+                            ClientProxy.moveSchematic(schematic, schematicCoordinate.right().left(), schematicCoordinate.right().middle(), schematicCoordinate.right().right());
+                            for (int i = 0; i < schematicCoordinate.middle(); i++) {
+                                schematic.rotate();
+                            }
+                            RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(schematic);
+                            SchematicPrinter.INSTANCE.refresh();
+                        } else {
+                            ClientProxy.moveSchematicToPlayer(schematic);
+                        }
                     }
                 }
             }
@@ -163,4 +180,22 @@ public class GuiSchematicLoad extends GuiScreenBase {
             Reference.logger.error("Failed to load schematic!", e);
         }
     }
+
+//    private void loadSchematic() {
+//        int selectedIndex = this.guiSchematicLoadSlot.selectedIndex;
+//
+//        try {
+//            if (selectedIndex >= 0 && selectedIndex < this.schematicFiles.size()) {
+//                GuiSchematicEntry schematicEntry = this.schematicFiles.get(selectedIndex);
+//                if (Schematica.getProxy().loadSchematic(null, this.currentDirectory, schematicEntry.getName())) {
+//                    SchematicWorld schematic = ClientProxy.schematic;
+//                    if (schematic != null) {
+//                        ClientProxy.moveSchematicToPlayer(schematic);
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            Reference.logger.error("Failed to load schematic!", e);
+//        }
+//    }
 }

@@ -72,6 +72,12 @@ public final class Names {
         public static final String LANG_PREFIX = Reference.MODID.toLowerCase() + ".config";
     }
 
+    public static final class Chat {
+
+        public static final String SAVE_COORDINATES_SUCCESS = "Schematica.chat.saveCoordinatesSuccess";
+        public static final String SAVE_COORDINATES_FAIL = "Schematica.chat.saveCoordinatesFail";
+    }
+
     public static final class Command {
         public static final class Save {
             public static final class Message {
@@ -143,10 +149,13 @@ public final class Names {
         }
 
         public static final class Control {
+            public static final String SAVE_COORDINATES = "schematica.gui.savecoordinates";
             public static final String MOVE_SCHEMATIC = "schematica.gui.moveschematic";
             public static final String MATERIALS = "schematica.gui.materials";
             public static final String PRINTER = "schematica.gui.printer";
             public static final String OPERATIONS = "schematica.gui.operations";
+
+            public static final String NAME = "schematica.gui.name";
 
             public static final String UNLOAD = "schematica.gui.unload";
             public static final String MODE_ALL = "schematica.gui.all";

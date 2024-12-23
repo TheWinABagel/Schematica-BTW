@@ -18,6 +18,7 @@ import java.util.List;
 public class SchematicWorld extends World {
     private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, EnumGameType.CREATIVE, false, false, WorldType.FLAT);
 
+    public String name = "";
     public static final ItemStack DEFAULT_ICON = new ItemStack(Block.grass);
     private static final WorldProvider DUMMY_PROVIDER = new WorldProvider() {
         @Override
@@ -32,9 +33,10 @@ public class SchematicWorld extends World {
     public boolean isRendering;
     public boolean isRenderingLayer;
     public int renderingLayer;
+    public int rotationState;
 
-    public SchematicWorld(ISchematic schematic) {
-        super(new SaveHandlerSchematic(), "Schematica", WORLD_SETTINGS, DUMMY_PROVIDER, null, null);
+    public SchematicWorld(ISchematic schematic, String filename) {
+        super(new SaveHandlerSchematic(), "Schematica", WORLD_SETTINGS, DUMMY_PROVIDER, new Profiler(), null);
         this.schematic = schematic;
 
         for (TileEntity tileEntity : schematic.getTileEntities()) {
@@ -44,6 +46,7 @@ public class SchematicWorld extends World {
         this.isRendering = false;
         this.isRenderingLayer = false;
         this.renderingLayer = 0;
+        this.name = filename.replace(".schematic", "");
     }
 
     @Override
@@ -280,7 +283,10 @@ public class SchematicWorld extends World {
 
             schematicRotated.setTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity);
         }
-
+        rotationState++;
+        if (rotationState > 3) {
+            rotationState = 0;
+        }
         this.schematic = schematicRotated;
 
         refreshChests();

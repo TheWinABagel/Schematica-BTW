@@ -6,10 +6,12 @@ import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
+import com.github.lunatrius.schematica.client.util.WorldServerName;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Names;
+import net.minecraft.src.EntityPlayerSP;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.I18n;
@@ -37,8 +39,15 @@ public class GuiSchematicControl extends GuiScreenBase {
     private GuiButton btnMaterials = null;
     private GuiButton btnPrint = null;
 
+    private GuiButton btnSaveCoordinates = null;
+
+    private final String strSaveCoordinatesSuccess = I18n.getString(Names.Chat.SAVE_COORDINATES_SUCCESS);
+    private final String strSaveCoordinatesFail = I18n.getString(Names.Chat.SAVE_COORDINATES_FAIL);
+    private final String strSaveCoordinates = I18n.getString(Names.Gui.Control.SAVE_COORDINATES);
+
     private final String strMoveSchematic = I18n.getString(Names.Gui.Control.MOVE_SCHEMATIC);
     private final String strOperations = I18n.getString(Names.Gui.Control.OPERATIONS);
+    private final String strName = I18n.getString(Names.Gui.Control.NAME);
     private final String strUnload = I18n.getString(Names.Gui.Control.UNLOAD);
     private final String strAll = I18n.getString(Names.Gui.Control.MODE_ALL);
     private final String strLayers = I18n.getString(Names.Gui.Control.MODE_LAYERS);
@@ -103,6 +112,9 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, this.printer.isPrinting() ? this.strOn : this.strOff);
         this.buttonList.add(this.btnPrint);
 
+        this.btnSaveCoordinates = new GuiButton(id++, this.centerX - 50, this.centerY + 45, 100, 20, this.strSaveCoordinates);
+        this.buttonList.add(this.btnSaveCoordinates);
+
         this.numericX.setEnabled(this.schematic != null);
         this.numericY.setEnabled(this.schematic != null);
         this.numericZ.setEnabled(this.schematic != null);
@@ -118,6 +130,8 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnRotate.enabled = this.schematic != null;
         this.btnMaterials.enabled = this.schematic != null;
         this.btnPrint.enabled = this.schematic != null && this.printer.isEnabled();
+
+        this.btnSaveCoordinates.enabled = this.schematic != null;
 
         setMinMax(this.numericX);
         setMinMax(this.numericY);
@@ -191,6 +205,22 @@ public class GuiSchematicControl extends GuiScreenBase {
             } else if (guiButton.id == this.btnPrint.id && this.printer.isEnabled()) {
                 boolean isPrinting = this.printer.togglePrinting();
                 this.btnPrint.displayString = isPrinting ? this.strOn : this.strOff;
+            }else if (guiButton.id == this.btnSaveCoordinates.id) {
+                String worldServerName = WorldServerName.worldServerName(this.mc);
+                EntityPlayerSP player = mc.thePlayer;
+                if (player != null) {
+                    if (ClientProxy.addCoordinatesAndRotation(
+                            worldServerName,
+                            this.schematic.name,
+                            this.numericX.getValue(),
+                            this.numericY.getValue(),
+                            this.numericZ.getValue(),
+                            this.schematic.rotationState)) {
+                        mc.thePlayer.addChatMessage(strSaveCoordinatesSuccess);
+                    } else {
+                        mc.thePlayer.addChatMessage(strSaveCoordinatesFail);
+                    }
+                }
             }
         }
     }
@@ -205,6 +235,9 @@ public class GuiSchematicControl extends GuiScreenBase {
         drawCenteredString(this.fontRenderer, this.strLayers, this.width - 50, this.height - 165, 0xFFFFFF);
         drawCenteredString(this.fontRenderer, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
 
+        if (this.schematic != null) {
+            drawString(this.fontRenderer, this.strName + ": " + this.schematic.name, 10, this.height - 195, 0xFFFFFF);
+        }
         drawString(this.fontRenderer, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);
         drawString(this.fontRenderer, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
         drawString(this.fontRenderer, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
