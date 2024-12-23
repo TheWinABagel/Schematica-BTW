@@ -1,5 +1,6 @@
 package com.github.lunatrius.core.client.gui;
 
+import net.fabricmc.example.ext.GuiScreenExtension;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.GuiTextField;
@@ -9,7 +10,7 @@ import org.lwjgl.input.Keyboard;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiScreenBase extends GuiScreen {
+public class GuiScreenBase extends GuiScreen implements GuiScreenExtension {
     protected final GuiScreen parentScreen;
 
     protected List<GuiButton> buttonList = super.buttonList; // I feel dirty

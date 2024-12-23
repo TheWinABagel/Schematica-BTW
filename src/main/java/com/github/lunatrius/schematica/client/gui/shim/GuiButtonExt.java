@@ -3,15 +3,9 @@ package com.github.lunatrius.schematica.client.gui.shim;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.Minecraft;
 
-public class GuiButtonExt extends GuiButton
-{
-    public GuiButtonExt(int id, int xPos, int yPos, String displayString)
-    {
-        super(id, xPos, yPos, displayString);
-    }
+public class GuiButtonExt extends GuiButton {
 
-    public GuiButtonExt(int id, int xPos, int yPos, int width, int height, String displayString)
-    {
+    public GuiButtonExt(int id, int xPos, int yPos, int width, int height, String displayString) {
         super(id, xPos, yPos, width, height, displayString);
     }
 
@@ -30,12 +24,9 @@ public class GuiButtonExt extends GuiButton
             this.mouseDragged(mc, mouseX, mouseY);
             int color = 14737632;
 
-            if (!this.enabled)
-            {
+            if (!this.enabled) {
                 color = 10526880;
-            }
-            else if (this.field_82253_i)
-            {
+            } else if (this.field_82253_i) {
                 color = 16777120;
             }
 

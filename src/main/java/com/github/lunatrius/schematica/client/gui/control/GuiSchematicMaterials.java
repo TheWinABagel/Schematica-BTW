@@ -9,10 +9,11 @@ import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.util.ItemStackSortType;
-import emi.dev.emi.emi.screen.EmiScreenManager;
-import net.minecraft.src.*;
+import net.minecraft.src.GuiButton;
+import net.minecraft.src.GuiScreen;
+import net.minecraft.src.I18n;
+import net.minecraft.src.Minecraft;
 import org.apache.commons.io.IOUtils;
-import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -76,76 +77,6 @@ public class GuiSchematicMaterials extends GuiScreenBase {
             } else {
                 this.guiSchematicMaterialsSlot.actionPerformed(guiButton);
             }
-        }
-    }
-
-    //    @Override
-    //straight up copied from GuiContainer
-public void renderToolTip(ItemStack par1ItemStack, int par2, int par3) {
-    EmiScreenManager.lastStackTooltipRendered = par1ItemStack;
-    List<String> var4 = par1ItemStack.getTooltip(this.mc.thePlayer, this.mc.gameSettings.advancedItemTooltips);
-    for (int var5 = 0; var5 < var4.size(); ++var5) {
-        if (var5 == 0) {
-            var4.set(var5, "§" + Integer.toHexString(par1ItemStack.getRarity().rarityColor) + var4.get(var5));
-            continue;
-        }
-        var4.set(var5, EnumChatFormatting.GRAY + var4.get(var5));
-    }
-    this.renderTooltipList(var4, par2, par3);
-}
-
-    protected void renderTooltipList(List<String> tooltip, int mouseX, int mouseY) {
-        if (!tooltip.isEmpty()) {
-            GL11.glDisable(32826);
-            RenderHelper.disableStandardItemLighting();
-            GL11.glDisable(2896);
-            GL11.glDisable(2929);
-            int var4 = 0;
-            for (String var6 : tooltip) {
-                int var7 = this.fontRenderer.getStringWidth(var6);
-                if (var7 <= var4) continue;
-                var4 = var7;
-            }
-            int var14 = mouseX + 12;
-            int var15 = mouseY - 12;
-            int var8 = 8;
-            if (tooltip.size() > 1) {
-                var8 += 2 + (tooltip.size() - 1) * 10;
-            }
-            if (var14 + var4 > this.width) {
-                var14 -= 28 + var4;
-            }
-            if (var15 + var8 + 6 > this.height) {
-                var15 = this.height - var8 - 6;
-            }
-            this.zLevel = 300.0f;
-            itemRenderer.zLevel = 300.0f;
-            int var9 = -267386864;
-            this.drawGradientRect(var14 - 3, var15 - 4, var14 + var4 + 3, var15 - 3, var9, var9);
-            this.drawGradientRect(var14 - 3, var15 + var8 + 3, var14 + var4 + 3, var15 + var8 + 4, var9, var9);
-            this.drawGradientRect(var14 - 3, var15 - 3, var14 + var4 + 3, var15 + var8 + 3, var9, var9);
-            this.drawGradientRect(var14 - 4, var15 - 3, var14 - 3, var15 + var8 + 3, var9, var9);
-            this.drawGradientRect(var14 + var4 + 3, var15 - 3, var14 + var4 + 4, var15 + var8 + 3, var9, var9);
-            int var10 = 0x505000FF;
-            int var11 = (var10 & 0xFEFEFE) >> 1 | var10 & 0xFF000000;
-            this.drawGradientRect(var14 - 3, var15 - 3 + 1, var14 - 3 + 1, var15 + var8 + 3 - 1, var10, var11);
-            this.drawGradientRect(var14 + var4 + 2, var15 - 3 + 1, var14 + var4 + 3, var15 + var8 + 3 - 1, var10, var11);
-            this.drawGradientRect(var14 - 3, var15 - 3, var14 + var4 + 3, var15 - 3 + 1, var10, var10);
-            this.drawGradientRect(var14 - 3, var15 + var8 + 2, var14 + var4 + 3, var15 + var8 + 3, var11, var11);
-            for (int var12 = 0; var12 < tooltip.size(); ++var12) {
-                String var13 = (String)tooltip.get(var12);
-                this.fontRenderer.drawStringWithShadow(var13, var14, var15, -1);
-                if (var12 == 0) {
-                    var15 += 2;
-                }
-                var15 += 10;
-            }
-            this.zLevel = 0.0f;
-            itemRenderer.zLevel = 0.0f;
-            GL11.glEnable(2896);
-            GL11.glEnable(2929);
-            RenderHelper.enableStandardItemLighting();
-            GL11.glEnable(32826);
         }
     }
 

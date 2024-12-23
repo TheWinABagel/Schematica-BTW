@@ -7,10 +7,9 @@ import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
-
+//todo look at GuiStats for improvements
 class GuiSchematicMaterialsSlot extends GuiSlot {
     private final Minecraft minecraft = Minecraft.getMinecraft();
-
     private final GuiSchematicMaterials guiSchematicMaterials;
 
     private final String strMaterialRequired = I18n.getString(Names.Gui.Control.MATERIAL_REQUIRED);
@@ -48,7 +47,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 //    }
 
     @Override
-    protected void drawSlot(int index, int x, int y, int par4, Tessellator tessellator) {
+    protected void drawSlot(int index, int x, int y, int z, Tessellator tessellator) {
         final BlockList.WrappedItemStack wrappedItemStack = this.guiSchematicMaterials.blockList.get(index);
         final ItemStack itemStack = wrappedItemStack.itemStack;
 
@@ -64,21 +63,65 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
         int amountRequiredXWidth = this.minecraft.fontRenderer.getStringWidth(amountRequired);
         this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amountRequired, x + 215 - amountRequiredXWidth, y + 16, 0xFFFFFF);
 
-        if (mouseX > x + 215 - amountXWidth && mouseX <= x + 215 && mouseY > y + 2 && mouseY <= y + 2 + 9) {
-            this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountTooltip()), mouseX, mouseY);
-            GL11.glDisable(GL11.GL_LIGHTING);
+//        if (mouseX > x + 215 - amountXWidth && mouseX <= x + 215 && mouseY > y + 2 && mouseY <= y + 2 + 9) {
+//            this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountTooltip()), mouseX, mouseY);
+//            GL11.glDisable(GL11.GL_LIGHTING);
+//        }
+//
+//        if (mouseX > x + 215 - amountRequiredXWidth && mouseX <= x + 215 && mouseY > y + 2 + 9 && mouseY <= y + 2 + 18) {
+//            this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountRequiredTooltip(strMaterialRequired, strMaterialAvailable)), mouseX, mouseY);
+//            GL11.glDisable(GL11.GL_LIGHTING);
+//        }
+//
+//
+//        if (mouseX >= x + 215 - x && mouseY >= y && mouseX <= x + 18 && mouseY <= y + 18) {
+//
+//            this.guiSchematicMaterials.renderToolTip(itemStack, mouseX, mouseY);
+//            GL11.glDisable(GL11.GL_LIGHTING);
+//        }
+    }
+
+    @Override
+    protected void func_77215_b(int mouseX, int mouseY) {
+        int n5 = this.top + 4 - (int) this.amountScrolled;
+        for (int idx = 0; idx < this.getSize(); ++idx) {
+
+            int y = n5 + idx * this.slotHeight/* + this.field_77242_t*/;
+            int x = this.guiSchematicMaterials.width / 2 - 92 - 16;
+            int n2 = this.slotHeight - 4;
+            if (y > this.bottom || y + n2 < this.top) continue;
+            if (/*this.showSelectionBox && */true) {
+                final BlockList.WrappedItemStack wrappedItemStack = this.guiSchematicMaterials.blockList.get(idx);
+
+                final String amount = wrappedItemStack.getFormattedAmount();
+                final String amountRequired = wrappedItemStack.getFormattedAmountRequired(strMaterialRequired, strMaterialAvailable);
+
+                int amountXWidth = this.minecraft.fontRenderer.getStringWidth(amount);
+                int amountRequiredXWidth = this.minecraft.fontRenderer.getStringWidth(amountRequired);
+
+                //Amount
+                if (mouseX > x + 215 - amountXWidth && mouseX <= x + 215 && mouseY > y + 2 && mouseY <= y + 2 + 9) {
+                    this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountTooltip()), mouseX, mouseY);
+                    GL11.glDisable(GL11.GL_LIGHTING);
+                    GL11.glDisable(GL11.GL_DEPTH_TEST);
+                }
+
+                //Required
+                if (mouseX > x + 215 - amountRequiredXWidth && mouseX <= x + 215 && mouseY > y + 2 + 9 && mouseY <= y + 2 + 18) {
+                    this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountRequiredTooltip(strMaterialRequired, strMaterialAvailable)), mouseX, mouseY);
+                    GL11.glDisable(GL11.GL_LIGHTING);
+                    GL11.glDisable(GL11.GL_DEPTH_TEST);
+                }
+
+                //Stack
+                if (mouseX >= x + 215 - x && mouseY >= y && mouseX <= x + 18 && mouseY <= y + 18) {
+                    this.guiSchematicMaterials.renderToolTip(wrappedItemStack.itemStack, mouseX, mouseY);
+                    GL11.glDisable(GL11.GL_LIGHTING);
+                    GL11.glDisable(GL11.GL_DEPTH_TEST);
+                }
+            }
+//            return super.func_77210_c(mouseX, j);
         }
 
-        if (mouseX > x + 215 - amountRequiredXWidth && mouseX <= x + 215 && mouseY > y + 2 + 9 && mouseY <= y + 2 + 18) {
-            this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountRequiredTooltip(strMaterialRequired, strMaterialAvailable)), mouseX, mouseY);
-            GL11.glDisable(GL11.GL_LIGHTING);
-        }
-
-
-        if (mouseX >= x + 215 - x && mouseY >= y && mouseX <= x + 18 && mouseY <= y + 18) {
-
-            this.guiSchematicMaterials.renderToolTip(itemStack, mouseX, mouseY);
-            GL11.glDisable(GL11.GL_LIGHTING);
-        }
     }
 }

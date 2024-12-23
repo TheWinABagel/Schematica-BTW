@@ -12,6 +12,8 @@
   ],
   "client": [
     "MinecraftMixin",
+    "ext.GuiScreenMixin",
+    "oneseven.GuiIngameMenuMixin",
     "oneseven.MinecraftMixin",
     "oneseven.NetClientHandlerMixin"
   ],
