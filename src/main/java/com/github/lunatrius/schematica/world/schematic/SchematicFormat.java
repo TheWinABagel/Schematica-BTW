@@ -10,6 +10,8 @@ import net.minecraft.src.NBTTagCompound;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
@@ -52,7 +54,7 @@ public abstract class SchematicFormat {
             NBTTagCompound tagCompound = new NBTTagCompound();
 
             FORMATS.get(FORMAT_DEFAULT).writeToNBT(tagCompound, schematic);
-
+            Files.createDirectories(Path.of(file.getParent())); //Create parent dir if it doesn't exist
             DataOutputStream dataOutputStream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
             try {

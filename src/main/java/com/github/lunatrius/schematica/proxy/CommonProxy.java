@@ -1,16 +1,13 @@
 package com.github.lunatrius.schematica.proxy;
 
-import btw.BTWAddon;
-import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.api.ISchematic;
+import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.command.CommandSchematicaList;
 import com.github.lunatrius.schematica.command.CommandSchematicaRemove;
 import com.github.lunatrius.schematica.command.CommandSchematicaSave;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
-import com.github.lunatrius.schematica.handler.DownloadHandler;
 import com.github.lunatrius.schematica.handler.QueueTickHandler;
-import com.github.lunatrius.schematica.nbt.ForgeMultipart;
 import com.github.lunatrius.schematica.nbt.NBTConversionException;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.network.PacketHandler;
@@ -18,12 +15,7 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.SchematicContainer;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import com.github.lunatrius.schematica.world.storage.Schematic;
-import net.minecraft.src.Block;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.AxisAlignedBB;
-import net.minecraft.src.World;
+import net.minecraft.src.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -120,7 +112,7 @@ public abstract class CommonProxy {
                         final int metadata = world.getBlockMetadata(x, y, z);
                         final boolean success = schematic.setBlock(localX, localY, localZ, block, metadata);
 
-                        if (success && block.hasTileEntity(/*metadata*/)) {
+                        if (success && block != null && block.hasTileEntity(/*metadata*/)) {
                             final TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
                             if (tileEntity != null) {
                                 try {
