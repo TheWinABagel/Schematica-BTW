@@ -73,10 +73,8 @@ public class BlockList {
         }
 
         for (WrappedItemStack wrappedItemStack : blockList) {
-            if (player.capabilities.isCreativeMode)
-                wrappedItemStack.inventory = -1;
-            else
-                wrappedItemStack.inventory = EntityHelper.getItemCountInInventory(player.inventory, wrappedItemStack.itemStack.getItem(), wrappedItemStack.itemStack.getItemDamage());
+            wrappedItemStack.creative = player.capabilities.isCreativeMode;
+            wrappedItemStack.inventory = EntityHelper.getItemCountInInventory(player.inventory, wrappedItemStack.itemStack.getItem(), wrappedItemStack.itemStack.getItemDamage());
         }
 
         return blockList;
@@ -99,6 +97,7 @@ public class BlockList {
         public int placed;
         public int total;
         public int inventory;
+        public boolean creative = false;
 
         public WrappedItemStack(final ItemStack itemStack) {
             this(itemStack, 0, 0);
@@ -114,14 +113,38 @@ public class BlockList {
             return this.itemStack.getItem().getItemStackDisplayName(this.itemStack);
         }
 
+        public String getTotal() {
+            return String.valueOf(total);
+        }
+
         public String getFormattedAmount() {
             final char color = this.placed < this.total ? 'c' : 'a';
             return String.format("§%c%s§r/%s", color, getFormattedStackAmount(itemStack, this.placed), getFormattedStackAmount(itemStack, this.total));
         }
 
+        public String getMissingNoColor() {
+            final int need = this.total - this.placed;
+            return String.format("%d", need);
+        }
+
+        public String getMissing() {
+            final int need = this.total - this.placed;
+            char color = this.placed >= this.total ? 'a' : this.inventory > need ? '6' : 'c';
+            return String.format("§%c%s", color, need);
+        }
+
+        public String getAvailable() {
+//            if (this.creative) {
+//                return "§a∞";
+//            }
+            int inv = Math.max(this.inventory, 0);
+            final char color = inv >= this.total - this.placed ? 'a' : 'c';
+            return "§%c%d".formatted(color, inv);
+        }
+
         public String getFormattedAmountRequired(final String reqstr, final String avastr) {
             final int need = this.total - this.inventory - this.placed;
-            if (this.inventory != -1 && need > 0) {
+            if (!creative && need > 0) {
                 return String.format("§c%s: %s", reqstr, getFormattedStackAmount(itemStack, need));
             } else {
                 return String.format("§a%s", avastr);
@@ -130,13 +153,27 @@ public class BlockList {
 
         private static String getFormattedStackAmount(final ItemStack itemStack, final int amount) {
             final int stackSize = itemStack.getMaxStackSize();
-            if (amount < stackSize) {
-                return String.format("%d", amount);
-            } else {
-                final int amountstack = amount / stackSize;
-                final int amountremainder = amount % stackSize;
-                return String.format("%d(%ds:%dr)", amount, amountstack, amountremainder);
-            }
+            return String.valueOf(amount);
+//            if (amount < stackSize) {
+//                return String.format("%d", amount);
+//            } else {
+//                final int amountstack = amount / stackSize;
+//                final int amountremainder = amount % stackSize;
+//                return String.format("%d(%ds:%dr)", amount, amountstack, amountremainder);
+//            }
+        }
+
+        public String calculateTotal() {
+            final int stackSize = this.itemStack.getMaxStackSize();
+            final int amount = this.total - this.inventory - this.placed;
+//            if (amount < stackSize) {
+//                return String.format("%d", amount);
+//            } else {
+                final int amountstack = this.total / stackSize;
+                final int amountremainder = this.total % stackSize;
+                final double chestPercent = amountstack / 54d;
+                return String.format("%d = %d x %d + %d = %.2f DC", this.total, amountstack, stackSize, amountremainder, chestPercent);
+//            }
         }
 
         public String getFormattedAmountTooltip() {
@@ -146,7 +183,7 @@ public class BlockList {
 
         public String getFormattedAmountRequiredTooltip(final String reqstr, final String avastr) {
             final int need = this.total - this.inventory - this.placed;
-            if (this.inventory != -1 && need > 0) {
+            if (!creative && need > 0) {
                 return String.format("§c%s: %s", reqstr, getFormattedStackAmountTooltip(itemStack, need));
             } else {
                 return String.format("§a%s", avastr);

@@ -1,12 +1,6 @@
 package com.github.lunatrius.schematica.client.gui;
 
-import net.minecraft.src.FontRenderer;
-import net.minecraft.src.Gui;
-import net.minecraft.src.RenderHelper;
-import net.minecraft.src.Tessellator;
-import net.minecraft.src.RenderItem;
-import net.minecraft.src.TextureManager;
-import net.minecraft.src.ItemStack;
+import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -19,7 +13,7 @@ public class GuiHelper {
         if (itemStack != null && itemStack.getItem() != null) {
             GL11.glEnable(GL12.GL_RESCALE_NORMAL);
             RenderHelper.enableGUIStandardItemLighting();
-            renderItem.renderItemIntoGUI(fontRenderer, textureManager, itemStack, x + 2, y + 2);
+            renderItem.renderItemAndEffectIntoGUI(fontRenderer, textureManager, itemStack, x + 2, y + 2);
             RenderHelper.disableStandardItemLighting();
             GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         }

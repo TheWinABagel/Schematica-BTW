@@ -89,8 +89,6 @@ public class GuiSchematicMaterials extends GuiScreenBase {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.guiSchematicMaterialsSlot.drawScreen(mouseX, mouseY, partialTicks);
 
-        drawString(this.fontRenderer, this.strMaterialName, this.width / 2 - 108, 4, 0x00FFFFFF);
-        drawString(this.fontRenderer, this.strMaterialAmount, this.width / 2 + 108 - this.fontRenderer.getStringWidth(this.strMaterialAmount), 4, 0x00FFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

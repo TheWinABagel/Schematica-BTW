@@ -3,9 +3,14 @@ package com.github.lunatrius.schematica.client.gui.control;
 import com.github.lunatrius.schematica.client.gui.GuiHelper;
 import com.github.lunatrius.schematica.client.util.BlockList;
 import com.github.lunatrius.schematica.reference.Names;
+import com.github.lunatrius.schematica.util.MaterialTooltipComponent;
+import emi.dev.emi.emi.EmiRenderHelper;
+import emi.dev.emi.emi.runtime.EmiDrawContext;
+import emi.shims.java.net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
 import java.util.List;
 //todo look at GuiStats for improvements
 class GuiSchematicMaterialsSlot extends GuiSlot {
@@ -15,8 +20,17 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
     private final String strMaterialRequired = I18n.getString(Names.Gui.Control.MATERIAL_REQUIRED);
     private final String strMaterialAvailable = I18n.getString(Names.Gui.Control.MATERIAL_AVAILABLE);
 
+    private final String strMaterialName = I18n.getString(Names.Gui.Control.MATERIAL_NAME);
+    private final String strMaterialTotal = I18n.getString(Names.Gui.Control.MATERIAL_TOTAL);
+    private final String strMaterialMissing = I18n.getString(Names.Gui.Control.MATERIAL_MISSING);
+
     protected int selectedIndex;
     protected int topOffset;
+
+    private final int NAME_START = 24;
+    private final int TOTAL_AMOUNT_START = 180;
+    private final int MISSING_START = 240;
+    private final int AVAILABLE_START = 300;
 
     public GuiSchematicMaterialsSlot(GuiSchematicMaterials par1) {
         super(Minecraft.getMinecraft(), par1.width, par1.height, 16, par1.height - 34, 21);
@@ -39,22 +53,19 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 
     @Override
     protected boolean isSelected(int index) {
-//        return index == this.selectedIndex;
         return false;
     }
 
     @Override
     protected void func_77222_a(int x, int yOffset, Tessellator tessellator) {
-//        x -= 80;
         x = 0;
         int xOff = this.guiSchematicMaterials.width;
         final int height = this.slotHeight;
-//        int n5 = this.top + 4 - (int) this.amountScrolled;
         int z = 0;
         for (int i = 0; i < getSize(); i += 2) {
             int y = yOffset + i * height + this.topOffset;
             tessellator.startDrawingQuads();
-            tessellator.setColorRGBA(10, 255, 10, 100);
+            tessellator.setColorRGBA(100, 100, 100, 50);
             tessellator.addVertexWithUV(x, y, z, 0, 0);
             tessellator.addVertexWithUV(x, y + height, z, 0, 0);
             tessellator.addVertexWithUV(x + xOff, y + height, z, 0, 0);
@@ -64,48 +75,41 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
     }
 
     @Override
-    protected void drawBackground() {
+    protected void drawBackground() {}
 
+    @Override
+    public void overlayBackground(int bottom, int height, int alpha1, int alpha2) {
+        super.overlayBackground(bottom, height, alpha1, alpha2);
+        if (bottom == this.bottom && height == this.guiSchematicMaterials.height) {
+            int xStart = 4;
+            GuiSchematicMaterials gui = this.guiSchematicMaterials;
+            FontRenderer fr = this.minecraft.fontRenderer;
+            gui.drawString(fr, this.strMaterialName, xStart, 4, 0x00FFFFFF);
+            gui.drawString(fr, this.strMaterialTotal, xStart + TOTAL_AMOUNT_START, 4, 0x00FFFFFF);
+
+            gui.drawString(fr, this.strMaterialMissing, xStart + MISSING_START, 4, 0x00FFFFFF);
+
+            gui.drawString(fr, this.strMaterialAvailable, xStart + AVAILABLE_START, 4, 0x00FFFFFF);
+        }
     }
-
-//    @Override
-//    protected void drawContainerBackground(Tessellator tessellator) {
-//    }
 
     @Override
     protected void drawSlot(int index, int x, int y, int height, Tessellator tessellator) {
-
         final BlockList.WrappedItemStack wrappedItemStack = this.guiSchematicMaterials.blockList.get(index);
         final ItemStack itemStack = wrappedItemStack.itemStack;
 
         final String itemName = wrappedItemStack.getItemStackDisplayName();
-        final String amount = wrappedItemStack.getFormattedAmount();
-        final String amountRequired = wrappedItemStack.getFormattedAmountRequired(strMaterialRequired, strMaterialAvailable);
-        int realX = x - 120;
+        final String total = wrappedItemStack.getTotal();
+        final String missing = wrappedItemStack.getMissing();
+        final String available = wrappedItemStack.getAvailable();
+        int realX = 4;
+
         GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRenderer, realX, y, itemStack);
-
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, itemName, realX + 24, y + 6, 0xFFFFFF);
-        int amountXWidth = this.minecraft.fontRenderer.getStringWidth(amount);
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amount, realX + 215 - amountXWidth, y + 6, 0xFFFFFF);
-        int amountRequiredXWidth = this.minecraft.fontRenderer.getStringWidth(amountRequired);
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amountRequired, realX + 315 - amountRequiredXWidth, y + 6, 0xFFFFFF);
-
-//        if (mouseX > x + 215 - amountXWidth && mouseX <= x + 215 && mouseY > y + 2 && mouseY <= y + 2 + 9) {
-//            this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountTooltip()), mouseX, mouseY);
-//            GL11.glDisable(GL11.GL_LIGHTING);
-//        }
-//
-//        if (mouseX > x + 215 - amountRequiredXWidth && mouseX <= x + 215 && mouseY > y + 2 + 9 && mouseY <= y + 2 + 18) {
-//            this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountRequiredTooltip(strMaterialRequired, strMaterialAvailable)), mouseX, mouseY);
-//            GL11.glDisable(GL11.GL_LIGHTING);
-//        }
-//
-//
-//        if (mouseX >= x + 215 - x && mouseY >= y && mouseX <= x + 18 && mouseY <= y + 18) {
-//
-//            this.guiSchematicMaterials.renderToolTip(itemStack, mouseX, mouseY);
-//            GL11.glDisable(GL11.GL_LIGHTING);
-//        }
+        y += 6;
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, itemName, realX + NAME_START, y, 0xFFFFFF);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, total, realX + TOTAL_AMOUNT_START, y, 0xFFFFFF);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, missing, realX + MISSING_START, y, 0xFFFFFF);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, available, realX + AVAILABLE_START, y, 0xFFFFFF);
     }
 
     /**
@@ -115,42 +119,40 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
     protected void func_77215_b(int mouseX, int mouseY) {
         int yOffset = this.top + 4 - (int) this.amountScrolled;
         for (int idx = 0; idx < this.getSize(); ++idx) {
-
             int y = yOffset + idx * this.slotHeight/* + this.field_77242_t*/;
-            int x = this.guiSchematicMaterials.width / 2 - 92 - 16;
             int n2 = this.slotHeight - 4;
             if (y > this.bottom || y + n2 < this.top) continue;
             final BlockList.WrappedItemStack wrappedItemStack = this.guiSchematicMaterials.blockList.get(idx);
 
-            final String amount = wrappedItemStack.getFormattedAmount();
-            final String amountRequired = wrappedItemStack.getFormattedAmountRequired(strMaterialRequired, strMaterialAvailable);
-
-            int amountXWidth = this.minecraft.fontRenderer.getStringWidth(amount);
-            int amountRequiredXWidth = this.minecraft.fontRenderer.getStringWidth(amountRequired);
-
-            int realX = x - 120;
-            //Amount
-            if (mouseX > realX + 215 - amountXWidth && mouseX <= realX + 215 && mouseY > y + 2 && mouseY <= y + 2 + 9) {
-                this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountTooltip()), mouseX, mouseY);
-                GL11.glDisable(GL11.GL_LIGHTING);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-            }
-
             //Required
-            if (mouseX > realX + 215 - amountRequiredXWidth && mouseX <= realX + 215 && mouseY > y + 2 + 9 && mouseY <= y + 2 + 18) {
-                this.guiSchematicMaterials.renderTooltipList(List.of(wrappedItemStack.getFormattedAmountRequiredTooltip(strMaterialRequired, strMaterialAvailable)), mouseX, mouseY);
+            if (mouseX > 4 && mouseX <= this.guiSchematicMaterials.width - 20 && mouseY > y + 2 && mouseY <= y + 2 + this.slotHeight) {
+//                List<String> tooltip = new ArrayList<>();
+//                tooltip.add("Item:      " + wrappedItemStack.getItemStackDisplayName());
+//                tooltip.add("Total:     " + wrappedItemStack.calculateTotal());
+//                tooltip.add("Missing:  " + wrappedItemStack.getMissingNoColor());
+//                this.guiSchematicMaterials.renderTooltipList(tooltip, mouseX, mouseY);
+//                GL11.glEnable(GL11.GL_LIGHTING);
+                List<TooltipComponent> comps = new ArrayList<>();
+//                comps.add(TooltipComponent.of(Text.literal("haha")));
+                comps.add(new MaterialTooltipComponent(wrappedItemStack));
+                EmiRenderHelper.drawTooltip(this.guiSchematicMaterials, EmiDrawContext.instance(), comps, this.mouseX, this.mouseY, this.guiSchematicMaterials.width / 2);
                 GL11.glDisable(GL11.GL_LIGHTING);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
             }
-
-            //Stack
-            if (mouseX >= realX + 215 - realX && mouseY >= y && mouseX <= realX + 18 && mouseY <= y + 18) {
-                this.guiSchematicMaterials.renderToolTip(wrappedItemStack.itemStack, mouseX, mouseY);
-                GL11.glDisable(GL11.GL_LIGHTING);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-            }
-            //            return super.func_77210_c(mouseX, j);
         }
 
+    }
+    private boolean notShown = true;
+    @Override
+    protected int getScrollBarX() {
+        var sr = new ScaledResolution(minecraft.gameSettings, minecraft.displayWidth, minecraft.displayHeight);
+        int amount = sr.getScaledWidth() - 10;
+        if (notShown) {
+            System.out.println("CURRENT WIDTH is " + amount);
+            notShown = false;
+        }
+
+        return amount;
+//        return this.guiSchematicMaterials.width - 100;
     }
 }
