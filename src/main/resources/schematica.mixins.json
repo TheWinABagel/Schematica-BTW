@@ -13,7 +13,6 @@
   "client": [
     "MinecraftMixin",
     "access.MinecraftAccessor",
-    "ext.GuiScreenMixin",
     "oneseven.GuiIngameMenuMixin",
     "oneseven.MinecraftMixin",
     "oneseven.NetClientHandlerMixin"
