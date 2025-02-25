@@ -1,14 +1,11 @@
 package com.github.lunatrius.schematica.handler;
 
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.config.Configuration;
+import com.github.lunatrius.schematica.config.Property;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-//import cpw.mods.fml.client.event.ConfigChangedEvent;
-//import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-//import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.src.Block;
-//import net.minecraftforge.common.config.Configuration;
-//import net.minecraftforge.common.config.Property;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +19,7 @@ public class ConfigurationHandler {
 
     public static final String VERSION = "1";
 
-//    public static Configuration configuration;
+    public static Configuration configuration;
 
     public static final boolean SHOW_DEBUG_INFO_DEFAULT = true;
     public static final boolean ENABLE_ALPHA_DEFAULT = false;
@@ -65,7 +62,7 @@ public class ConfigurationHandler {
     public static boolean destroyInstantly = DESTROY_INSTANTLY_DEFAULT;
     public static boolean placeAdjacent = PLACE_ADJACENT_DEFAULT;
     public static boolean[] swapSlots = SWAP_SLOTS_DEFAULT;
-    public static final Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
+    public static final Queue<Integer> swapSlotsQueue = new ArrayDeque<>();
     public static File schematicDirectory = SCHEMATIC_DIRECTORY_DEFAULT;
     public static String[] extraAirBlocks = EXTRA_AIR_BLOCKS_DEFAULT;
     public static String sortType = SORT_TYPE_DEFAULT;
@@ -74,7 +71,7 @@ public class ConfigurationHandler {
     public static boolean loadEnabled = LOAD_ENABLED_DEFAULT;
     public static int playerQuotaKilobytes = PLAYER_QUOTA_KILOBYTES_DEFAULT;
 
-    /*public static Property propShowDebugInfo = null;
+    public static Property propShowDebugInfo = null;
     public static Property propEnableAlpha = null;
     public static Property propAlpha = null;
     public static Property propHighlight = null;
@@ -97,7 +94,7 @@ public class ConfigurationHandler {
     public static Property propLoadEnabled = null;
     public static Property propPlayerQuotaKilobytes = null;
 
-    private static final Set<Block> extraAirBlockList = new HashSet<Block>();
+    private static final Set<Block> extraAirBlockList = new HashSet<>();
 
     public static void init(File configFile) {
         if (configuration == null) {
@@ -197,10 +194,16 @@ public class ConfigurationHandler {
 
         extraAirBlockList.clear();
         for (String name : extraAirBlocks) {
-            final Block block = GameData.getBlockRegistry().getObject(name);
-            if (block != Blocks.air) {
-                extraAirBlockList.add(block);
+            try {
+                final Block block = Block.blocksList[Integer.parseInt(name)];
+                if (block != null) {
+                    extraAirBlockList.add(block);
+                }
             }
+            catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+
         }
 
         propSortType = configuration.get(Names.Config.Category.GENERAL, Names.Config.SORT_TYPE, SORT_TYPE_DEFAULT, Names.Config.SORT_TYPE_DESC);
@@ -232,18 +235,18 @@ public class ConfigurationHandler {
 
     private ConfigurationHandler() {}
 
-    @SubscribeEvent
-    public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.modID.equalsIgnoreCase(Reference.MODID)) {
-            loadConfiguration();
-        }
-    }
+//    @SubscribeEvent
+//    public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+//        if (event.modID.equalsIgnoreCase(Reference.MODID)) {
+//            loadConfiguration();
+//        }
+//    }
 
     public static boolean isExtraAirBlock(final Block block) {
         return extraAirBlockList.contains(block);
-    }*/
-    //REMOVE WHNE CONFIG IS FUNCTIONAL
-    public static boolean isExtraAirBlock(final Block block) {
-        return false;
     }
+    //REMOVE WHNE CONFIG IS FUNCTIONAL
+//    public static boolean isExtraAirBlock(final Block block) {
+//        return false;
+//    }
 }

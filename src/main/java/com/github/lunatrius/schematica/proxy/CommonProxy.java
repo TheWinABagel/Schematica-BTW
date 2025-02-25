@@ -15,7 +15,9 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.SchematicContainer;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import com.github.lunatrius.schematica.world.storage.Schematic;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.src.*;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +29,8 @@ public abstract class CommonProxy {
 
 
     public void preInitialize() {
-//        Reference.logger = event.getModLog();
-//        ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+        Reference.logger = LogManager.getLogger(Reference.NAME);
+        ConfigurationHandler.init(new File(FabricLoader.getInstance().getConfigDir().toFile(), Reference.MODID + ".cfg"));
 
 //        VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
     }
