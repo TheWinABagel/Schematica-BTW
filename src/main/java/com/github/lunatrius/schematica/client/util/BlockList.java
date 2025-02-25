@@ -7,6 +7,7 @@ import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.WorldClient;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +87,7 @@ public class BlockList {
         return wrappedItemStack;
     }
 
-    public static class WrappedItemStack {
+    public static class WrappedItemStack implements Comparable<WrappedItemStack> {
         public ItemStack itemStack;
         public int placed;
         public int total;
@@ -105,6 +106,13 @@ public class BlockList {
 
         public String getItemStackDisplayName() {
             return this.itemStack.getItem().getItemStackDisplayName(this.itemStack);
+        }
+
+        public int compareNames(WrappedItemStack other) {
+            final String nameA = this.getItemStackDisplayName();
+            final String nameB = other.getItemStackDisplayName();
+
+            return nameB.compareTo(nameA);
         }
 
         public String getTotal() {
@@ -139,6 +147,11 @@ public class BlockList {
             final double chestPercent = amountstack / 54d;
             return String.format("%d = %d x %d + %d = %.2f DC", this.total, amountstack, stackSize, amountremainder, chestPercent);
 //            }
+        }
+
+        @Override
+        public int compareTo(@NotNull BlockList.WrappedItemStack o) {
+            return 0;
         }
     }
 }

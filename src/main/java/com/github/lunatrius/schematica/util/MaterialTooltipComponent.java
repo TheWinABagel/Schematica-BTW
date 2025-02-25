@@ -42,9 +42,24 @@ public class MaterialTooltipComponent implements EmiTooltipComponent {
     @Override
     public void drawTooltip(EmiDrawContext context, TooltipRenderData tooltip) {
         context.push();
+
+//        GL11.glDisable(2929);
         context.matrices().translate(OFFSET + tooltip.text.getStringWidth(wrapped.getItemStackDisplayName()) + 2, -1.2, 0);
         context.matrices().scale(0.7, 0.7, 0.7);
+//        context.raw().drawItem(this.wrapped.itemStack, 0, 0);
+//        GL11.glDisable(2896);
+//        GL11.glEnable(GL11.GL_DEPTH_TEST);
+//        GL11.glEnable(GL11.GL_LIGHTING);
+//        GL11.glEnable(GL11.GL_DEPTH);
+//        GL11.glEnable(GL11.GL_BLEND);
         tooltip.item.renderItemIntoGUI(tooltip.text, Minecraft.getMinecraft().renderEngine, this.wrapped.itemStack, 0, 0);
+//        GL11.glDisable(GL11.GL_DEPTH_TEST);
+//        GL11.glDisable(GL11.GL_LIGHTING);
+//        GL11.glEnable(3042);
+//        GL11.glBlendFunc(770, 771);
+//        GL11.glDisable(3008);
+//        GL11.glShadeModel(7425);
+//        GL11.glDisable(3553);
         context.pop();
     }
 }

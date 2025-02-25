@@ -23,22 +23,28 @@ import java.util.List;
 public class GuiSchematicMaterials extends GuiScreenBase {
     private GuiSchematicMaterialsSlot guiSchematicMaterialsSlot;
 
-    private ItemStackSortType sortType = ItemStackSortType.fromString(ConfigurationHandler.sortType);
+    protected ItemStackSortType sortType = ItemStackSortType.fromString(ConfigurationHandler.sortType);
 
     private GuiUnicodeGlyphButton btnSort = null;
     private GuiButton btnDump = null;
     private GuiButton btnDone = null;
 
-    private final String strMaterialName = I18n.getString(Names.Gui.Control.MATERIAL_NAME);
-    private final String strMaterialAmount = I18n.getString(Names.Gui.Control.MATERIAL_AMOUNT);
+    private long lastClicked = 0;
 
     protected final List<BlockList.WrappedItemStack> blockList;
+    protected final List<BlockList.WrappedItemStack> blockListOther;
 
     public GuiSchematicMaterials(GuiScreen guiScreen) {
         super(guiScreen);
         Minecraft mc = Minecraft.getMinecraft();
         this.blockList = new BlockList().getList(mc.thePlayer, ClientProxy.schematic, mc.theWorld);
         this.sortType.sort(this.blockList);
+        this.blockListOther = new BlockList().getList(mc.thePlayer, ClientProxy.schematic, mc.theWorld);
+    }
+
+    public void resetList() {
+        this.blockList.clear();
+        this.blockList.addAll(blockListOther);
     }
 
     @Override
@@ -47,17 +53,28 @@ public class GuiSchematicMaterials extends GuiScreenBase {
     }
 
     @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseEvent) {
+        super.mouseClicked(mouseX, mouseY, mouseEvent);
+        if (Minecraft.getSystemTime() - this.lastClicked > 125L) {
+            this.lastClicked = Minecraft.getSystemTime();
+            for (GuiSchematicButton button : this.guiSchematicMaterialsSlot.buttons) {
+                button.mousePressed(mouseX, mouseY);
+            }
+        }
+    }
+
+    @Override
     public void initGui() {
         int id = 0;
-        this.width += 100;
+//        this.width += 100;
 
-        this.btnSort = new GuiUnicodeGlyphButton(++id, this.width / 2 - 154, this.height - 30, 100, 20, " " + I18n.getString(Names.Gui.Control.SORT_PREFIX + this.sortType.label), this.sortType.glyph, 2.0f);
-        this.buttonList.add(this.btnSort);
+//        this.btnSort = new GuiUnicodeGlyphButton(++id, this.width / 2 - 154, this.height - 28, 100, 20, " " + I18n.getString(Names.Gui.Control.SORT_PREFIX + this.sortType.label), this.sortType.glyph, 2.0f);
+//        this.buttonList.add(this.btnSort);
 
-        this.btnDump = new GuiButton(++id, this.width / 2 - 50, this.height - 30, 100, 20, I18n.getString(Names.Gui.Control.DUMP));
+        this.btnDump = new GuiButton(++id, this.width / 2 - 100, this.height - 28, 100, 20, I18n.getString(Names.Gui.Control.DUMP));
         this.buttonList.add(this.btnDump);
 
-        this.btnDone = new GuiButton(++id, this.width / 2 + 54, this.height - 30, 100, 20, I18n.getString(Names.Gui.DONE));
+        this.btnDone = new GuiButton(++id, this.width / 2 + 4, this.height - 28, 100, 20, I18n.getString(Names.Gui.DONE));
         this.buttonList.add(this.btnDone);
 
         this.guiSchematicMaterialsSlot = new GuiSchematicMaterialsSlot(this);
@@ -65,22 +82,23 @@ public class GuiSchematicMaterials extends GuiScreenBase {
 
     @Override
     protected void actionPerformed(GuiButton guiButton) {
+        Reference.logger.info("Action performed: button {} with id  {}, hovering is {}", guiButton, guiButton.id, guiButton.func_82252_a());
         if (guiButton.enabled) {
-            if (guiButton.id == this.btnSort.id) {
-                this.sortType = this.sortType.next();
-                this.sortType.sort(this.blockList);
-                this.btnSort.displayString = " " + I18n.getString(Names.Gui.Control.SORT_PREFIX + this.sortType.label);
-                this.btnSort.glyph = this.sortType.glyph;
-
-                //todo change config when button pressed
+//            if (guiButton.id == this.btnSort.id) {
+//                this.sortType = this.sortType.next();
+//                this.sortType.sort(this.blockList);
+//                this.btnSort.displayString = " " + I18n.getString(Names.Gui.Control.SORT_PREFIX + this.sortType.label);
+//                this.btnSort.glyph = this.sortType.glyph;
+//
 //                ConfigurationHandler.propSortType.set(String.valueOf(this.sortType));
 //                ConfigurationHandler.loadConfiguration();
-            } else if (guiButton.id == this.btnDump.id) {
+//            } else
+                if (guiButton.id == this.btnDump.id) {
                 dumpMaterialList(this.blockList);
             } else if (guiButton.id == this.btnDone.id) {
                 this.mc.displayGuiScreen(this.parentScreen);
             } else {
-                this.guiSchematicMaterialsSlot.actionPerformed(guiButton);
+//                this.guiSchematicMaterialsSlot.actionPerformed(guiButton);
             }
         }
     }
@@ -92,8 +110,8 @@ public class GuiSchematicMaterials extends GuiScreenBase {
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
-    private void dumpMaterialList(final List<BlockList.WrappedItemStack> blockList) {
-        if (blockList.size() <= 0) {
+    protected void dumpMaterialList(final List<BlockList.WrappedItemStack> blockList) {
+        if (blockList.isEmpty()) {
             return;
         }
 
