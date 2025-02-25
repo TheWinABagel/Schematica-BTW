@@ -50,6 +50,10 @@ public class GuiSchematicButton extends Gui {
         this(xPosition, yPosition, width, height, text, getNextId(), glyphScale, type);
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private static int getNextId() {
         if (IDS > 100) IDS = 0;
         return IDS++;
@@ -70,8 +74,6 @@ public class GuiSchematicButton extends Gui {
     public void render(int mouseX, int mouseY) {
         Minecraft mc = Minecraft.getMinecraft();
         this.hovering = isHovering(mouseX, mouseY);
-//        drawRectangle(xPosition, yPosition, width, height);
-//        drawRect(xPosition, yPosition, xPosition + width, yPosition + height, 0xC418DC);
         drawGradientRect(xPosition, yPosition, xPosition + width, yPosition + height, 0x4444444f, 0xeeeeeeff);
         int color = 14737632;
 
@@ -125,7 +127,7 @@ public class GuiSchematicButton extends Gui {
     public static class Builder {
         private final int id;
         private int xPos, yPos, width, height;
-        private String text = "", glyph = "";
+        private String text = "";
         private float glyphScale = 1.0F;
         private ItemStackSortType sortType = ItemStackSortType.NONE;
         private OnClick onClick = (button, mouseX, mouseY) -> true;
@@ -134,13 +136,12 @@ public class GuiSchematicButton extends Gui {
             this.id = getNextId();
         }
 
-        public Builder glyph(String glyph, float glyphScale) {
-            this.glyph = glyph;
+        public Builder glyphScale(float glyphScale) {
             this.glyphScale = glyphScale;
             return this;
         }
 
-        public Builder setScale(int width, int height) {
+        public Builder setSize(int width, int height) {
             this.width = width;
             this.height = height;
             return this;
@@ -159,6 +160,11 @@ public class GuiSchematicButton extends Gui {
 
         public Builder setText(String text) {
             this.text = text;
+            return this;
+        }
+
+        public Builder setSortType(ItemStackSortType type) {
+            this.sortType = type;
             return this;
         }
 

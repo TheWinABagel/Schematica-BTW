@@ -35,26 +35,35 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 
     public GuiSchematicMaterialsSlot(GuiSchematicMaterials parent) {
         super(Minecraft.getMinecraft(), parent.width, parent.height, 16, parent.height - 34, 21);
-        ScaledResolution sr = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+//        ScaledResolution sr = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
         this.parent = parent;
         this.selectedIndex = -1;
         this.topOffset = 0;
         this.func_77223_a(true, topOffset);
         this.setShowSelectionBox(false);
         int width = 59;
-
+        int yPos = 2;
         int height = 15;
-
-        addSortButton(new GuiSchematicButton(NAME_START, 2, 169, height, this.strMaterialName, 2.0f, ItemStackSortType.NAME_NONE));
-        addSortButton(new GuiSchematicButton(TOTAL_AMOUNT_START, 2, width, height, this.strMaterialTotal, 2.0f, ItemStackSortType.SIZE_NONE));
-        addSortButton(new GuiSchematicButton(MISSING_START, 2, width, height, this.strMaterialMissing, 2.0f, ItemStackSortType.MISSING_NONE));
-        addSortButton(new GuiSchematicButton(AVAILABLE_START, 2, width, height, this.strMaterialAvailable, 2.0f, ItemStackSortType.AVAILABLE_NONE));
-
-//        addButton(new GuiSchematicButton(AVAILABLE_START + 60, 4, width, height, I18n.getString(Names.Gui.Control.DUMP))).onClick((button, mouseX1, mouseY1) -> {
-//            Reference.logger.debug("Dumping!");
-//            parent.dumpMaterialList(parent.blockList);
-//            return true;
-//        });
+        addSortButton(GuiSchematicButton.builder()
+                .setPos(NAME_START, yPos)
+                .setSize(169, height)
+                .setText(this.strMaterialName)
+                .setSortType(ItemStackSortType.NAME_NONE));
+        addSortButton(GuiSchematicButton.builder()
+                .setPos(TOTAL_AMOUNT_START, yPos)
+                .setSize(width, height)
+                .setText(this.strMaterialTotal)
+                .setSortType(ItemStackSortType.SIZE_NONE));
+        addSortButton(GuiSchematicButton.builder()
+                .setPos(MISSING_START, yPos)
+                .setSize(width, height)
+                .setText(this.strMaterialMissing)
+                .setSortType(ItemStackSortType.MISSING_NONE));
+        addSortButton(GuiSchematicButton.builder()
+                .setPos(AVAILABLE_START, yPos)
+                .setSize(width, height)
+                .setText(this.strMaterialAvailable)
+                .setSortType(ItemStackSortType.AVAILABLE_NONE));
     }
 
     @Override
@@ -97,13 +106,6 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
     public void overlayBackground(int bottom, int height, int alpha1, int alpha2) {
         super.overlayBackground(bottom, height, alpha1, alpha2);
         if (bottom == this.bottom && height == this.parent.height) {
-            int xStart = 4;
-            GuiSchematicMaterials gui = this.parent;
-            FontRenderer fr = this.mc.fontRenderer;
-//            gui.drawString(fr, this.strMaterialName, xStart, 4, 0x00FFFFFF);
-//            gui.drawString(fr, this.strMaterialTotal, xStart + TOTAL_AMOUNT_START, 4, 0x00FFFFFF);
-//            gui.drawString(fr, this.strMaterialMissing, xStart + MISSING_START, 4, 0x00FFFFFF);
-//            gui.drawString(fr, this.strMaterialAvailable, xStart + AVAILABLE_START, 4, 0x00FFFFFF);
             for (GuiSchematicButton button : this.buttons) {
                 button.render(mouseX, mouseY);
             }
@@ -160,13 +162,11 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 
     private GuiSchematicButton addButton(GuiSchematicButton button) {
         this.buttons.add(button);
-
         return button;
     }
 
-    private GuiSchematicButton addSortButton(GuiSchematicButton button) {
-        this.buttons.add(button);
-        button.onClick((but, mouseX1, mouseY1) -> {
+    private GuiSchematicButton addSortButton(GuiSchematicButton.Builder builder) {
+        return addButton(builder.onCLick((but, mouseX1, mouseY1) -> {
             for (GuiSchematicButton btn : buttons) {
                 if (!btn.equals(but)) {
                     btn.resetToNone();
@@ -178,8 +178,6 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
                 parent.resetList();
             }
             return true;
-        });
-
-        return button;
+        }).glyphScale(2.0f).build());
     }
 }
