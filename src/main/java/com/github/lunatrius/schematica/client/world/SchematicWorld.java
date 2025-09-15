@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.world;
 
+import btw.world.util.data.DataEntry;
 import com.github.lunatrius.api.ISchematic;
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.core.util.vector.Vector3i;
@@ -164,6 +165,16 @@ public class SchematicWorld extends World {
     @Override
     public boolean extendedLevelsInChunkCache() {
         return false;
+    }
+
+    @Override
+    public <T> T getData(DataEntry.WorldDataEntry<T> worldDataEntry) {
+        return Minecraft.getMinecraft().theWorld.getData(worldDataEntry);
+    }
+
+    @Override
+    public <T> void setData(DataEntry.WorldDataEntry<T> worldDataEntry, T t) {
+        //NO-OP
     }
 
     @Override

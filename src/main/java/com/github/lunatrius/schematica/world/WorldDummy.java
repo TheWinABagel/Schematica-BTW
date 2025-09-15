@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.world;
 
+import btw.world.util.data.DataEntry;
 import com.github.lunatrius.schematica.world.storage.SaveHandlerSchematic;
 import net.minecraft.src.*;
 
@@ -19,6 +20,16 @@ public class WorldDummy extends World {
     @Override
     public Entity getEntityByID(int id) {
         return null;
+    }
+
+    @Override
+    public <T> T getData(DataEntry.WorldDataEntry<T> worldDataEntry) {
+        return Minecraft.getMinecraft().theWorld.getData(worldDataEntry);
+    }
+
+    @Override
+    public <T> void setData(DataEntry.WorldDataEntry<T> worldDataEntry, T t) {
+
     }
 
     public static WorldDummy instance() {
