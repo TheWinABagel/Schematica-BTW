@@ -64,7 +64,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
                 boolean retry = false;
 
                 try {
-                    Class c = Class.forName("java.awt.Desktop");
+                    Class<?> c = Class.forName("java.awt.Desktop");
                     Object m = c.getMethod("getDesktop").invoke(null);
                     c.getMethod("browse", URI.class).invoke(m, ConfigurationHandler.schematicDirectory.toURI());
                 } catch (Throwable e) {
@@ -162,7 +162,6 @@ public class GuiSchematicLoad extends GuiScreenBase {
                     if (schematic != null) {
                         ImmutableTriple<Boolean, Integer, ImmutableTriple<Integer, Integer, Integer>> schematicCoordinate = ClientProxy
                                 .getCoordinates(worldServerName(this.mc), schematic.name);
-                        System.out.println("TRIPLE" + schematicCoordinate);
                         if (schematicCoordinate.left()) {
                             ClientProxy.moveSchematic(schematic, schematicCoordinate.right().left(), schematicCoordinate.right().middle(), schematicCoordinate.right().right());
                             for (int i = 0; i < schematicCoordinate.middle(); i++) {
