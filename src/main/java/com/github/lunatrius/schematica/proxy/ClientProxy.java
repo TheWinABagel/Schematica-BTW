@@ -290,9 +290,9 @@ public class ClientProxy extends CommonProxy {
 //    public void init(FMLInitializationEvent event) {
 //        super.init(event);
 
-//        FMLCommonHandler.instance().bus().register(InputHandler.INSTANCE);        //implemented, todo register keybinds
+//        FMLCommonHandler.instance().bus().register(InputHandler.INSTANCE);        //implemented
 //        FMLCommonHandler.instance().bus().register(TickHandler.INSTANCE);         //todo implement tick handler fully
-//        FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);   //todo render tick handler
+//        FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);   //implemented
 //        FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);//todo config
 
 //        MinecraftForge.EVENT_BUS.register(RendererSchematicGlobal.INSTANCE);      //implemented

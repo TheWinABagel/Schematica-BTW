@@ -34,7 +34,6 @@ public class RendererSchematicChunk {
 
     private boolean needsUpdate = true;
     private int glList = -1;
-    // TODO: move this away from GL lists
     private int glListHighlight = -1;
 
     public RendererSchematicChunk(SchematicWorld schematicWorld, int baseX, int baseY, int baseZ) {
