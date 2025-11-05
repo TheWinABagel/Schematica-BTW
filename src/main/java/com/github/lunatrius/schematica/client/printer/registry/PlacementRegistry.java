@@ -75,6 +75,8 @@ public class PlacementRegistry {
         addPlacementMapping(Item.doorIron, new PlacementData(PlacementData.PlacementType.PLAYER, -1, -1, 3, 1, 2, 0).setMaskMeta(0x7));
         addPlacementMapping(Item.redstoneRepeater, new PlacementData(PlacementData.PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
         addPlacementMapping(Item.comparator, new PlacementData(PlacementData.PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
+
+        //todo better than wolves blocks
     }
 
     public PlacementData addPlacementMapping(Class<? extends Block> clazz, PlacementData data) {
