@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.world;
 
 import btw.world.util.data.DataEntry;
 import com.github.lunatrius.schematica.world.storage.SaveHandlerSchematic;
+import net.fabricmc.example.debug.ChunkProviderDebug;
 import net.minecraft.src.*;
 
 public class WorldDummy extends World {
@@ -13,7 +14,7 @@ public class WorldDummy extends World {
 
     @Override
     protected IChunkProvider createChunkProvider() {
-        return null;
+        return new ChunkProviderDebug(this);
     }
 
 
@@ -40,4 +41,14 @@ public class WorldDummy extends World {
 
         return instance;
     }
+
+//    @Override
+//    public void notifyBlocksOfNeighborChange(int par1, int par2, int par3, int par4) {
+////        super.notifyBlocksOfNeighborChange(par1, par2, par3, par4);
+//    }
+//
+//    @Override
+//    public void notifyBlocksOfNeighborChange(int par1, int par2, int par3, int par4, int par5) {
+////        super.notifyBlocksOfNeighborChange(par1, par2, par3, par4, par5);
+//    }
 }

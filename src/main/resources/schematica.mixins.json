@@ -5,6 +5,10 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "NetServerHandlerMixin",
+    "debugworld.BlockBaseRailLogicMixin",
+    "debugworld.BlockPosMixin",
+    "debugworld.WorldProviderMixin",
+    "debugworld.WorldServerMixin",
     "oneseven.EntityRendererMixin",
     "oneseven.GameSettingsMixin",
     "oneseven.MinecraftServerMixin",

@@ -6,8 +6,11 @@ import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.proxy.CommonProxy;
 import com.github.lunatrius.schematica.proxy.ServerProxy;
 import com.github.lunatrius.schematica.reference.Reference;
+import net.fabricmc.example.debug.DebugWorldHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.EntityPlayerMP;
+import net.minecraft.src.NetServerHandler;
 
 public class Schematica extends BTWAddon {
     public static Schematica instance = new Schematica();
@@ -60,13 +63,26 @@ public class Schematica extends BTWAddon {
 
 
     //not needed anymore, only for forge multipart
-//    @Override
-//    public void postInitialize() {
+    @Override
+    public void postInitialize() {
+
 //        getProxy().postInitialize();
-//    }
+    }
 
+    @Override
+    public void serverPlayerConnectionInitialized(NetServerHandler serverHandler, EntityPlayerMP player) {
+        System.out.println("Server player connection initalized " + player);
+        if (player.worldObj.getWorldInfo().getTerrainType() == DebugWorldHelper.DEBUG_WORLD_TYPE) {
+            System.out.println("debug world type!");
 
-    //only to set up keybinds
+            serverHandler.setPlayerLocation(0d, 3d, 0d, player.rotationYaw, player.rotationPitch);
+            player.capabilities.allowFlying = true;
+            player.capabilities.isFlying = true;
+//            player.setPositionAndUpdate(1d, 1d, 1d);
+        }
+    }
+
+//only to set up keybinds
 //    @EventHandler
 //    public void serverStarting(FMLServerStartingEvent event) {
 //        proxy.serverStarting(event);
