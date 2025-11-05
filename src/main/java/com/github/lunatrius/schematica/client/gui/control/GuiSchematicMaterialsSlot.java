@@ -18,10 +18,10 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
     private final Minecraft mc = Minecraft.getMinecraft();
     private final GuiSchematicMaterials parent;
 
-    private final String strMaterialAvailable = I18n.getString(Names.Gui.Control.MATERIAL_AVAILABLE);
-    private final String strMaterialName = I18n.getString(Names.Gui.Control.MATERIAL_NAME);
-    private final String strMaterialTotal = I18n.getString(Names.Gui.Control.MATERIAL_TOTAL);
-    private final String strMaterialMissing = I18n.getString(Names.Gui.Control.MATERIAL_MISSING);
+    private static final String strMaterialAvailable = I18n.getString(Names.Gui.Control.MATERIAL_AVAILABLE);
+    private static final String strMaterialName = I18n.getString(Names.Gui.Control.MATERIAL_NAME);
+    private static final String strMaterialTotal = I18n.getString(Names.Gui.Control.MATERIAL_TOTAL);
+    private static final String strMaterialMissing = I18n.getString(Names.Gui.Control.MATERIAL_MISSING);
 
     protected int selectedIndex;
     protected int topOffset;
