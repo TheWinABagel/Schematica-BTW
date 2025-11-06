@@ -9,6 +9,7 @@
     "debugworld.BlockPosMixin",
     "debugworld.WorldProviderMixin",
     "debugworld.WorldServerMixin",
+    "ext.ItemMixin",
     "oneseven.EntityRendererMixin",
     "oneseven.GameSettingsMixin",
     "oneseven.MinecraftServerMixin",

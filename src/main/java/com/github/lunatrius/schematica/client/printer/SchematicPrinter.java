@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.printer;
 
+import btw.block.blocks.SidingAndCornerBlock;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.client.printer.registry.PlacementData;
 import com.github.lunatrius.schematica.client.printer.registry.PlacementRegistry;
@@ -195,7 +196,7 @@ public class SchematicPrinter {
     }
 
     private ForgeDirection[] getSolidSides(World world, int x, int y, int z) {
-        List<ForgeDirection> list = new ArrayList<ForgeDirection>();
+        List<ForgeDirection> list = new ArrayList<>();
 
         for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
             if (isSolid(world, x, y, z, side)) {
@@ -212,8 +213,7 @@ public class SchematicPrinter {
             return false;
         }
 
-        PlacementData data = PlacementRegistry.INSTANCE.getPlacementData(block, itemStack);
-
+        PlacementData data = PlacementRegistry.INSTANCE.getPlacementData(block, itemStack, metadata);
         if (!isValidOrientation(player, x, y, z, data, metadata)) {
             return false;
         }
@@ -243,10 +243,57 @@ public class SchematicPrinter {
         }
 
         if (direction != ForgeDirection.UNKNOWN || !ConfigurationHandler.placeAdjacent) {
+//            if (block instanceof SidingAndCornerAndDecorativeBlock siding) {
+//                var ret = placeBlock(world, player, x, y, z, direction, siding.isCornerFacingXOffset(metadata) ? 0f : 1f, siding.isCornerFacingYOffset(metadata) ? 0f : 1f, siding.isCornerFacingZOffset(metadata) ? 1f : 0f, extraClicks);
+//                return ret;
+//            }
+//            else
+                if (block instanceof SidingAndCornerBlock siding) {
+                    if (siding.getIsCorner(metadata)) {
+                        float fClickX = siding.isCornerFacingXOffset(metadata) ? .6f : .4f;
+                        float fClickY = siding.isCornerFacingYOffset(metadata) ? .3f : .7f;
+                        float fClickZ = siding.isCornerFacingZOffset(metadata) ? .6f : .4f;
+                        boolean bIOffset = false;
+                        boolean bJOffset = false;
+                        boolean bKOffset = false;
+                        int iFacing = siding.getFacing(metadata);
+                        if (iFacing == 0) {
+                            bJOffset = true;
+                            bIOffset = this.isPlayerClickOffsetOnAxis(fClickX);
+                            bKOffset = this.isPlayerClickOffsetOnAxis(fClickZ);
+                        } else if (iFacing == 1) {
+                            bIOffset = this.isPlayerClickOffsetOnAxis(fClickX);
+                            bKOffset = this.isPlayerClickOffsetOnAxis(fClickZ);
+                        } else if (iFacing == 2) {
+                            bKOffset = true;
+                            bIOffset = this.isPlayerClickOffsetOnAxis(fClickX);
+                            bJOffset = this.isPlayerClickOffsetOnAxis(fClickY);
+                        } else if (iFacing == 3) {
+                            bIOffset = this.isPlayerClickOffsetOnAxis(fClickX);
+                            bJOffset = this.isPlayerClickOffsetOnAxis(fClickY);
+                        } else if (iFacing == 4) {
+                            bIOffset = true;
+                            bJOffset = this.isPlayerClickOffsetOnAxis(fClickY);
+                            bKOffset = this.isPlayerClickOffsetOnAxis(fClickZ);
+                        } else if (iFacing == 5) {
+                            bJOffset = this.isPlayerClickOffsetOnAxis(fClickY);
+                            bKOffset = this.isPlayerClickOffsetOnAxis(fClickZ);
+                        }
+                        siding.setFacing(metadata, iFacing);
+//                        return siding.setCornerFacingInMetadata(metadata, bIOffset, bJOffset, bKOffset);
+                        return placeBlock(world, player, x, y, z, direction, fClickX, fClickY, fClickZ, extraClicks);
+                    }
+                    return placeBlock(world, player, x, y, z, direction, siding.isCornerFacingXOffset(metadata) ? .4f : .6f, siding.isCornerFacingYOffset(metadata) ? .4f : .6f, siding.isCornerFacingZOffset(metadata) ? .4f : .6f, extraClicks);
+//                return placeBlock(world, player, x, y, z, direction, siding.isCornerFacingXOffset(metadata) ? 0f : 1f, siding.isCornerFacingYOffset(metadata) ? 0f : 1f, siding.isCornerFacingZOffset(metadata) ? 1f : 0f, extraClicks);
+            }
             return placeBlock(world, player, x, y, z, direction, 0.0f, offsetY, 0.0f, extraClicks);
         }
 
         return false;
+    }
+
+    private boolean isPlayerClickOffsetOnAxis(float fPlayerClick) {
+        return fPlayerClick > 0.0f && fPlayerClick >= 0.5f;
     }
 
     private boolean isBlacklisted(Block block, ItemStack itemStack) {

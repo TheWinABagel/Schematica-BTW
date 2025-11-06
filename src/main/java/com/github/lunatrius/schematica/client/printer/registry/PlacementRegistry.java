@@ -1,19 +1,7 @@
 package com.github.lunatrius.schematica.client.printer.registry;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.BlockButton;
-import net.minecraft.src.BlockChest;
-import net.minecraft.src.BlockDispenser;
-import net.minecraft.src.BlockEnderChest;
-import net.minecraft.src.BlockFurnace;
-import net.minecraft.src.BlockHopper;
-import net.minecraft.src.BlockPistonBase;
-import net.minecraft.src.BlockPumpkin;
-import net.minecraft.src.BlockRotatedPillar;
-import net.minecraft.src.BlockStairs;
-import net.minecraft.src.BlockTorch;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import btw.block.blocks.SidingAndCornerBlock;
+import net.minecraft.src.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +9,10 @@ import java.util.Map;
 public class PlacementRegistry {
     public static final PlacementRegistry INSTANCE = new PlacementRegistry();
 
-    private final Map<Class<? extends Block>, PlacementData> classPlacementMap = new HashMap<Class<? extends Block>, PlacementData>();
-    private final Map<Block, PlacementData> blockPlacementMap = new HashMap<Block, PlacementData>();
-    private final Map<Item, PlacementData> itemPlacementMap = new HashMap<Item, PlacementData>();
+    private final Map<Class<? extends Block>, PlacementData> classPlacementMap = new HashMap<>();
+    private final Map<Block, PlacementData> blockPlacementMap = new HashMap<>();
+    private final Map<Item, PlacementData> itemPlacementMap = new HashMap<>();
+    private final Map<ExtendedPlacementData.Data, PlacementData> extendedPlacementMap = new HashMap<>();
 
     public void populatePlacementMaps() {
         this.classPlacementMap.clear();
@@ -77,7 +66,22 @@ public class PlacementRegistry {
         addPlacementMapping(Item.comparator, new PlacementData(PlacementData.PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
 
         //todo better than wolves blocks
+
+        addExtendedPlacementMapping(SidingAndCornerBlock.class, new ExtendedPlacementData(PlacementData.PlacementType.BLOCK, new int[] {2, 0, 6, 4, 10, 8}, 0, 2, 4, 6, 8, 10)/*.setOffset(0x2, 0.0f, 1.0f)*/);
+        addExtendedPlacementMapping(SidingAndCornerBlock.class, (ExtendedPlacementData) new ExtendedPlacementData(PlacementData.PlacementType.BLOCK, new int[] {3, 1, 7, 5, 11, 9}, 3, 1, 7, 5, 11, 9)/*.setOffset(0x2, 0.0f, 1.0f)*//*.setMaskMeta(0x2)*/);
+
+        //        addPlacementMapping(SidingAndCornerAndDecorativeWallBlock.class, new PlacementData(PlacementData.PlacementType.BLOCK, 0, 2, 4, 6, 8, 10).setOffset(0x4, 0.0f, 1.0f).setMaskMeta(0x2));
+
     }
+
+    public PlacementData addExtendedPlacementMapping(Class<? extends Block> clazz, ExtendedPlacementData data) {
+        if (clazz == null || data == null) {
+            return null;
+        }
+
+        return this.extendedPlacementMap.put(new ExtendedPlacementData.Data(clazz, data.validMetas), data);
+    }
+
 
     public PlacementData addPlacementMapping(Class<? extends Block> clazz, PlacementData data) {
         if (clazz == null || data == null) {
@@ -103,7 +107,7 @@ public class PlacementRegistry {
         return this.itemPlacementMap.put(item, data);
     }
 
-    public PlacementData getPlacementData(Block block, ItemStack itemStack) {
+    public PlacementData getPlacementData(Block block, ItemStack itemStack, int metadata) {
         final PlacementData placementDataItem = this.itemPlacementMap.get(itemStack.getItem());
         if (placementDataItem != null) {
             return placementDataItem;
@@ -117,6 +121,12 @@ public class PlacementRegistry {
         for (Class<? extends Block> clazz : this.classPlacementMap.keySet()) {
             if (clazz.isInstance(block)) {
                 return this.classPlacementMap.get(clazz);
+            }
+        }
+
+        for (ExtendedPlacementData.Data data : this.extendedPlacementMap.keySet()) {
+            if (data.type().isInstance(block) && data.matches(metadata)) {
+                return this.extendedPlacementMap.get(data);
             }
         }
 

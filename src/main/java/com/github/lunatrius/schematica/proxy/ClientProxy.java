@@ -51,6 +51,7 @@ public class ClientProxy extends CommonProxy {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting()
             .create();
     private static final Type schematicDataType = new TypeToken<Map<String, Map<String, SchematicData>>>() {}.getType();
+    private static final Type schematicDataType2 = new TypeToken<Map<String, String>>() {}.getType();
 
     public static void setPlayerData(EntityPlayer player, float partialTicks) {
         playerPosition.x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
