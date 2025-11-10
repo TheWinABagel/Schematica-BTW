@@ -8,3 +8,4 @@ accessible method net/minecraft/src/GuiSlot overlayBackground (IIII)V
 extendable method net/minecraft/src/GuiSlot overlayBackground (IIII)V
 
 accessible method net/minecraft/src/WorldType <init> (ILjava/lang/String;)V
+accessible field net/minecraft/src/GuiNewChat chatLines Ljava/util/List;

@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.client.printer.registry;
 
-import btw.block.blocks.SidingAndCornerBlock;
+import btw.block.BTWBlocks;
+import btw.block.blocks.*;
 import net.minecraft.src.*;
 
 import java.util.HashMap;
@@ -68,9 +69,34 @@ public class PlacementRegistry {
         //todo better than wolves blocks
 
         addExtendedPlacementMapping(SidingAndCornerBlock.class, new ExtendedPlacementData(PlacementData.PlacementType.BLOCK, new int[] {2, 0, 6, 4, 10, 8}, 0, 2, 4, 6, 8, 10)/*.setOffset(0x2, 0.0f, 1.0f)*/);
-        addExtendedPlacementMapping(SidingAndCornerBlock.class, (ExtendedPlacementData) new ExtendedPlacementData(PlacementData.PlacementType.BLOCK, new int[] {3, 1, 7, 5, 11, 9}, 3, 1, 7, 5, 11, 9)/*.setOffset(0x2, 0.0f, 1.0f)*//*.setMaskMeta(0x2)*/);
-
+        addExtendedPlacementMapping(SidingAndCornerBlock.class, (ExtendedPlacementData) new ExtendedPlacementData(PlacementData.PlacementType.BLOCK, new int[] {1, 3, -1, -1, -1, -1}, 3, 1, 7, 5, 11, 9, 15)/*.setOffset(0x2, 0.0f, 1.0f)*//*.setMaskMeta(0x2)*/);
+        addExtendedPlacementMapping(SidingAndCornerAndDecorativeWallBlock.class, (ExtendedPlacementData) new ExtendedPlacementData(PlacementData.PlacementType.BLOCK, new int[] {14, 13, 13, 13, 13, 13}, 13, 14).setOffset(0x1, 0.0f, 1.0f)/*.setMaskMeta(0x2)*/);
+        addPlacementMapping(AxleBlock.class, new PlacementData(PlacementData.PlacementType.BLOCK, 0, 0, 8, 8, 4, 4).setMaskMeta(0x3));
+        addPlacementMapping(GearBoxBlock.class, new PlacementData(PlacementData.PlacementType.BTW_ORIENTATION_BASED_REVERSED, 0, 1, 2, 3, 4, 5).setMaskMeta(0x7));
         //        addPlacementMapping(SidingAndCornerAndDecorativeWallBlock.class, new PlacementData(PlacementData.PlacementType.BLOCK, 0, 2, 4, 6, 8, 10).setOffset(0x4, 0.0f, 1.0f).setMaskMeta(0x2));
+        addPlacementMapping(StairsBlockBase.class, new PlacementData(PlacementData.PlacementType.PLAYER, -1, -1, 3, 2, 1, 0).setOffset(0x4, 0.0f, 1.0f).setMaskMeta(0x3));
+
+        addPlacementMapping(BTWBlocks.stoneDoubleSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setExtraClick(extraClickDoubleSlab));
+        addPlacementMapping(BTWBlocks.stoneSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7));
+        addPlacementMapping(BTWBlocks.stoneBrickDoubleSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setExtraClick(extraClickDoubleSlab));
+        addPlacementMapping(BTWBlocks.stoneBrickSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7));
+        addPlacementMapping(BTWBlocks.cobblestoneDoubleSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setExtraClick(extraClickDoubleSlab));
+        addPlacementMapping(BTWBlocks.cobblestoneSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7));
+        addPlacementMapping(Block.woodDoubleSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setExtraClick(extraClickDoubleSlab));
+        PlacementRegistry.INSTANCE.addPlacementMapping(Block.woodSingleSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7));
+
+//        addPlacementMapping(BTWBlocks.stoneDoubleSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setExtraClick(extraClickDoubleSlab));
+//        addPlacementMapping(BTWBlocks.boneSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x1, 0.0f, 1.0f)/*.setMaskMeta(0x7)*/);
+//        addPlacementMapping(BTWBlocks.solidSnowSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x1, 0.0f, 1.0f)/*.setMaskMeta(0x7)*/);
+//        addPlacementMapping(BTWBlocks.spiderEyeSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x1, 0.0f, 1.0f)/*.setMaskMeta(0x7)*/);
+//        addPlacementMapping(BTWBlocks.creeperOysterSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x1, 0.0f, 1.0f)/*.setMaskMeta(0x7)*/);
+//        addPlacementMapping(BTWBlocks.rottenFleshSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x1, 0.0f, 1.0f)/*.setMaskMeta(0x7)*/);
+//        addPlacementMapping(BTWBlocks.wickerSlab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x1, 0.0f, 1.0f)/*.setMaskMeta(0x7)*/);
+        addPlacementMapping(BTWBlocks.companionCube, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x1, 0.0f, 1.0f));
+        addExtendedPlacementMapping(AestheticNonOpaqueBlock.class, (ExtendedPlacementData) new ExtendedPlacementData(PlacementData.PlacementType.BLOCK, new int[]{}, AestheticNonOpaqueBlock.SUBTYPE_WHITE_COBBLE_SLAB, AestheticNonOpaqueBlock.SUBTYPE_WHITE_COBBLE_SLAB_UPSIDE_DOWN).setOffset(0x1, 0.0f, 1.0f));
+//        addPlacementMapping(BTWBlocks.woolSlabTop, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x1, 1.0f, 1.0f)/*.setMaskMeta(0x7)*/);
+
+        addPlacementMapping(SlabBlock.class, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x1, 0.0f, 1.0f));
 
     }
 

@@ -10,7 +10,11 @@ import java.util.Map;
 
 public class PlacementData {
     public enum PlacementType {
-        BLOCK, PLAYER, PISTON
+        BLOCK,
+        PLAYER,
+        PISTON,
+        BTW_ORIENTATION_BASED_REVERSED,
+        BTW_ORIENTATION_BASED
     }
 
     public static final ForgeDirection[] VALID_DIRECTIONS = ForgeDirection.VALID_DIRECTIONS;
@@ -34,13 +38,6 @@ public class PlacementData {
     }
 
     public PlacementData setOffset(int maskOffset, float offsetLowY, float offsetHighY) {
-        this.maskOffset = maskOffset;
-        this.offsetLowY = offsetLowY;
-        this.offsetHighY = offsetHighY;
-        return this;
-    }
-
-    public PlacementData setOffsetZ(int maskOffset, float offsetLowY, float offsetHighY) {
         this.maskOffset = maskOffset;
         this.offsetLowY = offsetLowY;
         this.offsetHighY = offsetHighY;
