@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.network.util;
 
 import emi.shims.java.net.minecraft.network.PacketByteBuf;
+import net.fabricmc.example.mixin.PacketAccessor;
 import net.minecraft.src.CompressedStreamTools;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
@@ -152,7 +153,7 @@ public interface ByteBuf {
             @Override
             public void writeTag(NBTTagCompound tag) {
                 try {
-                    Packet.writeNBTTagCompound(tag, out);
+                    PacketAccessor.callWriteNBTTagCompound(tag, out);
                 } catch (IOException e) {
                     throw new UncheckedIOException(e);
                 }

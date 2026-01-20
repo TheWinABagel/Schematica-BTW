@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.util;
 
+import net.fabricmc.example.mixin.GuiNewChatAccessor;
 import net.minecraft.src.ChatLine;
 import net.minecraft.src.Minecraft;
 
@@ -10,7 +11,7 @@ import java.util.regex.PatternSyntaxException;
 
 public class ChatUtils {
     public static void printToChatWhileRemovingLast(String string, String lastMessageRegex) {
-        List<ChatLine> lines = Minecraft.getMinecraft().ingameGUI.getChatGUI().chatLines;
+        List<ChatLine> lines = ((GuiNewChatAccessor)Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines();
 //        var str = lines.get(0).getChatLineString();
         int lines1 = getMatchingIndex(lastMessageRegex.replace("\\", "\\\\"), lines);
 

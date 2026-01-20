@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.world;
 
-import btw.world.util.data.DataEntry;
+import api.world.data.DataEntry;
 import com.github.lunatrius.schematica.world.storage.SaveHandlerSchematic;
 import net.fabricmc.example.debug.ChunkProviderDebug;
 import net.minecraft.src.*;

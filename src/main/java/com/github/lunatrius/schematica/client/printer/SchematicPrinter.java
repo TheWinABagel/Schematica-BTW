@@ -1,9 +1,9 @@
 package com.github.lunatrius.schematica.client.printer;
 
 import btw.block.BTWBlocks;
-import btw.block.blocks.SidingAndCornerBlock;
+import api.block.blocks.SidingAndCornerBlock;
 import btw.block.blocks.WoolSlabBlock;
-import btw.util.MiscUtils;
+import api.util.MiscUtils;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.client.printer.registry.PlacementData;
 import com.github.lunatrius.schematica.client.printer.registry.PlacementRegistry;

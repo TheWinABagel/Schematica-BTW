@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.printer.registry;
 import btw.block.BTWBlocks;
 import btw.block.blocks.*;
 import net.minecraft.src.*;
+import api.block.blocks.*;
 
 import java.util.HashMap;
 import java.util.Map;
