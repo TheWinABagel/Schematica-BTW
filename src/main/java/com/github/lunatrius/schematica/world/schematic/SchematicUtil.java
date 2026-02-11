@@ -23,12 +23,15 @@ public final class SchematicUtil {
 
     public static ItemStack getIconFromName(String iconName) {
         ItemStack icon;
-        String name = "";
+        int id = 2;
         int damage = 0;
 
         String[] parts = iconName.split(",");
         if (parts.length >= 1) {
-            name = parts[0];
+            try {
+                id = Integer.parseInt(parts[0]);
+            } catch (NumberFormatException ignored) {
+            }
             if (parts.length >= 2) {
                 try {
                     damage = Integer.parseInt(parts[1]);
@@ -36,14 +39,7 @@ public final class SchematicUtil {
                 }
             }
         }
-        //todo icon saving not working
-        icon = new ItemStack(1, 1, 0);
-//        icon = new ItemStack(GameData.getBlockRegistry().getObject(name), 1, damage);
-        if (icon.getItem() != null) {
-            return icon;
-        }
-
-//        icon = new ItemStack(GameData.getItemRegistry().getObject(name), 1, damage);
+        icon = new ItemStack(id, 1, damage);
         if (icon.getItem() != null) {
             return icon;
         }
