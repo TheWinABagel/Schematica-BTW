@@ -11,7 +11,7 @@ plugins {
 }
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version
+version = project.mod_version + "-btw" + project.btw_version
 group = project.maven_group
 
 repositories {
