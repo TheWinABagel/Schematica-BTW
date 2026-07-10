@@ -11,7 +11,7 @@ plugins {
 }
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version
+version = project.mod_version + "-btw" + project.btw_version
 group = project.maven_group
 
 repositories {
@@ -25,7 +25,10 @@ repositories {
 		url = 'https://maven.glass-launcher.net/babric'
 	}
 	maven {
-		url file('mavenRepo')
+		url = "https://api.modrinth.com/maven"
+	}
+	maven {
+		url 'https://btw-community.github.io/btw-mvn/'
 	}
 	maven {
 		url = "https://api.modrinth.com/maven"
@@ -70,6 +73,8 @@ dependencies {
 
 	implementation 'com.typesafe:config:1.4.5'
 	implementation group: 'it.unimi.dsi', name: 'fastutil', version: '8.5.12'
+
+	implementation 'com.typesafe:config:1.4.5'
 }
 
 configurations.all {
@@ -155,7 +160,7 @@ class BTWJarReplacer implements MinecraftJarProcessor<Spec> {
 	void processJar(java.nio.file.Path jar, Spec spec, ProcessorContext context) throws IOException {
 		// Replace the Minecraft jar with the custom one from BTW_dev.
 		// This is just a straight up file replacement, no remapping or anything.
-		if (!Files.exists(Paths.get(path, "build_BTW/BTW_dev/BTW_dev.zip"))) {
+		if (!Files.exists(Paths.get(path, "build_BTW/BTW_dev/BTW_dev.zip")) && !Files.exists(Paths.get(path, "build_BTW/BTW_dev/BTW_dev-javadoc.jar"))) {
 			// Print a warning if the BTW_dev zip doesn't exist.
 			System.err.println("BTW_dev zip not found, skipping BTWJarReplacer")
 		} else {
@@ -187,4 +192,5 @@ class BTWJarReplacer implements MinecraftJarProcessor<Spec> {
 			}
 		}
 	}
+
 }

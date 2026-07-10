@@ -1,5 +1,6 @@
 package net.fabricmc.example;
 
+import net.fabricmc.example.mixin.NBTBaseAccessor;
 import net.minecraft.src.NBTBase;
 
 import java.io.DataOutput;
@@ -14,7 +15,7 @@ public interface CompoundTagExtension {
         if (data.getId() != 0)
         {
             output.writeUTF(name);
-            data.write(output);
+            ((NBTBaseAccessor) data).callWrite(output);
         }
     }
 }

@@ -6,6 +6,7 @@ import api.block.blocks.SlabBlock;
 import btw.block.BTWBlocks;
 import btw.block.blocks.*;
 import net.minecraft.src.*;
+import api.block.blocks.*;
 
 import java.util.HashMap;
 import java.util.Map;

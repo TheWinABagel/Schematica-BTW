@@ -3,6 +3,7 @@ package net.fabricmc.example.debug;
 import btw.block.BTWBlocks;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.WorldDummy;
+import net.fabricmc.example.mixin.WorldTypeAccessor;
 import net.minecraft.src.Block;
 import net.minecraft.src.Chunk;
 import net.minecraft.src.WorldType;
@@ -206,7 +207,7 @@ public class DebugWorldHelper {
         max(block.blockID, maxMeta);
     }
 
-    public static WorldType DEBUG_WORLD_TYPE = new WorldType(6, "debug");
+    public static WorldType DEBUG_WORLD_TYPE = WorldTypeAccessor.createWorldType(6, "debug");
 
     public record ChunkData(int chunkX, int chunkY) {
 
