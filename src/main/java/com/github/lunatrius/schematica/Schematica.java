@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica;
 
-import btw.BTWAddon;
+import api.BTWAddon;
 import com.github.lunatrius.schematica.debug.DebugItem;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.proxy.CommonProxy;

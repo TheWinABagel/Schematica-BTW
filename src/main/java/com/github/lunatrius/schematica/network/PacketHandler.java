@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.network;
 
-import btw.network.packet.handler.CustomPacketHandler;
+import api.network.CustomPacketHandler;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.network.message.MessageCapabilities;
 import com.github.lunatrius.schematica.network.message.MessageDownloadBegin;

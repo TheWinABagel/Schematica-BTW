@@ -1,5 +1,8 @@
 package com.github.lunatrius.schematica.client.printer.registry;
 
+import api.block.blocks.SidingAndCornerAndDecorativeWallBlock;
+import api.block.blocks.SidingAndCornerBlock;
+import api.block.blocks.SlabBlock;
 import btw.block.BTWBlocks;
 import btw.block.blocks.*;
 import net.minecraft.src.*;

@@ -1,6 +1,6 @@
 package net.fabricmc.example.mixin.debugworld;
 
-import btw.world.util.BlockPos;
+import api.world.BlockPos;
 import net.minecraft.src.Facing;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.client.world;
 
-import btw.world.util.data.DataEntry;
+import api.world.data.DataEntry;
 import com.github.lunatrius.api.ISchematic;
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.core.util.vector.Vector3i;
